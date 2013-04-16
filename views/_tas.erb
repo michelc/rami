@@ -1,0 +1,9 @@
+<div class="row-fluid">
+  <div class="span12" id="tas"><% 6.times do |r| %>
+    <div class="row-fluid"><% 2.times do |c| %>
+      <ul id="tas<%= (r * 2) + c %>" class="span6 un_tas" title="<%= @partie.ta12s[(r * 2) + c].combinaison.tooltip %>">
+        <% @partie.ta12s[(r * 2) + c].cartes.each do |carte| %><li><%= img_carte(carte, nil) %></li><% end %>
+      </ul><% end %>
+    </div><% end %>
+  </div>
+</div>

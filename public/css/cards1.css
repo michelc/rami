@@ -1,0 +1,38 @@
+.une_main ul, .une_main li,
+.un_tas, .un_tas li
+{
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+.une_main li             { margin-left: -64px; }
+.une_main li:first-child { margin-left: 0; }
+.un_tas li               { margin-left: -44px; }
+.un_tas li:first-child   { margin-left: 0; }
+
+.card
+{
+  background-color: #fff;
+  border: 1px solid #666;
+  margin: 3px;
+  padding: 0 2px;
+  padding: 0;
+  border-radius: 5px;
+}
+
+.card.ui-draggable-dragging
+{
+  border: 1px solid #00a;
+  box-shadow: #08f 0 0 15px;
+}
+
+.ma_main .derniere { margin-top: -20px; }
+
+.un_tas .card
+{
+  border-radius: 3px;
+  width: 50px;
+  height: 70px;
+}

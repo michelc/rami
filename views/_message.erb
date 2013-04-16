@@ -1,0 +1,5 @@
+<ul class="alert alert-info">
+<% @partie.messages.reverse.take(15).each do |message| %>
+  <li><%= message %></li>
+<% end %>
+</ul>

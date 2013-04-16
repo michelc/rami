@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>RAMI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/rami.css" rel="stylesheet">
+    <link href="/css/<%= @cards_theme %>.css" rel="stylesheet">
+    <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="../assets/ico/favicon.png">
+  </head>
+
+  <body>
+
+    <div class="container-narrow">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="/demarrer">Nouvelle partie</a></li>
+          <li><a href="/regle-du-jeu">Règle du Jeu</a></li>
+        </ul>
+        <h3>Jouer au <em>RAMI</em></h3>
+      </div>
+
+      <hr>
+
+<div id="table">
+<%= yield %>
+</div>
+
+      <hr>
+
+      <div class="footer">
+        <p>&copy; Company 2013</p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/js/jquery-1.8.3.min.js"></script>
+    <script src="/js/jquery-ui-1.9.2.min.js"></script>
+
+<script>
+(function($){
+
+<% if not @partie %>
+
+<% elsif @partie.piocher %>
+
+  // Le joueur MOI doit tirer une carte de la pioche ou de la défausse
+
+  // Joueur peut double-cliquer la pioche pour y prendre la carte
+  $("#la_pioche").css("cursor", "pointer");
+  $("#la_pioche").on("dblclick", function () {
+    window.location.href = "/piocher";
+  });
+
+  <% if @partie.joueurs[0].peut_prendre? %>
+  // Joueur peut double-cliquer la défausse pour y prendre la carte
+  $("#la_defausse").css("cursor", "pointer");
+  $("#la_defausse").on("dblclick", function () {
+    window.location.href = "/prendre";
+  });
+  <% end %>
+
+  // Joueur peut déplacer une carte de pioche / défausse vers son jeu
+  var dragOpts = {
+    containment: "#table"
+    , cursor: "move"
+    , revert: true
+    , opacity: 1.7
+    , start: function (e, ui) {
+        ui.helper.css("z-index", 1);
+      }
+    , stop: function (e, ui) {
+        ui.helper.css("z-index", 0);
+      }
+  };
+  $("#la_pioche").draggable(dragOpts);
+  <% if @partie.joueurs[0].peut_prendre? %>
+  $("#la_defausse").draggable(dragOpts);
+  <% end %>
+
+  // Sa main accepte donc une carte en provenance de pioche / défausse
+  var dropOpts = {
+    accept: ".sabots .card"
+    , activeClass: "activated"
+    , hoverClass: "hovered"
+    , drop: function(e, ui) {
+        url = "/piocher";
+        if (ui.helper.attr('id') != "dos") url = "/prendre";
+        window.location.href = url;
+      }
+  };
+  $(".ma_main .card").droppable(dropOpts);
+
+<% else %>
+
+  // Le joueur MOI doit jouer ou poser une carte à la défausse
+
+  // Joueur peut double-cliquer une de ses cartes pour l'écarter
+  $(".ma_main .card").on("dblclick", function () {
+    url = "/ecarter/" + this.id.replace("carte", "");
+    window.location.href = url;
+  });
+  $(".ma_main .card").css("cursor", "pointer");
+
+  // Joueur peut déplacer une carte de son jeu vers la défausse ou les tas
+  var dragOpts = {
+    containment: "#table"
+    , cursor: "move"
+    , revert: true
+    , opacity: 1.7
+    , start: function (e, ui) {
+        ui.helper.css("z-index", 1);
+      }
+    , stop: function (e, ui) {
+        ui.helper.css("z-index", 0);
+      }
+  };
+  $(".ma_main .card").draggable(dragOpts);
+
+  // La défausse accepte donc une carte en provenance de la main du joueur
+  var dropOpts = {
+    accept: ".ma_main .card"
+    , activeClass: "activated"
+    , hoverClass: "hovered"
+    , drop: function(e, ui) {
+        url = "/ecarter/" + ui.draggable[0].id.replace("carte", "");
+        window.location.href = url;
+      }
+  };
+  $("#la_defausse").droppable(dropOpts);
+
+  // les tas acceptent donc une carte en provenance de la main du joueur
+  var dropOpts = {
+    accept: ".ma_main .card"
+    , activeClass: "activated"
+    , hoverClass: "hovered"
+    , drop: function(e, ui) {
+        url = "/poser/" + ui.draggable[0].id.replace("carte", "");
+        url += this.id.replace("tas", "/sur/");
+        window.location.href = url;
+      }
+  };
+  $("#tas .un_tas").droppable(dropOpts);
+
+<% end %>
+
+})(jQuery);
+</script>
+
+  </body>
+</html>

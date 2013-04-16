@@ -1,0 +1,349 @@
+<h3>Règle du jeu de Rami</h3>
+
+
+<p>Le Rami est un jeu dans lequel chaque joueur doit poser des combinaisons de
+  cartes sur la table. Le premier joueur qui réussi à poser toutes ses cartes
+  gagne la partie et marque 0 point. Les autres joueurs sont tous perdants et le
+  nombre de points qu'ils marquent dépend des cartes qui restent dans leur jeu.
+  L'objectif final d'une partie est donc d'avoir le moins de points possible.
+</p>
+
+
+<h4>Distribution des cartes</h4>
+
+<ul>
+
+  <li>Le jeu se joue avec 2 jeux complets de 54 cartes (dont 2 jokers), soit 108
+    cartes au total.
+  </li>
+
+  <li>Au début du jeu, les cartes sont mélangées puis on distribue 14 cartes (2
+    par 2) à chaque joueur, dans le sens des aiguilles d'une montre.
+  </li>
+
+  <li>Le donneur place ensuite une carte face visible dans une nouvelle pile qui
+    sert de "Défausse" et pose le reste des cartes non distribuées dans une
+    autre pile qui servira alors de "Pioche".
+    <ul>
+      <li>La Pioche : c'est la pile des cartes qui n'ont pas encore été
+        distribuées (face invisible) dans laquelle chaque joueur tirera une
+        carte à chaque tour.
+      </li>
+      <li>La Défausse : c'est la pile des cartes qui ont été écartées par les
+        joueurs (face visible) et que les joueurs peuvent utiliser dans certains
+        cas pour remplacer la pioche.
+      </li>
+    </ul>
+  </li>
+
+  <li>Le premier tour commence ensuite avec le joueur situé à gauche du donneur.
+  </li>
+
+</ul>
+
+
+<h4>Déroulement d'un tour du jeu</h4>
+
+<ul>
+
+  <li>A chacun de ses tours, le joueur commence le tour en tirant une carte de
+    la pioche (éventuellement de la défausse) et le termine toujours en écartant
+    une carte dans la défausse.
+  </li>
+
+  <li>Pour pouvoir poser ses cartes sur la table pour la 1° fois, le joueur doit
+    obligatoirement poser une tierce franche et d'autres combinaisons de cartes
+    qui fassent un total de 51 points. Il peut ensuite continuer le tour en
+    complétant les combinaisons déjà posées par les autres joueurs. Puis il
+    écarte une de ses cartes à la défausse pour terminer son tour.
+  </li>
+
+  <li>Une fois qu'il a posé ses 51 points, le joueur peut compléter les
+    combinaisons déjà posées (y compris les siennes) puis il doit terminer son
+    tour en écartant une carte à la défausse.
+  </li>
+
+  <li>Lorsque le joueur n'a plus qu'une seule carte après s'être défaussé, il
+    doit l'annoncer aux autres joueurs en disant "Carte". Lors des tours
+    suivants, il ne pourra plus prendre de carte dans la défausse.
+  </li>
+
+  <li>Le joueur qui termine son tour en posant sa dernière carte dans la
+    défausse gagne la partie.
+  </li>
+
+</ul>
+
+
+<h4>Prendre une carte dans la défausse</h4>
+
+<p>Normalement, le joueur commence son tour en tirant une carte dans la pioche.
+  Il existe quelques cas où il a le droit de prendre la dernière carte placée
+  dans la défausse plutôt que de tirer une carte de la pioche :
+</p>
+
+<ul>
+
+  <li>Lors de son 1° tour, le joueur peut prendre la carte de la défausse sans
+    aucune condition.
+  </li>
+
+  <li>Tant qu'il n'a pas posé ses 51 points, le joueur peut prendre une carte de
+    la défausse à condition que cette carte lui serve à poser ses 51 points dans
+    le tour en cours. Cependant, la carte prise ne doit pas servir pour faire sa
+    première tierce franche.
+  </li>
+
+  <li>Une fois qu'il a posé ses 51 points, le joueur peut prendre la carte de la
+    défausse à condition d'utiliser cette carte dans le tour en cours.
+  </li>
+
+  <li>Quand il ne lui reste qu'une carte à jouer, le joueur ne peut plus prendre
+    de carte dans la défausse.
+  </li>
+
+</ul>
+
+
+<h4>Les combinaisons possibles</h4>
+
+<p>Les cartes posées sur la table doivent être regroupées pour former 2 types de
+  combinaisons : des suites ou des séries.
+</p>
+
+<h5>Les Suites : au moins 3 cartes qui se suivent et qui sont de la même couleur</h5>
+
+<ul>
+
+  <li>Les cartes Trois de Coeur, Quatre de Coeur et Cinq de Coeur forment une
+    suite valide car elles se suivent (3, 4 et 5) et sont toutes à Coeur.
+  </li>
+
+  <li>Les cartes Trois de Coeur, Quatre de Coeur et Cinq de Carreau ne forment
+   pas une suite valide car elles correspondent à 2 couleurs : le Coeur et le
+   Carreau.
+  </li>
+
+  <li>Les cartes Trois de Coeur, Quatre de Coeur et Six de Coeur ne forment pas
+   une suite valide car elles ne se suivent pas directement.
+  </li>
+
+  <li>Les cartes Trois de Coeur et Quatre de Coeur ne forment pas une suite
+    valide car il faut au minimum 3 cartes.
+  </li>
+
+  <li>Les cartes Trois de Coeur, Quatre de Coeur, Cinq de Coeur et Six de Coeur
+   forment une suite valide car elles se suivent et sont toutes à Coeur.
+  </li>
+
+</ul>
+
+<p>L'As peut être placé au début ou à la fin d'une suite, mais jamais au milieu :</p>
+
+<ul>
+
+  <li>As de Coeur, Deux de Coeur et Trois de Coeur est une suite valide.
+  </li>
+
+  <li>Dame de Coeur, Roi de Coeur et As de Coeur est une suite valide.
+  </li>
+
+  <li>Roi de Coeur, As de Coeur et Deux de Coeur n'est pas une suite valide.
+  </li>
+
+</ul>
+
+<h5>Les Séries : 3 ou 4 cartes de même valeur et de couleur différente</h5>
+
+<ul>
+
+  <li>Les cartes Trois de Coeur, Trois de Pique et Trois de Carreau forment une
+    série valide car elles ont la même valeur (Trois) et elles ont toutes une
+    couleur différente.
+  </li>
+
+  <li>Les cartes Trois de Coeur, Trois de Pique et Trois de Pique ne forment pas
+    une série valide car elles n'ont pas toutes une couleur différente.
+  </li>
+
+  <li>Les cartes Trois de Coeur, Trois de Pique et Quatre de Carreau ne forment
+    pas une série valide car elles n'ont pas toutes la même valeur.
+  </li>
+
+  <li>Les cartes Trois de Coeur et Trois de Pique ne forment pas une série
+    valide car il faut au minimum 3 cartes.
+  </li>
+
+  <li>Les cartes Trois de Coeur, Trois de Pique, Trois de Carreau et Trois de
+    Trèfle forment une série valide car elles ont la même valeur et elles ont
+    toutes une couleur différente.
+  </li>
+
+</ul>
+
+
+<h4>Utilisation du Joker</h4>
+
+<p>Le Joker est une carte spéciale qui peut servir à faire une suite ou une
+  série en remplaçant n'importe quelle carte dans la combinaison. Mais on ne
+  peut utiliser qu'un seul Joker par combinaison.
+</p>
+
+<ul>
+
+  <li>Trois de Coeur, Quatre de Coeur et Joker est une suite valide dans
+    laquelle le Joker remplace le Cinq de Coeur.
+  </li>
+
+  <li>Trois de Coeur, Joker et Cinq de Coeur est une suite valide dans laquelle
+    le Joker remplace le Quatre de Coeur.
+  </li>
+
+  <li>Joker, Quatre de Coeur et Cinq de Coeur est une suite valide dans laquelle
+    le Joker remplace le Trois de Coeur.
+  </li>
+
+  <li>Joker, Quatre de Coeur et Joker n'est pas une suite valide car il y a 2
+    Jokers.
+  </li>
+
+  <li>Trois de Coeur, Trois de Pique et Joker est une série valide dans laquelle
+    le Joker remplace le Trois de Carreau ou le Trois de Trèfle.
+  </li>
+
+  <li>Trois de Coeur, Trois de Pique, Trois de Carreau et Joker est une série
+    valide dans laquelle le Joker remplace le Trois de Trèfle.
+  </li>
+
+  <li>Trois de Coeur, Trois de Pique, Trois de Carreau, Trois de Trèfle et Joker
+    n'est pas une série valide car il faut au maximum 4 cartes dans une série.
+  </li>
+
+  <li>Trois de Coeur, Joker et Joker n'est pas une série valide car il y a 2
+    Jokers.
+  </li>
+
+</ul>
+
+
+<h4>Précisions sur la 1° pose d'un joueur</h4>
+
+<p>Pour commencer à poser des cartes sur la table, le joueur doit impérativement
+  poser une tierce franche et d'autres combinaisons de cartes de façon à ce que
+  les cartes posées représentent 51 points au minimum.
+</p>
+
+<p>Une tierce franche est une suite d'exactement 3 cartes qui ne contient pas de
+ Joker :</p>
+
+<ul>
+
+  <li>Trois de Coeur, Quatre de Coeur et Cinq de Coeur est une tierce franche
+    car c'est une suite valide de 3 cartes sans Joker.
+  </li>
+
+  <li>Deux de Coeur, Trois de Coeur, Quatre de Coeur et Cinq de Coeur n'est pas
+    une tierce franche car il y a plus de 3 cartes.
+  </li>
+
+  <li>Trois de Coeur, Quatre de Coeur et Joker n'est pas une tierce franche car
+    il y a un Joker.
+  </li>
+
+</ul>
+
+
+<h4>Compter les points posés</h4>
+
+<p>Pour contrôler que le joueur a bien posé ses 51 points, on totalise les
+  points de chaque carte posée selon les règles suivantes :
+</p>
+
+<ul>
+
+  <li>Les cartes Deux, Trois, Quatre, ..., Neuf et Dix valent respectivement 2,
+    3, 4, ..., 9 et 10 points.
+  </li>
+
+  <li>Les cartes Valet, Dame et Roi valent 10 points.
+  </li>
+
+  <li>L'As vaut 1 point lorsqu'il fait parti d'une suite As, Deux, Trois... Par
+    contre, il vaut 10 points quand il fait parti d'une suite Dame, Roi, As ou
+    quand il fait parti d'une série (As de Coeur, As de Pique, As de Carreau).
+  </li>
+
+  <li>Le Joker vaut le même nombre de points que la carte qu'il remplace :
+    <ul>
+
+      <li>1 point dans une suite Joker, Deux de Coeur et Trois de Coeur.</li>
+      <li>4 points dans une suite Trois de Coeur, Joker et Cinq de Coeur.</li>
+      <li>10 points dans une suite Valet, Dame, Roi et Joker.</li>
+      <li>3 points dans une série Trois de Coeur, Trois de Pique et Joker.</li>
+      <li>10 points dans une série As de Coeur, As de Pique et Joker.</li>
+      <li>etc...</li>
+
+    </ul>
+
+</ul>
+
+
+<h4>Compléter les combinaisons</h4>
+
+<ul>
+
+  <li>
+  </li>
+
+</ul>
+
+
+<h4>Compter les points en fin de partie</h4>
+
+<p>La partie est terminée lorsque un des joueurs n'a plus de carte à la fin de
+  son tour. Attention, car le tour doit toujours se finir en posant une carte
+  dans la défausse :
+</p>
+
+<ul>
+
+  <li>Si un joueur termine un tour en n'ayant plus que le Trois et le Quatre de
+    coeur dans sa main.
+  </li>
+
+  <li>Si au tour suivant il tire le Cinq de Coeur, il se retrouve avec une suite
+    Trois, Quatre et Cinq à coeur.
+  </li>
+
+  <li>Mais il ne peut pas poser cette suite sur la table car après cela il ne
+    lui resterait pas de carte à poser dans la défausse.
+  </li>
+
+</ul>
+
+<p>Lorsque un joueur a réussi à poser sa dernière carte dans la défausse, la
+  partie est terminée et ce joueur a gagné la partie. Il reste alors à compter
+  les points marqués par chaque joueur.
+</p>
+
+<ul>
+
+  <li>Le joueur qui a gagné la partie marque 0 point.
+  </li>
+
+  <li>Les joueurs qui n'ont pas encore posé de carte sur la table marquent 100
+    points.
+  </li>
+
+  <li>Les joueurs qui ont déjà posé des cartes marquent le nombre de points qui
+    correspond aux cartes qui leur restent en main. Les points sont comptés de
+    la même façon que pour la première pose, mais dans ce cas le Joker vaut
+    toujours 50 points.
+  </li>
+
+</ul>
+
+<p>Il existe un cas particulier quand un joueur pose toutes ses cartes en une
+  seule fois et que les autres joueurs n'ont pas encore posé de carte. Dans ce
+  cas, les autres joueurs ne marquent pas 100 points mais 200 points !
+</p>

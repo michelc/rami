@@ -1,0 +1,7 @@
+<div class="row-fluid">
+  <div class="span12 une_main" title="score = <%= @partie.joueurs[1].a_pose_combien %>">
+    <ul class="sa_main"><% @partie.joueurs[1].cartes.each do |carte| %>
+      <li><%= img_carte(carte, nil) %></li><% end %>
+    </ul>
+  </div>
+</div>

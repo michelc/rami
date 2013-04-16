@@ -1,0 +1,13 @@
+<div class="row-fluid sabots">
+  <ul class="span6 alert alert-info" style="font-size: smaller">
+  <% @partie.messages.reverse.take(12).each do |message| %>
+    <li><%= message %></li>
+  <% end %>
+  </ul>
+  <div class="span3">
+    <div id="la_pioche"><%= img_dos() %></div>
+  </div>
+  <div class="span3">
+    <div id="la_defausse"><%= img_rebut @partie.carte_defausse %></div>
+  </div>
+</div>
