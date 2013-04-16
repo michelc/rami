@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "sinatra" 1.3.3
+gem "sinatra", "1.4.2"
 
 group :development do
 end
