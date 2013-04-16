@@ -62,10 +62,7 @@ class Niveau3
   # - sinon, si cela augmente le nombre de combinaisons sans joker (ie diminue le nb avec joker)
 # TODO : sinon, si cela permet de poser dans les tas déjà posés
   def mieux_vaut_prendre? carte, les_tas
-    # Si le joueur a déjà posé ses 51 points
-    # il peut prendre à condition de poser la carte prise
-
-    #
+    # Non si le joueur n'a pas le droit de prendre la carte à la défausse
     self.trace = "interdit"
     return false if self.joueur.peut_prendre? == false
 
@@ -76,21 +73,17 @@ class Niveau3
     self.trace = "score"
     return false if scores[carte] < 40
 
-    # Si le joueur n'a pas encore posé ses 51 points
-    # il peut prendre à condition d'utiliser la carte ailleurs que dans sa tierce franche
-    # Donc, il ne peut pas prendre s'il ne dispose pas encore de sa tierce franche
-    if joueur.a_pose_tierce? == false
-      self.trace = "tierce"
-      return false if self.joueur.tierce_franche? == false
-    end
+    # Si la carte est posable
+    # Et que le joueur a déjà posé des 51 points
+    # => Autant prendre la carte
+    self.trace = "" if self.joueur.a_pose_51?
+    return true if self.joueur.a_pose_51?
 
-    # Sinon, il peut prendre à condition de poser cette carte
-    # (et donc d'avoir 51 points)
-
-    # Pour l'instant, on en reste au niveau 2
+    # Sinon, il peut prendre à condition d'améliorer sa main
+    # (ou pour l'instant son nombre de combinaisons)
     nb_possibilites = self.joueur.combinaisons.size
     nb_avec_joker = (self.joueur.combinaisons.map { |c| c.avec_joker? }).size
-    main = self.joueur.cartes.map { |c| c }
+    main = self.joueur.cartes.clone
     main << carte
     analyse = Analyse.new main
     nb_possibilites < analyse.combinaisons.size
