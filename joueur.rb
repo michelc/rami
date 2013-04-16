@@ -77,6 +77,25 @@ class Joueur
     self.cartes.size > 1
   end
 
+  # Détermine si le joueur peut prendre la carte de la défausse
+  def peut_prendre?
+    if self.compte_tour == 0
+      # Le joueur peut prendre si c'est son 1° tour
+      true
+    elsif self.cartes.size == 1
+      # Le joueur ne peut pas prendre quand il n'a plus qu'une carte
+      false
+    elsif self.a_pose_51?
+      # Le joueur peut prendre une fois qu'il a posé ses 51 points
+      true
+    elsif self.tierce_franche?
+      # Le joueur peut prendre s'il a déjà sa tierce franche en main
+      true
+    else
+      false
+    end
+  end
+
   # Détermine si le joueur a sa premiere tierce franche dans sa main
   def tierce_franche?
     if a_pose_tierce?

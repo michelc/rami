@@ -188,16 +188,41 @@ end
 
 describe "Joueur", "Vérification peut_prendre?" do
 
-  it "Oui s'il a plus d'une carte dans sa main" do
+  it "Oui si c'est son 1° tour" do
     joueur = Joueur.new("Toto")
-    joueur.ajouter_une_carte Carte.new(0)
-    joueur.ajouter_une_carte Carte.new(1)
     joueur.peut_prendre?.must_equal true
   end
 
   it "Non s'il n'a qu'une carte dans sa main" do
     joueur = Joueur.new("Toto")
+    joueur.compte_tour = 1
     joueur.ajouter_une_carte Carte.new(0)
+    joueur.peut_prendre?.must_equal false
+  end
+
+  it "Oui s'il a posé ses 51 points" do
+    joueur = Joueur.new("Toto")
+    joueur.compte_tour = 1
+    joueur.a_pose_combien = 51
+    joueur.ajouter_une_carte Carte.new(0)
+    joueur.ajouter_une_carte Carte.new(1)
+    joueur.peut_prendre?.must_equal true
+  end
+
+  it "Oui s'il a une tierce franche en main" do
+    joueur = Joueur.new("Toto")
+    joueur.compte_tour = 1
+    joueur.ajouter_une_carte Carte.new(0)
+    joueur.ajouter_une_carte Carte.new(1)
+    joueur.ajouter_une_carte Carte.new(2)
+    joueur.peut_prendre?.must_equal true
+  end
+
+  it "Non s'il n'a pas encore sa tierce franche" do
+    joueur = Joueur.new("Toto")
+    joueur.compte_tour = 1
+    joueur.ajouter_une_carte Carte.new(0)
+    joueur.ajouter_une_carte Carte.new(1)
     joueur.peut_prendre?.must_equal false
   end
 
