@@ -132,6 +132,24 @@ class Partie
     msg self.joueurs[joueur_id].nom, "défausse", carte
   end
 
+  def fin_partie?
+    # Teste s'il y a un gagnant
+    gagnant_id = self.joueurs.find_index { |j| j.cartes.size == 0 }
+    if gagnant_id
+      # Oui => défini le résultat de la partie en fonction du joueur humain
+      if gagnant_id == 0
+        self.messages << "Gagné !!!"
+      else
+        self.messages << "Perdu..."
+      end
+      # Indique que la partie est terminée
+      true
+    else
+      # Indique que la partie n'est pas terminée
+      false
+    end
+  end
+
   def poser_sur_tas joueur, tas, carte
 
     # Cas où le joueur n'a pas encore posé sa tierce franche
