@@ -313,6 +313,22 @@ describe "Analyse", "Multiples combinaisons" do
     analyse.combinaisons[8].to_s.must_equal "[ 9C 9P J* ]"
   end
 
+  it "Reconnait toutes les suites d'une distribution" do
+    une_main = []
+    une_main << Carte.new(0)    # AC
+    une_main << Carte.new(4)    # 5C
+    une_main << Carte.new(5)    # 6C
+    une_main << Carte.new(6)    # 7C
+    une_main << Carte.new(8)    # 9C
+    une_main << Carte.new(10)   # VC
+    une_main << Carte.new(53)   # Joker
+    analyse = Analyse.new une_main
+    analyse.combinaisons.size.must_equal 2
+    # 2 suites
+    analyse.combinaisons[0].to_s.must_equal "[ 5C 6C 7C ]"
+    analyse.combinaisons[1].to_s.must_equal "[ 9C J* VC ]"
+  end
+
 end
 
 

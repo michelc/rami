@@ -137,22 +137,30 @@ class Analyse
       end
       # Re-vérifie qu'il y a un minimum de cartes pour espérer une suite
       next if suite.size < 3
-      #
-      # A, 2, J, 7, 8, 9, J
-      # - A, 2, J => OK
+
+      # A, 2, J, 7, 8, 9, J, A
+      # - A, 2, J, 7, 8, 9 => A, 2, J => OK
       # - 7, 8, 9 => OK
 
-      # A, 2, J, 5, J, 8, 9, J
-      # - A, 2, J => OK
+      # A, 2, J, 5, J, 8, 9, J, A
+      # - A, 2, J, 5 => A, 2, J => OK
       # - 5, J, 8, 9 => KO
-      # - 8, 9, J => OK
+      # - 8, 9, J, AC => 8, 9, J => OK
+
+      # A, J, 5, 6, 7, J, 9, J, V, J, A
+      # - A, J, 5, 6, 7 => KO
+      # - 5, 6, 7 => OK
+      # - J, 9 => KO
+      # - 9, J, V => OK
+      # - V, J, A => KO
 
       i = 0
       while i < suite.size - 3 + 1
+
         en_cours = [ suite[i] ]
         j = i + 1
         k = -1
-        deja_un_joker = false
+        deja_un_joker = suite[i].est_joker?
         while j < suite.size
           if suite[j].est_joker?
             break if en_cours.size >= 3
