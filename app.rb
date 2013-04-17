@@ -160,12 +160,25 @@ get "/ecarter/:carte_id" do
   carte = Carte.new params[:carte_id].to_i
   @partie.poser_dans_defausse MOI, carte
 
+  # MOI n'a plus de carte
+  if @partie.joueurs[MOI].cartes.size == 0
+    @partie.messages << "Gagné !!!"
+    session[:partie] = @partie
+    redirect to("/")
+  end
+
   # C'est à RUBY de jouer
   @partie.faire_jouer RUBY
 
   # Puis c'est au tour de MOI de jouer
   @partie.piocher = true
   # @partie.message = "A votre tour de piocher une carte"
+
+  # RUBY n'a plus de carte
+  if @partie.joueurs[RUBY].cartes.size == 0
+    @partie.messages << "Perdu..."
+    @partie.piocher = false
+  end
 
   session[:partie] = @partie
   redirect to("/")
