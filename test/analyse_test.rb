@@ -573,4 +573,13 @@ describe "Analyse", "Reconnait une suite" do
     analyse.est_une_suite?(suite).must_equal false
   end
 
+  it "Refuse suite Roi As Joker" do
+    suite = []
+    suite << Carte.new(12)
+    suite << Carte.new(0)
+    suite << Carte.new(52)
+    analyse = Analyse.new []
+    analyse.est_une_suite?(suite).must_equal false
+  end
+
 end

@@ -74,6 +74,7 @@ class Analyse
       # Vérifie que la carte correspond à celle qu'on attendait
       if carte.carte_id != id_carte_attendue
         return false unless carte.est_joker?
+        return false if id_carte_attendue == -1
       end
       # Détermine quelle devra être la carte suivante
       if carte.est_joker?
