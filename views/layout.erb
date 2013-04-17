@@ -107,7 +107,7 @@
     , drop: function(e, ui) {
         ui.draggable.draggable("option", "revert", false);
         url = "/piocher";
-        if (ui.helper.attr('id') != "dos") url = "/prendre";
+        if (ui.helper.attr('id') != undefined) url = "/prendre";
         window.location.href = url;
       }
   };
