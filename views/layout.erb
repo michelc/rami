@@ -105,6 +105,7 @@
     , activeClass: "activated"
     , hoverClass: "hovered"
     , drop: function(e, ui) {
+        ui.draggable.draggable("option", "revert", false);
         url = "/piocher";
         if (ui.helper.attr('id') != "dos") url = "/prendre";
         window.location.href = url;
@@ -144,6 +145,7 @@
     , activeClass: "activated"
     , hoverClass: "hovered"
     , drop: function(e, ui) {
+        ui.draggable.draggable("option", "revert", false);
         url = "/ecarter/" + ui.draggable[0].id.replace("carte", "");
         window.location.href = url;
       }
@@ -156,6 +158,7 @@
     , activeClass: "activated"
     , hoverClass: "hovered"
     , drop: function(e, ui) {
+        ui.draggable.draggable("option", "revert", false);
         url = "/poser/" + ui.draggable[0].id.replace("carte", "");
         url += this.id.replace("tas", "/sur/");
         window.location.href = url;
