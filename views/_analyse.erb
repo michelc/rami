@@ -1,5 +1,5 @@
-<div class="row-fluid"><% @partie.joueurs[0].combinaisons.each do |combinaison| %>
+<% if @debug %><div class="row-fluid"><% @partie.joueurs[0].combinaisons.each do |combinaison| %>
   <ul class="un_tas" title="<%= combinaison.to_s %>">
   <% combinaison.cartes.each do |carte| %><li><%= img_carte(carte, nil) %></li><% end %>
   </ul><% end %>
-</div>
+</div><% end %>
