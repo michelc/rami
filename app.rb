@@ -27,8 +27,13 @@ helpers do
   end
 
   # Code HTML pour afficher le dos d'une carte
-  def img_dos
-    "<img class='card' src='/#{@cards_theme}/carte-dos.png' />"
+  def img_dos carte
+    carte = nil unless @debug
+    if carte.nil?
+      "<img class='card' src='/#{@cards_theme}/carte-dos.png' />"
+    else
+      img_carte carte, nil
+    end
   end
 
   # Code HTML pour afficher la pile des cartes rejetées
@@ -55,9 +60,20 @@ end
 # Page d'accueil
 get "/" do
   @partie = session[:partie]
+  @debug = session[:debug] ? true : false
   redirect to('/demarrer') unless @partie
 
   erb :table
+end
+
+# Mode debug
+get "/debug" do
+  @debug = session[:debug] ? true : false
+
+  @debug = !@debug
+
+  session[:debug] = @debug
+  redirect to("/")
 end
 
 # Nouvelle partie
