@@ -68,15 +68,15 @@
   // Le joueur MOI doit tirer une carte de la pioche ou de la défausse
 
   // Joueur peut double-cliquer la pioche pour y prendre la carte
-  $("#la_pioche").css("cursor", "pointer");
-  $("#la_pioche").on("dblclick", function () {
+  $("#la_pioche .card").css("cursor", "pointer");
+  $("#la_pioche .card").on("dblclick", function () {
     window.location.href = "/piocher";
   });
 
   <% if @partie.joueurs[0].peut_prendre? %>
   // Joueur peut double-cliquer la défausse pour y prendre la carte
-  $("#la_defausse").css("cursor", "pointer");
-  $("#la_defausse").on("dblclick", function () {
+  $("#la_defausse .card").css("cursor", "pointer");
+  $("#la_defausse .card").on("dblclick", function () {
     window.location.href = "/prendre";
   });
   <% end %>
@@ -94,9 +94,9 @@
         ui.helper.css("z-index", 0);
       }
   };
-  $("#la_pioche").draggable(dragOpts);
+  $("#la_pioche .card").draggable(dragOpts);
   <% if @partie.joueurs[0].peut_prendre? %>
-  $("#la_defausse").draggable(dragOpts);
+  $("#la_defausse .card").draggable(dragOpts);
   <% end %>
 
   // Sa main accepte donc une carte en provenance de pioche / défausse
