@@ -23,7 +23,8 @@ helpers do
     id = "0" + id if id.size < 2
     css = "card"
     css << " derniere" if carte == derniere
-    "<img id='carte#{id}' class='#{css}' src='/#{@cards_theme}/carte-#{id}.png' title='#{carte.tooltip}' />"
+    tooltip = @debug ? " title='#{carte.tooltip}'" : ""
+    "<img id='carte#{id}' class='#{css}' src='/#{@cards_theme}/carte-#{id}.png'#{tooltip} />"
   end
 
   # Code HTML pour afficher le dos d'une carte
@@ -43,6 +44,10 @@ helpers do
     else
       " " #<img src='/#{@cards_theme}/pile-vide.png' />"
     end
+  end
+
+  def tooltip text
+    @debug ? " title='#{text}'" : ""
   end
 
 end

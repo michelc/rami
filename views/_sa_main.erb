@@ -1,5 +1,5 @@
 <div class="row-fluid">
-  <div class="span12 une_main" title="score = <%= @partie.joueurs[1].a_pose_combien %>">
+  <div class="span12 une_main"<%= tooltip("points = #{@partie.joueurs[1].a_pose_combien}") %>>
     <ul class="sa_main"><% @partie.joueurs[1].cartes.each do |carte| %>
       <li><%= img_dos(carte) %></li><% end %>
     </ul>
