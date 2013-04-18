@@ -292,7 +292,52 @@
 
 <ul>
 
-  <li>
+  <li>Une fois qu'il a posé 51 points, le joueur dont c'est le tour peut
+    continuer à jouer ses cartes en complétant les combinaisons déjà posées sur
+    la table.
+  </li>
+
+  <li>Pour compléter une combinaison, il faut lui ajouter une carte qui vient
+    continuer la combinaison :
+    <ul>
+      <li>compléter une suite Valet de Coeur, Dame de Coeur et Roi de Coeur avec
+        le Dix de Coeur (10, Valet, Dame et Roi) ou l'As de Coeur (Valet, Dame,
+        Roi et As).
+      </li>
+      <li>compléter une suite Valet de Coeur, Dame de Coeur et Joker avec le Dix
+        de Coeur (10, Valet, Dame et Joker) ou l'As de Coeur (Valet, Dame, Joker
+        et As).
+      </li>
+      <li>compléter une série Dame de Coeur, Dame de Pique et Dame de Carreau en
+        ajoutant la Dame de Trèfle.
+      </li>
+      <li>compléter une série Dame de Coeur, Dame de Pique et Joker en ajoutant
+        la Dame de Carreau ou la Dame de Trèfle.
+      </li>
+    </ul>
+  </li>
+
+  <li>Le joueur a également la possibilité de récupérer le Joker présent dans
+    une combinaison à condition de poser à sa place la carte qu'il représente :
+    <ul>
+      <li>remplacer le Joker dans la suite Valet de Coeur, Dame de Coeur et
+        Joker en posant le Roi de Coeur.
+      </li>
+      <li>remplacer le Joker dans la série Dame de Coeur, Dame de Pique, Dame de
+        Carreau et Joker en posant la Dame de Trèfle.
+      </li>
+    </ul>
+  </li>
+
+  <li>Il n'est pas possible de remplacer le Joker dans une série comme Dame de
+    Coeur, Dame de Pique et Joker car dans ce cas le Joker représente aussi bien
+    la Dame de Carreau que la Dame de Trèfle.
+  </li>
+
+  <li>Le joueur peut compléter les combinaisons de ses adversaires dès qu'il a
+    fini de poser ses 51 points. Par contre, il doit attendre le tour suivant
+    pour pouvoir compléter ses propres combinaisons (et en particulier sa tierce
+    franche).
   </li>
 
 </ul>
@@ -300,7 +345,7 @@
 
 <h4>Compter les points en fin de partie</h4>
 
-<p>La partie est terminée lorsque un des joueurs n'a plus de carte à la fin de
+<p>La partie est terminée lorsqu'un des joueurs n'a plus de carte à la fin de
   son tour. Attention, car le tour doit toujours se finir en posant une carte
   dans la défausse :
 </p>
@@ -344,6 +389,7 @@
 </ul>
 
 <p>Il existe un cas particulier quand un joueur pose toutes ses cartes en une
-  seule fois et que les autres joueurs n'ont pas encore posé de carte. Dans ce
-  cas, les autres joueurs ne marquent pas 100 points mais 200 points !
+  seule fois et que les autres joueurs n'ont pas encore posé de carte. Il doit
+  alors crier "RAMI !" et dans ce cas, les autres joueurs ne marquent pas 100
+  points mais 200 points.
 </p>
