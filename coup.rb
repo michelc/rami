@@ -49,31 +49,50 @@ class Coups < Array
   def to_messages
     messages = [ "Distribution des cartes "]
     tas = (0..11).map { |i| "" }
+    avant = nil
     self.each_with_index do | coup, index |
       unless coup.type_id.include? "ramasser"
         if coup.type_id.include? "sur "
           # Est-ce que la carte posée est la dernière d'un ensemble de cartes
           # posées par le même joueur sur le même tas ?
-          carte = Carte.new(coup.carte_id).to_s
-          tas_id = (coup.type_id.sub "sur tas ", "").to_i
-          tas[tas_id] << " #{carte}"
-          derniere = false
+          derniere = true
           if index < self.size - 1
             if coup.joueur_id == self[index + 1].joueur_id
-              derniere = true if coup.type_id == self[index + 1].type_id
+              derniere = false if coup.type_id == self[index + 1].type_id
             end
           end
           # Message uniquement quand pose de la dernière carte de l'ensemble
+          carte = Carte.new(coup.carte_id).to_s
+          tas_id = (coup.type_id.sub "sur tas ", "").to_i
           if derniere
+            # Est-ce que le joueur crée un nouveau tas ou complète un tas existant ?
+            creer = if tas[tas_id] == ""
+                      true
+                    elsif avant.joueur_id != coup.joueur_id
+                      false
+                    elsif avant.type_id != coup.type_id
+                      false
+                    else
+                      true
+                    end
             text = "MR"[coup.joueur_id]
             text << ": "
-            text << "poser #{tas[tas_id]}"
+            if creer
+              tas[tas_id] << " #{carte}"
+              text << "poser #{tas[tas_id]}"
+            else
+              text << "ajouter #{carte} à #{tas[tas_id]}"
+              tas[tas_id] << " #{carte}"
+            end
             messages << text
+          else
+            tas[tas_id] << " #{carte}"
           end
         else
           messages << coup.to_s
         end
       end
+      avant = coup
     end
     messages
   end
