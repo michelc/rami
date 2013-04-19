@@ -66,7 +66,14 @@ class Coup
 
   def to_s
     carte = Carte.new(self.carte_id).to_s
-    "J#{self.joueur_id} #{carte} #{self.type_id}"
+    text = "MR"[self.joueur_id]
+    text << ": "
+    if self.type_id.include? "sur "
+      text << "poser #{carte} #{self.type_id}"
+    else
+      text << "#{self.type_id} #{carte}"
+    end
+    text
   end
 
 end
