@@ -355,7 +355,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # donc forcément sur un tas vide
       if tas.cartes.size != 0
         msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "pas un tas vide #{tas.cartes.size}"
-        return if joueur.nom == "Moi"
+        return
       end
     when 14
       # Si le joueur a 14 cartes
@@ -363,7 +363,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # donc forcément sur un tas de 1 carte
       if tas.cartes.size != 1
         msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "pas le tas commencé #{tas.cartes.size}"
-        return if joueur.nom == "Moi"
+        return
       end
     when 13
       # Si le joueur a 13 cartes
@@ -371,12 +371,12 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # donc forcément sur un tas de 2 cartes
       if tas.cartes.size != 2
         msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "pas le tas commencé #{tas.cartes.size}"
-        return if joueur.nom == "Moi"
+        return
       end
     else
       # Sinon on est dans un cas inattendu
       msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "hors tierce franche #{joueur.cartes.size}"
-      return if joueur.nom == "Moi"
+      return
     end
 
     # Place la carte du joueur sur le tas destiné à sa tierce franche
