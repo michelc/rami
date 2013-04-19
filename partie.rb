@@ -4,6 +4,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "paquet"
 require "joueur"
 require "tas"
+require "coup"
 
 
 # Classe Partie
@@ -28,6 +29,7 @@ class Partie
 
   attr_accessor :messages         # Tableau des messages d'information
   attr_accessor :traces           # Tableau des messages d'information
+  attr_accessor :coups            # Tableau des coups joués
 
   # OU BIEN, GERER PIOCHE ET DEFAUSSE AU NIVEAU DE LA PARTIE
   # attr_accessor :pioche
@@ -50,6 +52,7 @@ class Partie
 
     self.messages = []
     self.traces = []
+    self.coups = Coups.new
   end
 
   def distribuer_les_cartes
@@ -103,6 +106,7 @@ class Partie
     # Pour l'ajouter à la main du joueur
     self.joueurs[joueur_id].ajouter_une_carte self.carte_tiree
     msg self.joueurs[joueur_id].nom, "pioche", self.carte_tiree
+    self.coups.piocher joueur_id, self.carte_tiree.carte_id
   end
 
   def prendre_dans_defausse joueur_id
@@ -113,6 +117,7 @@ class Partie
     # Mémorise la nouvelle carte disponible à la défausse
     self.carte_defausse = self.paquet.carte_defausse
     msg self.joueurs[joueur_id].nom, "prend", self.carte_tiree
+    self.coups.repecher joueur_id, self.carte_tiree.carte_id
   end
 
   def poser_dans_defausse joueur_id, carte
@@ -130,6 +135,7 @@ class Partie
     # Passe au tour suivant lorsque tous les joueurs ont fini le tour
     self.compte_tour += 1 if self.joueurs.all? { |j| j.compte_tour == self.compte_tour }
     msg self.joueurs[joueur_id].nom, "défausse", carte
+    self.coups.defausser joueur_id, carte.carte_id
   end
 
   def fin_partie?
@@ -282,6 +288,9 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       joueur.cartes << joker
       # - Informe le joueur qu'il a récupéré le joker
       msg joueur.nom, "remplace", carte, "dans #{avant_cartes}"
+      # - Mémorise le coup joué
+      joueur_id = joueur.nom == "Moi" ? 0 : 1
+      self.coups.poser joueur_id, carte.carte_id, tas.tas_id
       return
     end
 
@@ -297,6 +306,9 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # - Informe le joueur qu'il a complété le tas
       resultat = donner_score ? "#{joueur.a_pose_combien} pts" : nil
       msg joueur.nom, "ajoute", carte, "à #{avant_cartes}", resultat
+      # - Mémorise le coup joué
+      joueur_id = joueur.nom == "Moi" ? 0 : 1
+      self.coups.poser joueur_id, carte.carte_id, tas.tas_id
       return
     end
 
@@ -313,6 +325,9 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     joueur.enlever_une_carte carte
     # - Pour la placer sur un tas
     tas.ajouter_une_carte carte
+    # - Mémorise le coup joué
+    joueur_id = joueur.nom == "Moi" ? 0 : 1
+    self.coups.poser joueur_id, carte.carte_id, tas.tas_id
     # - Rien d'autre à faire tant que le tas ne contient pas 3 cartes
     if tas.cartes.size < 3
       msg joueur.nom, "place", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>"
@@ -337,7 +352,10 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
 
     # Cas où les 3 cartes ne constituent pas une combinaison valide !!!
     # - Remet les cartes du tas dans la main du joueur
-    tas.cartes.each { |c| joueur.ajouter_une_carte c }
+    tas.cartes.each do |c|
+      joueur.ajouter_une_carte c
+      self.coups.annuler
+    end
     # - Vide le tas
     tas.clear
     # - Informe le joueur qu'il y a un problème
@@ -380,11 +398,14 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     end
 
     # Place la carte du joueur sur le tas destiné à sa tierce franche
-    # - retire une carte de la main du joueur
+    # - Retire une carte de la main du joueur
     joueur.enlever_une_carte carte
-    # - pour la placer sur un tas
+    # - Pour la placer sur un tas
     tas.ajouter_une_carte carte
-    # - rien d'autre à faire tant que le tas ne contient pas 3 cartes
+    # - Mémorise le coup joué
+    joueur_id = joueur.nom == "Moi" ? 0 : 1
+    self.coups.poser joueur_id, carte.carte_id, tas.tas_id
+    # - Rien d'autre à faire tant que le tas ne contient pas 3 cartes
     if tas.cartes.size < 3
       msg joueur.nom, "place", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>"
       return
@@ -405,7 +426,10 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
 
     # Cas où les 3 cartes ne constituent pas une tierce franche !!!
     # - Remet les cartes du tas dans la main du joueur
-    tas.cartes.each { |c| joueur.ajouter_une_carte c }
+    tas.cartes.each do |c|
+      joueur.ajouter_une_carte c
+      self.coups.annuler
+    end
     # - Vide le tas
     tas.clear
     # - Informe le joueur qu'il y a un problème
