@@ -64,4 +64,9 @@ class Coup
     self.type_id = type_id
   end
 
+  def to_s
+    carte = Carte.new(self.carte_id).to_s
+    "J#{self.joueur_id} #{carte} #{self.type_id}"
+  end
+
 end
