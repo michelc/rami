@@ -78,16 +78,13 @@ class Coups < Array
             text = "MR"[coup.joueur_id]
             text << ": "
             if creer
-              tas[tas_id] << " #{carte}"
-              text << "poser #{tas[tas_id]}"
+              text << "poser #{tas[tas_id]} #{carte}"
             else
               text << "ajouter #{carte} à #{tas[tas_id]}"
-              tas[tas_id] << " #{carte}"
             end
             messages << text
-          else
-            tas[tas_id] << " #{carte}"
           end
+          tas[tas_id] << " #{carte}"
         else
           messages << coup.to_s
         end
