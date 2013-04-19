@@ -48,32 +48,30 @@ class Coups < Array
 
   def to_messages
     messages = [ "Distribution des cartes "]
-    suivant = 0
+    tas = (0..11).map { |i| "" }
     self.each_with_index do | coup, index |
       unless coup.type_id.include? "ramasser"
-        if index < suivant
-          # La pose de cette carte a déjà été traitée
-        elsif coup.type_id.include? "sur "
-          # Traite la pose de plusieurs carte par le même joueur sur le même tas
-          cartes = ""
-          j = index
-          while j < self.size
-            break if coup.joueur_id != self[j].joueur_id
-            break if coup.type_id != self[j].type_id
-            carte = Carte.new(self[j].carte_id).to_s
-            cartes << " #{carte}"
-            j += 1
+        if coup.type_id.include? "sur "
+          # Est-ce que la carte posée est la dernière d'un ensemble de cartes
+          # posées par le même joueur sur le même tas ?
+          carte = Carte.new(coup.carte_id).to_s
+          tas_id = (coup.type_id.sub "sur tas ", "").to_i
+          tas[tas_id] << " #{carte}"
+          derniere = false
+          if index < self.size - 1
+            if coup.joueur_id == self[index + 1].joueur_id
+              derniere = true if coup.type_id == self[index + 1].type_id
+            end
           end
-          # Pour éviter de re-traiter les cartes déjà traitées
-          suivant = j
-          # Message pour pose des différentes cartes
-          text = "MR"[coup.joueur_id]
-          text << ": "
-          text << "poser #{cartes}"
-          messages << text
+          # Message uniquement quand pose de la dernière carte de l'ensemble
+          if derniere
+            text = "MR"[coup.joueur_id]
+            text << ": "
+            text << "poser #{tas[tas_id]}"
+            messages << text
+          end
         else
           messages << coup.to_s
-          suivant = 0
         end
       end
     end
