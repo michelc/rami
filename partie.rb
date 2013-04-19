@@ -60,6 +60,9 @@ class Partie
     # (les cartes étant mélangées => on ne distribue pas 2 par 2)
     self.joueurs.each do |joueur|
       joueur.ramasser_cartes self.paquet.distribuer_une_main(Joueur::TAILLE_MAIN)
+      # Mémorise les cartes ramassées
+      joueur_id = joueur.nom == "Moi" ? 0 : 1
+      self.coups.ramasser joueur_id, joueur.cartes
     end
     # Crée le tas de défausse en y plaçant la 1° carte de la pioche
     self.carte_defausse = self.paquet.piocher_une_carte

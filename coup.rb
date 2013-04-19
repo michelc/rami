@@ -12,28 +12,33 @@ class Coups < Array
     super
   end
 
+  # Joueur ramasse les cartes distribuées
+  def ramasser joueur_id, cartes
+    cartes.each { |c| self << Coup.new(joueur_id, c.carte_id, "ramasser") }
+  end
+
   # 1° coup possible
-  # Un joueur prend une carte dans la pioche
+  # Joueur prend une carte dans la pioche
   def piocher joueur_id, carte_id
-    self << Coup.new(joueur_id, carte_id, "P")
+    self << Coup.new(joueur_id, carte_id, "piocher")
   end
 
   # 2° coup possible
-  # Un joueur prend une carte dans la défausse
+  # Joueur prend une carte dans la défausse
   def repecher joueur_id, carte_id
-    self << Coup.new(joueur_id, carte_id, "R")
+    self << Coup.new(joueur_id, carte_id, "repecher")
   end
 
   # 3° coup possible
-  # Un joueur pose une carte dans la défausse
+  # Joueur pose une carte dans la défausse
   def defausser joueur_id, carte_id
-    self << Coup.new(joueur_id, carte_id, "D")
+    self << Coup.new(joueur_id, carte_id, "défausser")
   end
 
   # 4° coup possible
-  # Un joueur pose une carte sur un tas
+  # Joueur pose une carte sur un tas
   def poser joueur_id, carte_id, tas_id
-    self << Coup.new(joueur_id, carte_id, tas_id)
+    self << Coup.new(joueur_id, carte_id, "sur #{tas_id}")
   end
 
   # Annule le dernier coup joué
