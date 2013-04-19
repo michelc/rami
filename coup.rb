@@ -48,9 +48,33 @@ class Coups < Array
 
   def to_messages
     messages = [ "Distribution des cartes "]
-    self.each do |coup|
+    suivant = 0
+    self.each_with_index do | coup, index |
       unless coup.type_id.include? "ramasser"
-        messages << coup.to_s
+        if index < suivant
+          # La pose de cette carte a déjà été traitée
+        elsif coup.type_id.include? "sur "
+          # Traite la pose de plusieurs carte par le même joueur sur le même tas
+          cartes = ""
+          j = index
+          while j < self.size
+            break if coup.joueur_id != self[j].joueur_id
+            break if coup.type_id != self[j].type_id
+            carte = Carte.new(self[j].carte_id).to_s
+            cartes << " #{carte}"
+            j += 1
+          end
+          # Pour éviter de re-traiter les cartes déjà traitées
+          suivant = j
+          # Message pour pose des différentes cartes
+          text = "MR"[coup.joueur_id]
+          text << ": "
+          text << "poser #{cartes}"
+          messages << text
+        else
+          messages << coup.to_s
+          suivant = 0
+        end
       end
     end
     messages
