@@ -8,6 +8,11 @@
 
 <div class="row-fluid">
   <div class="span12">
-    <%= @partie.coups.reverse.to_s %>
+    <ul>
+    <% @partie.coups.to_messages.reverse.take(12).each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+    <p><%= @partie.coups.reverse.to_s %></p>
   </div>
 </div>

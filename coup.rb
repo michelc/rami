@@ -38,12 +38,22 @@ class Coups < Array
   # 4° coup possible
   # Joueur pose une carte sur un tas
   def poser joueur_id, carte_id, tas_id
-    self << Coup.new(joueur_id, carte_id, "sur #{tas_id}")
+    self << Coup.new(joueur_id, carte_id, "sur tas #{tas_id}")
   end
 
   # Annule le dernier coup joué
   def annuler
     self.pop
+  end
+
+  def to_messages
+    messages = [ "Distribution des cartes "]
+    self.each do |coup|
+      unless coup.type_id.include? "ramasser"
+        messages << coup.to_s
+      end
+    end
+    messages
   end
 
 end
