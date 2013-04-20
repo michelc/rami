@@ -58,6 +58,7 @@ class Partie
   def distribuer_les_cartes
     # Distribue 14 cartes à chaque joueur
     # (les cartes étant mélangées => on ne distribue pas 2 par 2)
+    self.coups.alerter 0, "Distribution des cartes"
     self.joueurs.each do |joueur|
       joueur.ramasser_cartes self.paquet.distribuer_une_main(Joueur::TAILLE_MAIN)
       # Mémorise les cartes ramassées
@@ -120,7 +121,7 @@ class Partie
     # Mémorise la nouvelle carte disponible à la défausse
     self.carte_defausse = self.paquet.carte_defausse
     msg self.joueurs[joueur_id].nom, "prend", self.carte_tiree
-    self.coups.repecher joueur_id, self.carte_tiree.carte_id
+    self.coups.prendre joueur_id, self.carte_tiree.carte_id
   end
 
   def poser_dans_defausse joueur_id, carte
@@ -148,8 +149,10 @@ class Partie
       # Oui => défini le résultat de la partie en fonction du joueur humain
       if gagnant_id == 0
         self.messages << "Gagné !!!"
+        self.coups.alerter 0, "Gagné !!!"
       else
         self.messages << "Perdu..."
+        self.coups.alerter 0, "Perdu..."
       end
       # Indique que la partie est terminée
       true
@@ -269,6 +272,8 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     avant_points = tas.combinaison.points
     # Détermine s'il est encore nécessaire de donner le score du joueur
     donner_score = joueur.a_pose_51? ? false : true
+    # Détermine l'identifiant du joueur en cours
+    joueur_id = joueur.nom == "Moi" ? 0 : 1
 
     # Cas où le joueur n'a pas encore posé ses 51 points
     if (joueur.a_pose_51? == false)
@@ -276,6 +281,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       tas.nom_joueur = joueur.nom if avant_points == 0
       # - Le joueur ne peut pas poser sur un tas adverse pour l'instant
       if tas.nom_joueur != joueur.nom
+        self.coups.alerter joueur_id, "il faut 51 pour compléter les tas"
         msg_libre "Tas #{tas.tas_id} interdit car seulement #{joueur.a_pose_combien} sur 51 points"
         return
       end
@@ -292,7 +298,6 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # - Informe le joueur qu'il a récupéré le joker
       msg joueur.nom, "remplace", carte, "dans #{avant_cartes}"
       # - Mémorise le coup joué
-      joueur_id = joueur.nom == "Moi" ? 0 : 1
       self.coups.poser joueur_id, carte.carte_id, tas.tas_id
       return
     end
@@ -310,7 +315,6 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       resultat = donner_score ? "#{joueur.a_pose_combien} pts" : nil
       msg joueur.nom, "ajoute", carte, "à #{avant_cartes}", resultat
       # - Mémorise le coup joué
-      joueur_id = joueur.nom == "Moi" ? 0 : 1
       self.coups.poser joueur_id, carte.carte_id, tas.tas_id
       return
     end
@@ -320,6 +324,8 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     if tas.cartes.size >= 3
       # - Informe le joueur qu'il y a un problème
       msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>"
+      type = tas.combinaison.type == :serie ? "série" : "suite"
+      self.coups.alerter joueur_id, "#{carte} ne complète pas la #{type}"
       return
     end
 
@@ -329,7 +335,6 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     # - Pour la placer sur un tas
     tas.ajouter_une_carte carte
     # - Mémorise le coup joué
-    joueur_id = joueur.nom == "Moi" ? 0 : 1
     self.coups.poser joueur_id, carte.carte_id, tas.tas_id
     # - Rien d'autre à faire tant que le tas ne contient pas 3 cartes
     if tas.cartes.size < 3
@@ -349,6 +354,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # - Informe l'utilisateur qu'il a posé une combinaison valide
       resultat = donner_score ? "#{joueur.a_pose_combien} pts" : nil
       msg joueur.nom, "pose", combinaison, "sur <span title='tas n°#{tas.tas_id}'>table</span>", resultat
+      self.coups.marquer joueur_id, tas.combinaison.points, joueur.a_pose_combien
       # - Rien d'autre à faire
       return
     end
@@ -363,41 +369,24 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     tas.clear
     # - Informe le joueur qu'il y a un problème
     msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "#{combinaison.to_s} pas valide"
+    self.coups.alerter joueur_id, "#{combinaison.to_s} pas une combinaison"
   end
 
   # Cas où le joueur est en train de constituer sa tierce franche
   def poser_tierce_franche joueur, tas, carte
+    # Détermine l'identifiant du joueur en cours
+    joueur_id = joueur.nom == "Moi" ? 0 : 1
 
     # Vérifie que le joueur pose sa tierce franche au bon endroit
-    case joueur.cartes.size
-    when 15
+    if joueur.cartes.size == 15
       # Si le joueur a 15 cartes
       # Alors, il est en train de poser sa 1° carte,
       # donc forcément sur un tas vide
       if tas.cartes.size != 0
         msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "pas un tas vide #{tas.cartes.size}"
+        self.coups.alerter joueur_id, "tierce franche doit aller sur un tas vide"
         return
       end
-    when 14
-      # Si le joueur a 14 cartes
-      # Alors, il est en train de poser sa 2° carte,
-      # donc forcément sur un tas de 1 carte
-      if tas.cartes.size != 1
-        msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "pas le tas commencé #{tas.cartes.size}"
-        return
-      end
-    when 13
-      # Si le joueur a 13 cartes
-      # Alors, il est en train de poser sa 3° carte
-      # donc forcément sur un tas de 2 cartes
-      if tas.cartes.size != 2
-        msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "pas le tas commencé #{tas.cartes.size}"
-        return
-      end
-    else
-      # Sinon on est dans un cas inattendu
-      msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "hors tierce franche #{joueur.cartes.size}"
-      return
     end
 
     # Place la carte du joueur sur le tas destiné à sa tierce franche
@@ -406,7 +395,6 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     # - Pour la placer sur un tas
     tas.ajouter_une_carte carte
     # - Mémorise le coup joué
-    joueur_id = joueur.nom == "Moi" ? 0 : 1
     self.coups.poser joueur_id, carte.carte_id, tas.tas_id
     # - Rien d'autre à faire tant que le tas ne contient pas 3 cartes
     if tas.cartes.size < 3
@@ -421,8 +409,8 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # Mémorise le nombre de points que représente la tierce franche
       joueur.a_pose_combien = combinaison.points
       # Informe l'utilisateur qu'il a posé sa tierce franche
-      # msg joueur.nom, "place", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "#{combinaison.to_s} (tierce franche)"
       msg joueur.nom, "pose", combinaison, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "#{joueur.a_pose_combien} pts"
+      self.coups.marquer joueur_id, tas.combinaison.points, joueur.a_pose_combien
       # Rien d'autre à faire
       return
     end
@@ -437,6 +425,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     tas.clear
     # - Informe le joueur qu'il y a un problème
     msg joueur.nom, "KO", carte, "sur <span title='tas n°#{tas.tas_id}'>table</span>", "#{combinaison.to_s} pas une tierce franche"
+    self.coups.alerter joueur_id, "#{combinaison.to_s} pas une tierce franche"
   end
 
 end
