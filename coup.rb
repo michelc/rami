@@ -120,7 +120,7 @@ class Coup
   end
 
   def to_s
-    text = "MR"[self.joueur_id]
+    text = "MRD"[self.joueur_id]
     text << ": "
     if self.message == ""
       carte = Carte.new(self.carte_id).to_s

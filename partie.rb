@@ -56,7 +56,7 @@ class Partie
   def distribuer_les_cartes
     # Distribue 14 cartes à chaque joueur
     # (les cartes étant mélangées => on ne distribue pas 2 par 2)
-    self.coups.alerter 0, "Distribution des cartes"
+    self.coups.alerter -1, "Distribution des cartes"
     self.joueurs.each do |joueur|
       joueur.ramasser_cartes self.paquet.distribuer_une_main(Joueur::TAILLE_MAIN)
       # Mémorise les cartes ramassées
@@ -66,6 +66,7 @@ class Partie
     # Crée le tas de défausse en y plaçant la 1° carte de la pioche
     self.carte_defausse = self.paquet.piocher_une_carte
     self.paquet.defausser_une_carte self.carte_defausse
+    self.coups.defausser -1, self.carte_defausse.carte_id
     # Puis on commence le 1° tour de jeu
     self.compte_tour = 1
     self.traces = []
