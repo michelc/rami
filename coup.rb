@@ -64,27 +64,13 @@ class Coups < Array
           # Message uniquement quand pose de la dernière carte de l'ensemble
           carte = Carte.new(coup.carte_id).to_s
           tas_id = (coup.type_id.sub "sur tas ", "").to_i
+          tas[tas_id] << " #{carte}"
           if derniere
-            # Est-ce que le joueur crée un nouveau tas ou complète un tas existant ?
-            creer = if tas[tas_id] == ""
-                      true
-                    elsif avant.joueur_id != coup.joueur_id
-                      false
-                    elsif avant.type_id != coup.type_id
-                      false
-                    else
-                      true
-                    end
             text = "MR"[coup.joueur_id]
             text << ": "
-            if creer
-              text << "poser #{tas[tas_id]} #{carte}"
-            else
-              text << "ajouter #{carte} à #{tas[tas_id]}"
-            end
+            text << "poser #{tas[tas_id].sub(carte, "[" + carte + "]")}"
             messages << text
           end
-          tas[tas_id] << " #{carte}"
         else
           messages << coup.to_s
         end
