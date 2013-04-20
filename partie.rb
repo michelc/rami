@@ -277,6 +277,8 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       joueur.a_pose_combien += tas.combinaison.points
       # - Mémorise le coup joué
       self.coups.poser joueur_id, carte.carte_id, tas.tas_id
+      # - Informe le joueur qu'il a complété une combinaison valide
+      self.coups.marquer joueur_id, tas.combinaison.points, joueur.a_pose_combien
       return
     end
 
