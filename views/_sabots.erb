@@ -1,6 +1,6 @@
 <div class="row-fluid sabots">
   <ul class="span6 alert alert-info" style="font-size: smaller">
-  <% @partie.messages.reverse.take(12).each do |message| %>
+  <% @partie.coups.to_messages.reverse.take(12).each do |message| %>
     <li><%= message %></li>
   <% end %>
   </ul>
