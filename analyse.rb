@@ -124,6 +124,7 @@ class Analyse
       # Complète éventuellement les "trous" avec un joker
       # - 2, 3, V, D, R => 2, 3, J, V, D, R, J
       # - 2, 3, 6, D, R => 2, 3, J, 6, J, D, R, J
+      # - A, R, A => A, J, R, A
       if un_joker
         temp = []
         id_carte_attendue = suite[0].carte_id
@@ -153,6 +154,10 @@ class Analyse
       # - J, 9 => KO
       # - 9, J, V => OK
       # - V, J, A => KO
+
+      # A, J, R, A
+      # - A, J, R, A => A, J, R => KO
+      # - J, R, A => OK
 
       i = 0
       while i < suite.size - 3 + 1
@@ -184,7 +189,9 @@ class Analyse
           end
         end
         i = k == -1 ? i + 1 : k
-
+        if k != -1
+          i -= 1 if i == suite.size - 3 + 1
+        end
       end
 
     end

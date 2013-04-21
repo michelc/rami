@@ -114,6 +114,15 @@ describe "Analyse", "Vérification suites" do
     analyse.combinaisons.size.must_equal 1
   end
 
+  it "Reconnait AC RC J* comme tierce" do
+    une_main = []
+    une_main << Carte.new(0)
+    une_main << Carte.new(12)
+    une_main << Carte.new(52)
+    analyse = Analyse.new une_main
+    analyse.combinaisons.size.must_equal 1
+  end
+
   it "Ne traite pas 2C Joker Joker comme tierce" do
     une_main = []
     une_main << Carte.new(1)
