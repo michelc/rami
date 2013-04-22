@@ -156,6 +156,12 @@ get "/ecarter/:carte_id" do
   # On ne peut pas jeter si c'est le moment de piocher
   redirect to('/') if @partie.piocher
 
+  # On ne peut pas défausser s'il existe un temps entamé
+  unless @partie.accepter_defausse MOI
+    session[:partie] = @partie
+    redirect to("/")
+  end
+
   # MOI écarte une carte dans la défausse
   carte = Carte.new params[:carte_id].to_i
   @partie.poser_dans_defausse MOI, carte
@@ -177,7 +183,7 @@ get "/ecarter/:carte_id" do
   redirect to("/")
 end
 
-# Joueur dépose une carte dans un des "slots" prévu à cet effet
+# Joueur dépose une carte dans un des tas prévu à cet effet
 get "/poser/:carte_id/sur/:tas_id" do
   @partie = session[:partie]
 

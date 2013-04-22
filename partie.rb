@@ -94,6 +94,17 @@ class Partie
     self.coups.prendre joueur_id, self.carte_tiree.carte_id
   end
 
+  def accepter_defausse joueur_id
+    # Vérifie s'il existe un tas entamé (ie avec 1 ou 2 cartes)
+    a_finir = self.ta12s.find { |t| (1..2) === t.cartes.size }
+    if a_finir != nil
+      self.coups.alerter joueur_id, "défausse impossible car tas entamé"
+      return false
+    end
+    # Défausse est OK sinon
+    true
+  end
+
   def poser_dans_defausse joueur_id, carte
     # Retire une carte de la main du joueur
     self.joueurs[joueur_id].enlever_une_carte carte
