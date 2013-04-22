@@ -6,8 +6,8 @@
   </div>
 </div>
 
-<div class="row-fluid">
+<% if @is_local %><div class="row-fluid">
   <div class="span12">
     <%= @partie.coups.reverse.to_s %>
   </div>
-</div>
+</div><% end %>

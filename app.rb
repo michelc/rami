@@ -75,6 +75,7 @@ get "/" do
 
   @debug = session[:debug] ? true : false
   @fin_partie = @partie.fin_partie?
+  @is_local = request.ip == "127.0.0.1"
 
   erb :table
 end
