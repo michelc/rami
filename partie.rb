@@ -98,16 +98,23 @@ class Partie
     # Vérifie s'il existe un tas entamé (ie avec 1 ou 2 cartes)
     a_finir = self.ta12s.find { |t| (1..2) === t.cartes.size }
     if a_finir != nil
-      self.coups.alerter joueur_id, "défausse impossible car tas entamé"
+      self.coups.alerter joueur_id, "défausse interdite car tas entamé"
       return false
     end
-    # Si le joueur a posé une tierce franche, il faut qu'il ait posé 51 points
+    # Si le joueur a posé sa tierce franche,
+    # => il faut qu'il ait posé 51 points
     if self.joueurs[joueur_id].a_pose_tierce?
       unless self.joueurs[joueur_id].a_pose_51?
-        self.coups.alerter joueur_id, "défausse impossible car pas 51 points"
+        self.coups.alerter joueur_id, "défausse interdite car pas 51 points"
         return false
       end
     end
+    # Si le joueur a pris la carte à la défausse,
+    # => il faut qu'il ait posé cette carte
+    # => TODO
+    # Si le joueur a pris la carte à la défausse,
+    # => il ne faut pas qu'il l'ait utilisée pour sa tierce franche
+    # => TODO
     # Défausse est OK sinon
     true
   end
