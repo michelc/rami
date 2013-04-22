@@ -150,6 +150,7 @@ class Niveau3
       # Un joker est inestimable
       if carte.est_joker?
         score += 1_000_000
+        scores[carte] = score
         next
       end
 
