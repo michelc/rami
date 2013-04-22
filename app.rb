@@ -29,7 +29,13 @@ helpers do
 
   # Code HTML pour afficher le dos d'une carte
   def img_dos carte
-    carte = nil unless @debug
+    carte = if @fin_partie
+              carte
+            elsif @debug
+              carte
+            else
+              nil
+            end
     if carte.nil?
       "<img class='card' src='/#{@cards_theme}/carte-dos.png' />"
     else
@@ -65,8 +71,10 @@ end
 # Page d'accueil
 get "/" do
   @partie = session[:partie]
-  @debug = session[:debug] ? true : false
   redirect to('/demarrer') unless @partie
+
+  @debug = session[:debug] ? true : false
+  @fin_partie = @partie.fin_partie?
 
   erb :table
 end
