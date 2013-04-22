@@ -101,6 +101,13 @@ class Partie
       self.coups.alerter joueur_id, "défausse impossible car tas entamé"
       return false
     end
+    # Si le joueur a posé une tierce franche, il faut qu'il ait posé 51 points
+    if self.joueurs[joueur_id].a_pose_tierce?
+      unless self.joueurs[joueur_id].a_pose_51?
+        self.coups.alerter joueur_id, "défausse impossible car pas 51 points"
+        return false
+      end
+    end
     # Défausse est OK sinon
     true
   end
