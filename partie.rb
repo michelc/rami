@@ -18,6 +18,7 @@ class Partie
   attr_accessor :joueurs          # Tableau des joueurs participamnst à la partie
 
   attr_accessor :carte_tiree      # Dernière carte tirée par le joueur en cours
+  attr_accessor :carte_prise      # Carte prise à la défausse le cas échéant
   attr_accessor :carte_defausse   # Carte disponible dans le tas de défausse
 
   attr_accessor :piocher          # Indique si MOI doit piocher (quick & dirty)
@@ -72,11 +73,13 @@ class Partie
     self.traces = []
     # Et il n'y a plus de carte en cours
     self.carte_tiree = nil
+    self.carte_prise = nil
   end
 
   def prendre_dans_pioche joueur_id
     # Prend une carte dans la pioche
     self.carte_tiree = self.paquet.piocher_une_carte
+    self.carte_prise = nil
     # Pour l'ajouter à la main du joueur
     self.joueurs[joueur_id].ajouter_une_carte self.carte_tiree
     # Mémorise le coup joué
@@ -86,6 +89,7 @@ class Partie
   def prendre_dans_defausse joueur_id
     # Prend une carte dans la défausse
     self.carte_tiree = self.paquet.prendre_la_defausse
+    self.carte_prise = self.carte_tiree
     # Pour l'ajouter à la main du joueur
     self.joueurs[joueur_id].ajouter_une_carte self.carte_tiree
     # Mémorise la nouvelle carte disponible à la défausse
