@@ -306,7 +306,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # - Le joueur ne peut pas encore compléter sa tierce franche
       if tas.nom_joueur == joueur.nom + "_tf"
         self.coups.alerter joueur_id, "attendre 1 tour pour compléter la tierce franche"
-        return
+        return if joueur_id == 0 # TODO: Pas encore géré pour le joueur Ruby
       end
     end
 
