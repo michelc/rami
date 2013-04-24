@@ -145,6 +145,9 @@ def get_conseil
     elsif joueur.cartes.size == 1
       # Le joueur n'a plus qu'une carte => il va gagner !
       conseil = "Ecartez votre dernière carte à la défausse !"
+    elsif @partie.compte_tour == 1
+      # Le joueur ne peut que défausser lors du 1° tour
+      conseil = "Posez une de vos cartes dans la défausse"
     elsif joueur.compte_tour > 10
       # Ca fait un moment qu'on joue => on laisse le joueur tranquille
       conseil = "Posez une carte sur la table ou dans la défausse"
