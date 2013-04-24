@@ -77,7 +77,103 @@ get "/" do
   @fin_partie = @partie.fin_partie?
   @is_local = request.ip == "127.0.0.1"
 
+  @conseil = get_conseil
+
   erb :table
+end
+
+def get_conseil
+  joueur = @partie.joueurs[0]
+  conseil = ""
+
+  # Est-ce qu'il existe un tas en cours de remplissage ?
+  tas_en_cours = @partie.ta12s.any? { |t| [1,2].include? t.cartes.size }
+
+  if @partie.piocher
+
+    # Le joueur doit piocher une carte
+
+    if joueur.compte_tour == 0
+      # C'est le 1° tour du jeu => on l'aide au maximum
+      conseil = "Pour commencer la partie, vous pouvez prendre une carte dans la
+                 pioche ci-dessus (face invisible) ou prendre la carte de la
+                 défausse (face visible)"
+    elsif joueur.peut_prendre? == false
+      # Le joueur ne peut pas prendre de carte dans la défausse
+      if joueur.compte_tour < 3
+        # On est au début du jeu => on l'aide au maximum
+        conseil = "Vous devez tirer une carte dans la pioche car vous n'avez pas
+                   de tierce franche dans votre main"
+      else
+        # Ca fait un moment qu'on joue => on le laisse tranquille
+        conseil = "Tirez une carte dans la pioche"
+      end
+    elsif joueur.a_pose_51?
+      # Le joueur a déjà posé ses 51 points
+      # => il peut prendre la défausse à condition de la jouer
+      conseil = "Tirez une carte dans la pioche ou prenez la carte de la défausse
+                 à condition de la poser dans le tour"
+    else
+      # Le joueur a déjà une tierce franche en main
+      # => il peut prendre la défausse à condition de poser 51 points
+      conseil = "Tirez une carte dans la pioche ou prenez la carte de la défausse
+                 à condition de poser 51 points dans le tour"
+    end
+
+  elsif tas_en_cours
+
+    # Le joueur a commencé à remplir un tas
+    # => Il doit continuer ce qu'il a commencé
+    if joueur.a_pose_tierce? == false
+      conseil = "Continuez à poser votre tierce franche"
+    elsif joueur.a_pose_51? == false
+      conseil = "Continuez à poser votre combinaison pour atteindre 51 points"
+    else
+      conseil = "Continuez à poser votre combinaison"
+    end
+
+  else
+
+    # Le joueur doit jouer une carte
+
+    if @partie.joueurs[1].cartes.size == 0
+      # L'adversaire n'a plus de carte => il a gagné !
+      conseil = "Dommage ! Vous avez perdu la partie :("
+    elsif joueur.cartes.size == 0
+      # Le joueur n'a plus de carte => il a gagné !
+      conseil = "Félicitation ! Vous avez gagné la partie :)"
+    elsif joueur.cartes.size == 1
+      # Le joueur n'a plus qu'une carte => il va gagner !
+      conseil = "Ecartez votre dernière carte à la défausse !"
+    elsif joueur.compte_tour > 10
+      # Ca fait un moment qu'on joue => on laisse le joueur tranquille
+      conseil = "Posez une carte sur la table ou dans la défausse"
+    elsif joueur.tierce_franche?
+      # Il dispose d'une tierce franche et ne l'a pas encore posée
+      conseil = "Posez votre tierce franche à condition d'atteindre 51 points
+                 avec d'autres combinaisons ou écartez une carte à la défausse"
+    elsif joueur.a_pose_51?
+      # Le joueur a posé 51 points
+      # => Il peut jouer assez librement
+      if joueur.cartes.size > 3
+        conseil = "Posez une nouvelle combinaison, complétez une des combinaisons
+                   déjà posées ou écartez une carte à la défausse"
+      else
+        conseil = "Complétez une des combinaisons déjà posées ou écartez une
+                   carte à la défausse"
+      end
+    elsif joueur.a_pose_tierce?
+      # Il a déjà posé sa tierce franche mais n'a pas encore ses 51 points
+      conseil = "Posez d'autres combinaisons pour atteindre 51 points"
+    elsif joueur.compte_tour < 10
+      conseil = "Vous ne pouvez pas encore poser de tierce franche. Vous devez
+                 donc écarter une de vos cartes dans la défausse"
+    else
+      conseil = "Ecartez une carte à la défausse"
+    end
+
+  end
+
 end
 
 # Mode debug
