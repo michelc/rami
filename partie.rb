@@ -131,6 +131,8 @@ class Partie
 
     # Le joueur a fini son tour => met à jour son compte-tour
     self.joueurs[joueur_id].compte_tour += 1
+    # Le joueur a fini son tour => met à jour ses points à la fin du tour
+    self.joueurs[joueur_id].compte_points = self.joueurs[joueur_id].a_pose_combien
     # Passe au tour suivant lorsque tous les joueurs ont fini le tour
     self.compte_tour += 1 if self.joueurs.all? { |j| j.compte_tour == self.compte_tour }
     # Mémorise le coup joué

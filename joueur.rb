@@ -16,6 +16,7 @@ class Joueur
   attr_accessor :cartes         # Tableau des cartes dans la main du joueur
   attr_accessor :combinaisons   # Tableau des combinaisons possibles pour le joueur
   attr_accessor :compte_tour    # Numéro du dernier tour joué par le joueur
+  attr_accessor :compte_points  # Nombre de points du joueur au début du tour
   attr_accessor :a_pose_combien # Nombre de points posés par le joueur
 
   attr_accessor :niveau         # Niveau de jeu du joueur
@@ -69,6 +70,12 @@ class Joueur
   # Détermine si le joueur a déjà posé ses 51 points
   def a_pose_51?
     self.a_pose_combien >= 51
+  end
+
+  # Détermine si le joueur peut combiner sur les autres tas
+  def peut_combiner?
+    # Oui s'il a posé ses 51 points avant le tour en cours
+    self.compte_points >= 51
   end
 
   # Détermine si le joueur peut prendre la carte de la défausse
