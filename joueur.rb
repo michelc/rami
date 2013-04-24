@@ -79,12 +79,6 @@ class Joueur
 
   # Détermine si le joueur peut prendre la carte de la défausse
   def peut_prendre?
-    # Le joueur ne peut prendre que s'il a plus d'une carte
-    self.cartes.size > 1
-  end
-
-  # Détermine si le joueur peut prendre la carte de la défausse
-  def peut_prendre?
     if self.compte_tour == 0
       # Le joueur peut prendre si c'est son 1° tour
       true
