@@ -157,6 +157,14 @@ class Partie
 
   def poser_sur_tas joueur, tas, carte
 
+    # Le joueur ne peut pas poser sa dernière carte !
+    # (il doit la mettre à la défausse)
+    if joueur.cartes.size == 1
+      joueur_id = joueur.nom == "Moi" ? 0 : 1
+      self.coups.alerter joueur_id, "Dernière carte va à la défausse !"
+      return if joueur_id == 0 # TODO: Pas encore géré pour le joueur Ruby
+    end
+
     # Cas où le joueur n'a pas encore posé sa tierce franche
     unless joueur.a_pose_tierce?
       # => il est en train de constituer sa tierce franche
