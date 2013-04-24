@@ -72,9 +72,8 @@ class Joueur
     self.a_pose_combien >= 51
   end
 
-  # Détermine si le joueur peut combiner sur les autres tas
-  def peut_combiner?
-    # Oui s'il a posé ses 51 points avant le tour en cours
+  # Détermine si le joueur a posé ses 51 points avant le tour en cours
+  def avait_pose_51?
     self.compte_points >= 51
   end
 

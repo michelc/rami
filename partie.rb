@@ -279,12 +279,21 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     joueur_id = joueur.nom == "Moi" ? 0 : 1
 
     # Cas où le joueur n'a pas encore posé ses 51 points
-    if (joueur.a_pose_51? == false)
+    if joueur.a_pose_51? == false
       # - Le joueur s'approprie le tas dès lors qu'il est vide
       tas.nom_joueur = joueur.nom if avant_points == 0
       # - Le joueur ne peut pas poser sur un tas adverse pour l'instant
       if tas.nom_joueur != joueur.nom
         self.coups.alerter joueur_id, "il faut 51 pour compléter les tas"
+        return
+      end
+    end
+
+    # Cas où le joueur n'a pas posé ses 51 points avant le tour en cours
+    if joueur.avait_pose_51? == false
+      # - Le joueur ne peut pas encore compléter sa tierce franche
+      if tas.nom_joueur == joueur.nom + "_tf"
+        self.coups.alerter joueur_id, "attendre 1 tour pour compléter la tierce franche"
         return
       end
     end
@@ -368,6 +377,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
   def poser_tierce_franche joueur, tas, carte
     # Détermine l'identifiant du joueur en cours
     joueur_id = joueur.nom == "Moi" ? 0 : 1
+    tas.nom_joueur = joueur.nom + "_tf"
 
     # Vérifie que le joueur pose sa tierce franche au bon endroit
     if joueur.cartes.size == 15
