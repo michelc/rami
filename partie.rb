@@ -134,12 +134,14 @@ class Partie
       end
     end
     # Si le joueur a pris la carte à la défausse,
-    # => il ne faut pas qu'il l'ait utilisée pour sa tierce franche
+    # => il ne faut pas qu'il l'ait utilisée pour constituer sa tierce franche
     if self.carte_prise_nb == 1
-      tf = self.ta12s.find { |t| t.nom_joueur == self.joueurs[joueur_id].nom + "_tf" }
-      if tf.cartes.any? { |c| c == self.carte_prise }
-        self.coups.alerter joueur_id, "carte prise à la défausse interdite dans tierce franche"
-        return false
+      if self.joueurs[joueur_id].avait_pose_51? == false
+        tf = self.ta12s.find { |t| t.nom_joueur == self.joueurs[joueur_id].nom + "_tf" }
+        if tf.cartes.any? { |c| c == self.carte_prise }
+          self.coups.alerter joueur_id, "carte prise à la défausse interdite dans tierce franche"
+          return false
+        end
       end
     end
     # Défausse est OK sinon
