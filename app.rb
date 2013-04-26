@@ -275,7 +275,7 @@ get "/ecarter/:carte_id" do
   @partie.poser_dans_defausse MOI, carte
 
   # Vérifie si la partie est terminée après MOI
-  if @partie.fin_partie?
+  if @partie.joueurs[MOI].cartes.size == 0
     session[:partie] = @partie
     redirect to("/")
   end
@@ -285,7 +285,7 @@ get "/ecarter/:carte_id" do
 
   # Puis c'est au tour de MOI de jouer
   # (sauf si la partie est terminée)
-  @partie.piocher = !@partie.fin_partie?
+  @partie.piocher = @partie.joueurs[RUBY].cartes.size > 0
 
   session[:partie] = @partie
   redirect to("/")
