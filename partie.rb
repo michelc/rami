@@ -411,7 +411,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # donc forcément sur un tas vide
       if tas.cartes.size != 0
         self.coups.alerter joueur.joueur_id, "tierce franche doit aller sur un tas vide"
-        return if joueur.est_humain? # TODO: Pas encore géré pour le joueur Ruby
+        return
       end
     end
 
@@ -421,7 +421,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # Mais ce n'est un problème que s'il n'a pas cette carte en double
       if self.carte_prise_nb == 1
         self.coups.alerter joueur.joueur_id, "carte prise à la défausse interdite dans tierce franche"
-        return
+        return if joueur.est_humain? # TODO: Pas encore géré pour le joueur Ruby
       end
     end
 
