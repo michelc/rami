@@ -12,6 +12,7 @@ require "combinaison"
 class Joueur
   TAILLE_MAIN = 14
 
+  attr_accessor :joueur_id      # Identifiant du joueur
   attr_accessor :nom            # Nom du joueur
   attr_accessor :cartes         # Tableau des cartes dans la main du joueur
   attr_accessor :combinaisons   # Tableau des combinaisons possibles pour le joueur
@@ -21,8 +22,9 @@ class Joueur
 
   attr_accessor :niveau         # Niveau de jeu du joueur
 
-  def initialize nom_joueur
+  def initialize nom_joueur, joueur_id = 0
     self.nom = nom_joueur
+    self.joueur_id = joueur_id
     self.cartes = []
     self.combinaisons = []
     self.compte_tour = 0

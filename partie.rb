@@ -43,8 +43,8 @@ class Partie
     self.paquet = Paquet.new NB_JEUX
     # Partie se joue entre les joueurs passés en paramètre
     self.joueurs = []
-    les_joueurs.each do |nom|
-      self.joueurs << Joueur.new(nom)
+    les_joueurs.each_with_index do |nom, id|
+      self.joueurs << Joueur.new(nom, id)
     end
     # La partie n'a pas encore démarrée
     self.compte_tour = 0
