@@ -170,13 +170,12 @@ class Partie
       return
     end
 
-
     # Le joueur ne peut pas poser sa dernière carte !
     # (il doit la mettre à la défausse)
     if joueur.cartes.size == 1
       joueur_id = joueur.nom == "Moi" ? 0 : 1
       self.coups.alerter joueur_id, "dernière carte va à la défausse !"
-      return if joueur_id == 0 # TODO: Pas encore géré pour le joueur Ruby
+      return
     end
 
     # Cas où le joueur n'a pas encore posé sa tierce franche
@@ -269,11 +268,8 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
     end
 
     # Ecarte une carte à la défausse
-    if joueur.cartes.size > 0
-      # SIZE = 0 NE DEVRAIT PAS ARRIVER => A TRAITER
-      poser_dans_defausse joueur_id, joueur.meilleure_defausse(self.ta12s)
+    poser_dans_defausse joueur_id, joueur.meilleure_defausse(self.ta12s)
 self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
-    end
 
   end
 

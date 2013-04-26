@@ -46,18 +46,24 @@ class Joueur
     self.cartes << carte
     # Il re-trie son jeu
     self.cartes.sort!
-    # Puis il ré-analyse son jeu
-    analyse = Analyse.new self.cartes
-    self.combinaisons = analyse.combinaisons
+    # Puis il ré-analyse son jeu (à condition d'avoir plus de 3 cartes)
+    self.combinaisons = []
+    if self.cartes.size > 3
+      analyse = Analyse.new self.cartes
+      self.combinaisons = analyse.combinaisons
+    end
   end
 
   def enlever_une_carte carte
     # Joueur enlève une carte de sa main
     index = self.cartes.find_index { |c| c == carte }
     self.cartes.delete_at(index) if index
-    # Et il ré-analyse son jeu
-    analyse = Analyse.new self.cartes
-    self.combinaisons = analyse.combinaisons
+    # Et il ré-analyse son jeu (à condition d'avoir plus de 3 cartes)
+    self.combinaisons = []
+    if self.cartes.size > 3
+      analyse = Analyse.new self.cartes
+      self.combinaisons = analyse.combinaisons
+    end
   end
 
   # Détermine si le joueur a déjà posé sa tierce franche
