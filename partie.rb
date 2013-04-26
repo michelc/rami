@@ -136,7 +136,7 @@ class Partie
     # Si le joueur a pris la carte à la défausse,
     # => il ne faut pas qu'il l'ait utilisée pour constituer sa tierce franche
     if self.carte_prise_nb == 1
-      if self.joueurs[joueur_id].avait_pose_51? == false
+      unless self.joueurs[joueur_id].a_atteint_51?
         tf = self.ta12s.find { |t| t.nom_joueur == self.joueurs[joueur_id].nom + "_tf" }
         if tf.cartes.any? { |c| c == self.carte_prise }
           self.coups.alerter joueur_id, "carte prise à la défausse interdite dans tierce franche"
@@ -159,9 +159,7 @@ class Partie
     self.carte_defausse = self.paquet.carte_defausse
 
     # Le joueur a fini son tour => met à jour son compte-tour
-    self.joueurs[joueur_id].compte_tour += 1
-    # Le joueur a fini son tour => met à jour ses points à la fin du tour
-    self.joueurs[joueur_id].compte_points = self.joueurs[joueur_id].a_pose_combien
+    self.joueurs[joueur_id].incrementer_tour
     # Passe au tour suivant lorsque tous les joueurs ont fini le tour
     self.compte_tour += 1 if self.joueurs.all? { |j| j.compte_tour == self.compte_tour }
     # Mémorise le coup joué
@@ -322,12 +320,12 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       end
     end
 
-    # Cas où le joueur n'a pas posé ses 51 points avant le tour en cours
-    if joueur.avait_pose_51? == false
+    # Cas où le joueur n'a pas marqué 51 points avant le tour en cours
+    unless joueur.a_atteint_51?
       # - Le joueur ne peut pas encore compléter sa tierce franche
       if tas.nom_joueur == joueur.nom + "_tf"
         self.coups.alerter joueur_id, "attendre 1 tour pour compléter la tierce franche"
-        return if joueur_id == 0 # TODO: Pas encore géré pour le joueur Ruby
+        return if joueur.est_humain? # TODO: Pas encore géré pour le joueur Ruby
       end
     end
 
@@ -419,7 +417,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # donc forcément sur un tas vide
       if tas.cartes.size != 0
         self.coups.alerter joueur_id, "tierce franche doit aller sur un tas vide"
-        return
+        return if joueur.est_humain? # TODO: Pas encore géré pour le joueur Ruby
       end
     end
 

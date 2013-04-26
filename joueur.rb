@@ -16,8 +16,8 @@ class Joueur
   attr_accessor :cartes         # Tableau des cartes dans la main du joueur
   attr_accessor :combinaisons   # Tableau des combinaisons possibles pour le joueur
   attr_accessor :compte_tour    # Numéro du dernier tour joué par le joueur
-  attr_accessor :compte_points  # Nombre de points du joueur au début du tour
   attr_accessor :a_pose_combien # Nombre de points posés par le joueur
+  attr_accessor :a_atteint_51   # Vrai si le joueur a posé 51 points lors des tours précédants
 
   attr_accessor :niveau         # Niveau de jeu du joueur
 
@@ -27,6 +27,11 @@ class Joueur
     self.combinaisons = []
     self.compte_tour = 0
     self.a_pose_combien = 0
+    self.a_atteint_51 = false
+  end
+
+  def est_humain?
+    self.niveau == nil
   end
 
   def ramasser_cartes cartes
@@ -39,6 +44,7 @@ class Joueur
 
     self.compte_tour = 0
     self.a_pose_combien = 0
+    self.a_atteint_51 = false
   end
 
   def ajouter_une_carte carte
@@ -66,6 +72,13 @@ class Joueur
     end
   end
 
+  def incrementer_tour
+    # Met à jour le compte-tour du joueur
+    self.compte_tour += 1
+    # Mémorise s'il a déjà marqué ses 51 points
+    self.a_atteint_51 = self.a_pose_combien >= 51
+  end
+
   # Détermine si le joueur a déjà posé sa tierce franche
   def a_pose_tierce?
     # Le joueur a posé sa tierce dès qu'il a des points
@@ -78,9 +91,9 @@ class Joueur
     self.a_pose_combien >= 51
   end
 
-  # Détermine si le joueur a posé ses 51 points avant le tour en cours
-  def avait_pose_51?
-    self.compte_points >= 51
+  # Détermine si le joueur a marqué 51 points avant le tour en cours
+  def a_atteint_51?
+    self.a_atteint_51
   end
 
   # Détermine si le joueur peut prendre la carte de la défausse
@@ -114,7 +127,7 @@ class Joueur
 
   # Détermine si le joueur peut poser ses cartes
   def peut_poser?
-    if compte_tour == 0
+    if self.compte_tour == 0
       # On ne peut pas poser dès le 1° tour
       false
     elsif a_pose_tierce? == true

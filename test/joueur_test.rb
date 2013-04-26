@@ -37,6 +37,23 @@ describe "Joueur", "Vérification initialisation" do
     joueur = Joueur.new("Toto")
     joueur.compte_tour.must_equal 0
     joueur.a_pose_combien.must_equal 0
+    joueur.a_atteint_51?.must_equal false
+  end
+
+end
+
+
+describe "Joueur", "Vérification est-humain?" do
+
+  it "Est un joueur humain par défaut" do
+    joueur = Joueur.new("Toto")
+    joueur.est_humain?.must_equal true
+  end
+
+  it "N'est pas un joueur humain si niveau est défini" do
+    joueur = Joueur.new("Toto")
+    joueur.niveau = ""
+    joueur.est_humain?.must_equal false
   end
 
 end
@@ -83,6 +100,7 @@ describe "Joueur", "Vérification ramassage" do
     joueur.ramasser_cartes []
     joueur.compte_tour.must_equal 0
     joueur.a_pose_combien.must_equal 0
+    joueur.a_atteint_51?.must_equal false
   end
 
 end
@@ -143,10 +161,48 @@ describe "Joueur", "Vérification retrait carte" do
   it "Actualise la liste des combinaisons" do
     joueur = Joueur.new("Toto")
     distribution = (0..2).map { |i| Carte.new i }
+    distribution += (7..9).map { |i| Carte.new i }
+    joueur.ramasser_cartes distribution
+    joueur.combinaisons.size.must_equal 2
+    joueur.enlever_une_carte distribution.last
+    joueur.combinaisons.size.must_equal 1
+  end
+
+  it "Actualise la liste des combinaisons tant que au moins 3 cartes" do
+    joueur = Joueur.new("Toto")
+    distribution = (0..3).map { |i| Carte.new i }
     joueur.ramasser_cartes distribution
     joueur.combinaisons.size.must_equal 1
     joueur.enlever_une_carte distribution.last
     joueur.combinaisons.must_be_empty
+  end
+
+end
+
+
+describe "Joueur", "Vérification incrementer_tour" do
+
+  it "Augmente le compteur de tour" do
+    joueur = Joueur.new("Toto")
+    joueur.compte_tour.must_equal 0
+    joueur.incrementer_tour
+    joueur.compte_tour.must_equal 1
+  end
+
+  it "Laisse à faux le drapeau 51 points si pas atteints" do
+    joueur = Joueur.new("Toto")
+    joueur.incrementer_tour
+    joueur.a_atteint_51.must_equal false
+    joueur.a_pose_combien = 33
+    joueur.incrementer_tour
+    joueur.a_atteint_51.must_equal false
+  end
+
+  it "Met à vrai le drapeau 51 points si déjà marqués" do
+    joueur = Joueur.new("Toto")
+    joueur.a_pose_combien = 51
+    joueur.incrementer_tour
+    joueur.a_atteint_51.must_equal true
   end
 
 end
@@ -183,6 +239,23 @@ describe "Joueur", "Vérification a_pose_51?" do
     joueur = Joueur.new("Toto")
     joueur.a_pose_combien = 51
     joueur.a_pose_51?.must_equal true
+  end
+
+end
+
+
+describe "Joueur", "Vérification a_atteint_51?" do
+
+  it "Non s'il la propriété est fausse" do
+    joueur = Joueur.new("Toto")
+    joueur.a_atteint_51 = false
+    joueur.a_atteint_51?.must_equal false
+  end
+
+  it "Oui s'il la propriété est vraie" do
+    joueur = Joueur.new("Toto")
+    joueur.a_atteint_51 = true
+    joueur.a_atteint_51?.must_equal true
   end
 
 end
