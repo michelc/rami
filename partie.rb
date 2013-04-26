@@ -125,7 +125,7 @@ class Partie
     end
     # Si le joueur a pris la carte à la défausse,
     # => il faut qu'il ait posé cette carte
-    if self.carte_prise
+    if self.carte_prise_nb == 1
       # Donc qu'il en ait moins que ce qu'il en avait après l'avoir prise
       nb = self.joueurs[joueur_id].cartes.count { |c| c == self.carte_prise }
       if nb == self.carte_prise_nb
@@ -417,6 +417,16 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # donc forcément sur un tas vide
       if tas.cartes.size != 0
         self.coups.alerter joueur_id, "tierce franche doit aller sur un tas vide"
+        return
+      end
+    end
+
+    # Vérifie que le joueur n'utilise pas la carte prise à la défausse
+    if carte == self.carte_prise
+      # Si, justement !
+      # Mais ce n'est un problème que s'il n'a pas cette carte en double
+      if self.carte_prise_nb == 1
+        self.coups.alerter joueur_id, "carte prise à la défausse interdite dans tierce franche"
         return
       end
     end
