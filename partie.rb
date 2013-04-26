@@ -19,6 +19,8 @@ class Partie
 
   attr_accessor :carte_tiree      # Dernière carte tirée par le joueur en cours
   attr_accessor :carte_prise      # Carte prise à la défausse le cas échéant
+  attr_accessor :carte_prise_nb   # Nb de fois où la carte prise est dans la main du joueur
+
   attr_accessor :carte_defausse   # Carte disponible dans le tas de défausse
 
   attr_accessor :piocher          # Indique si MOI doit piocher (quick & dirty)
@@ -80,6 +82,7 @@ class Partie
     # Prend une carte dans la pioche
     self.carte_tiree = self.paquet.piocher_une_carte
     self.carte_prise = nil
+    self.carte_prise_nb = 0
     # Pour l'ajouter à la main du joueur
     self.joueurs[joueur_id].ajouter_une_carte self.carte_tiree
     # Mémorise le coup joué
@@ -92,6 +95,8 @@ class Partie
     self.carte_prise = self.carte_tiree
     # Pour l'ajouter à la main du joueur
     self.joueurs[joueur_id].ajouter_une_carte self.carte_tiree
+    # Puis compte combien de fois cette carte prise est dans la main du joueur
+    self.carte_prise_nb = self.joueurs[joueur_id].cartes.count { |c| c == self.carte_prise }
     # Mémorise la nouvelle carte disponible à la défausse
     self.carte_defausse = self.paquet.carte_defausse
     # Mémorise le coup joué
@@ -120,6 +125,14 @@ class Partie
     end
     # Si le joueur a pris la carte à la défausse,
     # => il faut qu'il ait posé cette carte
+    if self.carte_prise
+      # Donc qu'il en ait moins que ce qu'il en avait après l'avoir prise
+      nb = self.joueurs[joueur_id].cartes.count { |c| c == self.carte_prise }
+      if nb == self.carte_prise_nb
+        self.coups.alerter joueur_id, "carte prise à la défausse n'a pas été posée"
+        return false
+      end
+    end
     # => TODO
     # Si le joueur a pris la carte à la défausse,
     # => il ne faut pas qu'il l'ait utilisée pour sa tierce franche
