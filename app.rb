@@ -93,14 +93,14 @@ def get_conseil
 
     # Le joueur doit piocher une carte
 
-    if joueur.compte_tour == 0
+    if @partie.compte_tour == 1
       # C'est le 1° tour du jeu => on l'aide au maximum
       conseil = "Pour commencer la partie, vous pouvez prendre une carte dans la
                  pioche ci-dessus (face invisible) ou prendre la carte de la
                  défausse (face visible)"
     elsif joueur.peut_prendre? == false
       # Le joueur ne peut pas prendre de carte dans la défausse
-      if joueur.compte_tour < 3
+      if @partie.compte_tour < 4
         # On est au début du jeu => on l'aide au maximum
         conseil = "Vous devez tirer une carte dans la pioche car vous n'avez pas
                    de tierce franche dans votre main"
@@ -148,7 +148,7 @@ def get_conseil
     elsif @partie.compte_tour == 1
       # Le joueur ne peut que défausser lors du 1° tour
       conseil = "Posez une de vos cartes dans la défausse"
-    elsif joueur.compte_tour > 10
+    elsif @partie.compte_tour > 10
       # Ca fait un moment qu'on joue => on laisse le joueur tranquille
       conseil = "Posez une carte sur la table ou dans la défausse"
     elsif joueur.tierce_franche?
@@ -168,7 +168,7 @@ def get_conseil
     elsif joueur.a_pose_tierce?
       # Il a déjà posé sa tierce franche mais n'a pas encore ses 51 points
       conseil = "Posez d'autres combinaisons pour atteindre 51 points"
-    elsif joueur.compte_tour < 10
+    elsif @partie.compte_tour < 10
       conseil = "Vous ne pouvez pas encore poser de tierce franche. Vous devez
                  donc écarter une de vos cartes dans la défausse"
     else
