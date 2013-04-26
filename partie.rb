@@ -113,6 +113,11 @@ class Partie
         return false
       end
     end
+    # Si on en est au 1° tour du jeu
+    # => il n'est pas nécessaire d'avoir utilisé la carte prise à la défausse
+    if self.compte_tour == 1
+      return true
+    end
     # Si le joueur a pris la carte à la défausse,
     # => il faut qu'il ait posé cette carte
     # => TODO
