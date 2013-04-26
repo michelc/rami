@@ -107,13 +107,15 @@ describe "Joueur", "Vérification ajout carte" do
     joueur.cartes.include?(nouvelle).must_equal true
   end
 
-  it "Actualise la liste des combinaisons" do
+  it "Actualise la liste des combinaisons à partir de 4 cartes" do
     joueur = Joueur.new("Toto")
     joueur.ajouter_une_carte Carte.new(0)
     joueur.combinaisons.must_be_empty
     joueur.ajouter_une_carte Carte.new(1)
     joueur.combinaisons.must_be_empty
     joueur.ajouter_une_carte Carte.new(2)
+    joueur.combinaisons.must_be_empty
+    joueur.ajouter_une_carte Carte.new(33)
     joueur.combinaisons.size.must_equal 1
   end
 
@@ -215,6 +217,7 @@ describe "Joueur", "Vérification peut_prendre?" do
     joueur.ajouter_une_carte Carte.new(0)
     joueur.ajouter_une_carte Carte.new(1)
     joueur.ajouter_une_carte Carte.new(2)
+    joueur.ajouter_une_carte Carte.new(33)
     joueur.peut_prendre?.must_equal true
   end
 
@@ -277,24 +280,8 @@ describe "Joueur", "Vérification peut_poser?" do
     joueur.ajouter_une_carte Carte.new(0)
     joueur.ajouter_une_carte Carte.new(1)
     joueur.ajouter_une_carte Carte.new(2)
+    joueur.ajouter_une_carte Carte.new(33)
     joueur.peut_poser?.must_equal true
-  end
-
-end
-
-
-describe "Joueur", "RESTE A TESTER" do
-
-  it "Niveau // meilleure_defausse" do
-    false.must_equal true
-  end
-
-  it "Niveau // meilleure_combinaison" do
-    false.must_equal true
-  end
-
-  it "Niveau // mieux_vaut_prendre?" do
-    false.must_equal true
   end
 
 end
