@@ -219,7 +219,7 @@ class Combinaison
       premiere_carte = self.remplacement
     end
     # Détermine la carte qui peut aller avant la première carte
-    if premiere_carte.valeur != :A
+    unless premiere_carte.est_as?
       suite << premiere_carte.carte_avant
     end
     # Trouve la dernière carte de la suite
@@ -228,7 +228,7 @@ class Combinaison
       derniere_carte = self.remplacement
     end
     # Détermine la carte qui peut aller après la dernière carte
-    if derniere_carte.valeur != :A
+    unless derniere_carte.est_as?
       suite << derniere_carte.carte_apres
     end
     # Renvoie les cartes ajoutables

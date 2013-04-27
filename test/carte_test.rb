@@ -153,6 +153,24 @@ describe "Carte", "Vérification du est_joker?" do
 end
 
 
+describe "Carte", "Vérification du est_as?" do
+
+  it "Renvoie true pour les As" do
+    Carte.new("AC").est_as?.must_equal true
+    Carte.new("AP").est_as?.must_equal true
+    Carte.new("AK").est_as?.must_equal true
+    Carte.new("AT").est_as?.must_equal true
+  end
+
+  it "Renvoie false pour d'autres cartes" do
+    Carte.new(52).est_as?.must_equal false
+    Carte.new(51).est_as?.must_equal false
+    Carte.new(1).est_as?.must_equal false
+  end
+
+end
+
+
 describe "Carte", "Vérification du to_text" do
 
   it "Renvoie 'Joker' pour le 1° joker" do

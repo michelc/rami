@@ -62,6 +62,11 @@ class Carte
     self.couleur.nil?
   end
 
+  # Helper pour savoir si la carte est un As
+  def est_as?
+    self.valeur == :A
+  end
+
   # Représentation textuelle de la carte
   def to_text
     if est_joker?
@@ -95,7 +100,7 @@ class Carte
   # Renvoie la carte précédante dans la couleur
   def carte_avant
     id_avant = self.carte_id - 1
-    self.valeur == :A ? nil : Carte.new(id_avant)
+    self.est_as? ? nil : Carte.new(id_avant)
   end
 
   # Renvoie la carte suivante dans la couleur

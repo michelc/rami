@@ -90,7 +90,7 @@ class Analyse
         # La carte attendue est directement après la carte en cours
         id_carte_attendue = carte.carte_apres.carte_id
         # Dans le cas où la carte en cours est un As
-        if carte.valeur == :A
+        if carte.est_as?
           # L'As peut être utilisé à 2 endroits
           # - en première position (As, 2, 3...) => sera suivi d'un 2
           # - en dernière position (Dame, Roi, As) => doit être le dernier
@@ -120,7 +120,7 @@ class Analyse
       # (sinon, passe aux cartes de la couleur suivante)
       next if suite.size < nb_cartes
       # Ajoute l'As en dernière carte s'il est présent en 1° carte
-      suite << suite.first if suite.first.valeur == :A
+      suite << suite.first if suite.first.est_as?
       # Complète éventuellement les "trous" avec un joker
       # - 2, 3, V, D, R => 2, 3, J, V, D, R, J
       # - 2, 3, 6, D, R => 2, 3, J, 6, J, D, R, J
@@ -133,7 +133,7 @@ class Analyse
           temp << carte
           id_carte_attendue = carte.carte_apres.carte_id
         end
-        temp << un_joker unless temp.last.valeur == :A
+        temp << un_joker unless temp.last.est_as?
         suite = temp
       end
       # Re-vérifie qu'il y a un minimum de cartes pour espérer une suite
@@ -217,7 +217,7 @@ class Analyse
       # S'il y a assez de cartes pour essayer de faire une suite
       if suite.size >= nb_cartes
         # Ajoute l'as en dernière carte s'il est présent en 1° carte
-        suite << suite.first if suite.first.valeur == :A
+        suite << suite.first if suite.first.est_as?
         # Parcours les cartes pour trouver une série d'au moins 3 cartes qui se suivent
         i = 0
         while i < suite.size - nb_cartes + 1
@@ -233,7 +233,7 @@ class Analyse
 
             # Si la carte suivante est un As
             # On lui donne l'ID suivant le roi
-            id_carte_suivante += 13 if suite[j].valeur == :A
+            id_carte_suivante += 13 if suite[j].est_as?
 
             # Si la carte suivante suit exactement la dernière carte de la suite
             # => la suite peut continuer à se constituer
@@ -276,7 +276,7 @@ class Analyse
           if en_cours.size >= nb_cartes
             # Complète éventuellement la suite avec le joker
             if en_cours.size == 2
-              if en_cours.last.valeur == :A
+              if en_cours.last.est_as?
                 # Cas où on a Roi - As => Dame - Roi - As
                 en_cours.unshift un_joker if un_joker
               else
