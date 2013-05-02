@@ -151,9 +151,26 @@ class Joueur
     end
   end
 
+  # Détermine quelle est la phase du jeu pour le joueur
+  def phase_du_jeu
+    if self.a_pose_51?
+      # Joueur a déjà posé ses cartes
+      # => cherche à finir la partie (tout poser ou diminuer nb points en main)
+      :finir_partie
+    elsif self.tierce_franche?
+      # Joueur a sa tierce franche (mais pas encore 51 points)
+      # => cherche à avoir plus de points pour pouvoir poser
+      :faire_points
+    else
+      # Joueur n'a pas encore de tierce franche
+      # => cherche à faire une tierce franche pour espérer démarrer la partie
+      :faire_tierce
+    end
+  end
+
   # Détermine quelle est la meilleure carte à défausser
-  def meilleure_defausse les_tas
-    self.niveau.meilleure_defausse les_tas
+  def meilleure_defausse les_tas, la_defausse
+    self.niveau.meilleure_defausse les_tas, la_defausse
   end
 
   # Détermine quelle est la meilleure combinaison à poser
@@ -162,8 +179,16 @@ class Joueur
   end
 
   # Détermine s'il vaut mieux prendre la défausse que piocher
-  def mieux_vaut_prendre? carte_defausse, les_tas
-    self.niveau.mieux_vaut_prendre? carte_defausse, les_tas
+  def mieux_vaut_prendre? carte_defausse, les_tas, la_defausse
+    self.niveau.mieux_vaut_prendre? carte_defausse, les_tas, la_defausse
+  end
+
+  def get_scores piocher, les_tas, la_defausse
+    if piocher && self.peut_prendre?
+      self.niveau.score_cartes(la_defausse.last, les_tas, la_defausse)
+    else
+      self.niveau.score_cartes(nil, les_tas, la_defausse)
+    end
   end
 
 end

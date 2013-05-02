@@ -14,7 +14,7 @@ class Niveau3
 
   # Détermine quelle est la meilleure carte à défausser
   # - une carte qui ne fait pas baisser le nombre de combinaisons possibles
-  def meilleure_defausse les_tas
+  def meilleure_defausse les_tas, la_defausse
     # Calcule le score de chaque carte dans la main du joueur
     scores = score_cartes(nil, les_tas)
     # Détermine le score le plus bas
@@ -61,7 +61,7 @@ class Niveau3
   # - si cela augmente le nombre de combinaisons
   # - sinon, si cela augmente le nombre de combinaisons sans joker (ie diminue le nb avec joker)
 # TODO : sinon, si cela permet de poser dans les tas déjà posés
-  def mieux_vaut_prendre? carte, les_tas
+  def mieux_vaut_prendre? carte, les_tas, la_defausse
     # Non si le joueur n'a pas le droit de prendre la carte à la défausse
     self.trace = "interdit"
     return false if self.joueur.peut_prendre? == false

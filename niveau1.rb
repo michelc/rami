@@ -12,7 +12,7 @@ class Niveau1
   # Détermine quelle est la meilleure carte à défausser
   # - une au hasard
   # - évite le joker
-  def meilleure_defausse les_tas
+  def meilleure_defausse les_tas, la_defausse
     self.joueur.cartes.sample
   end
 
@@ -31,7 +31,7 @@ class Niveau1
 
   # Détermine s'il vaut mieux prendre la défausse que piocher
   # - prend la défausse 1 fois sur 3
-  def mieux_vaut_prendre? carte, les_tas
+  def mieux_vaut_prendre? carte, les_tas, la_defausse
     false
   end
 

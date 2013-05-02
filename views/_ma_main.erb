@@ -9,8 +9,57 @@
   </div>
 </div>
 
+<!--
 <% if @is_local %><div class="row-fluid">
   <div class="span12">
     <%= @partie.coups.reverse.to_s %>
   </div>
 </div><% end %>
+-->
+
+<%
+if @is_local
+  scores = @partie.joueurs[0].get_scores @partie.piocher, @partie.ta12s, @partie.paquet.defausse
+  size = @partie.joueurs[0].cartes.size
+  size += 1 if @partie.piocher
+  scores.pop if scores.size > size
+end
+%>
+<% if @is_local %><table class="table table-bordered table-condensed table-hover">
+  <thead>
+    <tr>
+      <th>carte</th>
+      <th title="valorisation">va</th>
+      <th title="est_joker">j?</th>
+      <th title="nombre">nb</th>
+      <th title="nb_utilisation">ut</th>
+      <th title="combinaisons">combinaisons</th>
+      <th title="nb_point">pt</th>
+      <th title="nb_sans_joker">sj</th>
+      <th title="nb_tierce_franche">tf</th>
+      <th title="nb_suite">su</th>
+      <th title="nb_esperance">es</th>
+      <th title="nb_tas_joker">tj</th>
+      <th title="nb_tas_pose">tp</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% scores.each do |score| %>
+    <tr>
+      <td><%= @partie.joueurs[0].cartes[score.index].to_s %></td>
+      <td><%= score.valorisation %></td>
+      <td><%= score.est_joker ? 'x' : '' %></td>
+      <td><%= score.nombre %></td>
+      <td><%= score.nb_utilisation %></td>
+      <td><%= score.infos %></td>
+      <td><%= score.nb_point %></td>
+      <td><%= score.nb_sans_joker %></td>
+      <td><%= score.nb_tierce_franche %></td>
+      <td><%= score.nb_suite %></td>
+      <td><%= score.nb_esperance %></td>
+      <td><%= score.nb_tas_joker %></td>
+      <td><%= score.nb_tas_pose %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table><% end %>

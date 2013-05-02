@@ -223,7 +223,7 @@ class Partie
     joueur = self.joueurs[joueur_id]
 
     # Tire une carte (dans la pioche ou la défausse)
-    if joueur.mieux_vaut_prendre? self.carte_defausse, self.ta12s
+    if joueur.mieux_vaut_prendre? self.carte_defausse, self.ta12s, self.paquet.defausse
 self.traces << "defausse => [ #{self.carte_defausse.to_s} ]"
       prendre_dans_defausse joueur_id
     else
@@ -288,7 +288,7 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
     end
 
     # Ecarte une carte à la défausse
-    poser_dans_defausse joueur_id, joueur.meilleure_defausse(self.ta12s)
+    poser_dans_defausse joueur_id, joueur.meilleure_defausse(self.ta12s, self.paquet.defausse)
 self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
 
   end
