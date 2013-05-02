@@ -67,6 +67,22 @@ class Carte
     self.valeur == :A
   end
 
+  # Nombre de points de la carte (pour score en fin de partie)
+  def points
+    case valeur
+    when :X, :V, :D, :R, :A
+      # Le 10, les têtes et l'AS valent 10 points
+      10
+    when :J
+      # Le Joker vaut 0 points
+      50
+    else
+      # Les autres cartes valent la valeur qu'elles représentent
+      valeur.to_s.to_i
+    end
+
+  end
+
   # Représentation textuelle de la carte
   def to_text
     if est_joker?
