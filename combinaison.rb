@@ -19,7 +19,7 @@ class Combinaison
 
   def initialize type, cartes
     self.type = type
-    self.cartes = cartes
+    self.cartes = cartes.clone
     # L'ordre d'appel de ces 3 fonnctions est important
     self.remplacement = chercher_remplacement
     self.complements = chercher_complements
