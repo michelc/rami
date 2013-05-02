@@ -395,8 +395,10 @@ describe "Combinaison", "Vérification joker_facultatif?" do
   it "Renvoie true si la combinaison est une tierce franche" do
     suite = []
     suite << Carte.new(1)
-    suite << Carte.new(2)
+    suite << Carte.new(52)
     suite << Carte.new(3)
+    suite << Carte.new(4)
+    suite << Carte.new(5)
     combinaison = Combinaison.new :suite, suite
     combinaison.joker_facultatif?.must_equal true
   end
@@ -410,14 +412,24 @@ describe "Combinaison", "Vérification joker_facultatif?" do
     combinaison.joker_facultatif?.must_equal false
   end
 
-  it "Renvoie true si combinaison de plus de 2 cartes + Joker" do
+  it "Renvoie true si serie de plus de 2 cartes + Joker" do
+    serie = []
+    serie << Carte.new(0)
+    serie << Carte.new(13)
+    serie << Carte.new(26)
+    serie << Carte.new(52)
+    combinaison = Combinaison.new :serie, serie
+    combinaison.joker_facultatif?.must_equal true
+  end
+
+  it "Renvoie false si suite de plus de 2 cartes + Joker" do
     suite = []
     suite << Carte.new(1)
     suite << Carte.new(2)
     suite << Carte.new(52)
     suite << Carte.new(4)
     combinaison = Combinaison.new :suite, suite
-    combinaison.joker_facultatif?.must_equal true
+    combinaison.joker_facultatif?.must_equal false
   end
 
 end

@@ -68,7 +68,7 @@ class Combinaison
   def tierce_franche?
     if self.type == :tas
       # Combinaison est un tas sans rien de particulier
-      # => ce n'est donc pas une tiuerce franche
+      # => ce n'est donc pas une tierce franche
       false
     elsif self.type == :serie
       # Combinaison constitue une série
@@ -112,11 +112,16 @@ class Combinaison
       # (dont un joker)
       # => le joker est indispensable
       false
-    else
-      # La combinaison contient plus de 3 cartes
-      # (?)
+    elsif self.type == :serie
+      # La combinaison est une série de plus de 3 cartes
+      # (donc 3 cartes plus un Joker)
       # => le joker est facultatif
       true
+    else
+      # La combinaison est une suite de plus de 3 cartes
+      # (mais ne contient pas une tierce franche)
+      # => le joker est indispensable
+      false
     end
   end
 
