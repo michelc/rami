@@ -435,6 +435,118 @@ describe "Combinaison", "Vérification joker_facultatif?" do
 end
 
 
+describe "Combinaison", "Vérification possibilites" do
+
+  it "Renvoie vide si le Joker est facultatif" do
+    serie = []
+    serie << Carte.new(0)
+    serie << Carte.new(13)
+    serie << Carte.new(26)
+    combinaison = Combinaison.new :serie, serie
+    combinaison.possibilites.must_equal []
+  end
+
+  it "Renvoie 2 cartes si Paire + Joker" do
+    serie = []
+    serie << Carte.new(0)
+    serie << Carte.new(13)
+    serie << Carte.new(52)
+    combinaison = Combinaison.new :serie, serie
+    possibilites = combinaison.possibilites
+    possibilites.size.must_equal 2
+    possibilites.must_equal combinaison.complements
+  end
+
+  it "Renvoie 1 carte si suite commençe par un As" do
+    suite = []
+    suite << Carte.new(0)
+    suite << Carte.new(1)
+    suite << Carte.new(52)
+    combinaison = Combinaison.new :suite, suite
+    possibilites = combinaison.possibilites
+    possibilites.size.must_equal 1
+    possibilites[0].must_equal combinaison.remplacement
+  end
+
+  it "Renvoie 1 carte si suite fini par un As" do
+    suite = []
+    suite << Carte.new(11)
+    suite << Carte.new(52)
+    suite << Carte.new(0)
+    combinaison = Combinaison.new :suite, suite
+    possibilites = combinaison.possibilites
+    possibilites.size.must_equal 1
+    possibilites[0].must_equal combinaison.remplacement
+  end
+
+  it "Renvoie 2 cartes si suite commence par un Joker" do
+    suite = []
+    suite << Carte.new(52)
+    suite << Carte.new(4)
+    suite << Carte.new(5)
+    combinaison = Combinaison.new :suite, suite
+    possibilites = combinaison.possibilites
+    possibilites.size.must_equal 2
+    possibilites[0].must_equal combinaison.remplacement
+    possibilites[1].carte_id.must_equal 6
+  end
+
+  it "Renvoie 2 cartes si suite fini par un Joker" do
+    suite = []
+    suite << Carte.new(4)
+    suite << Carte.new(5)
+    suite << Carte.new(52)
+    combinaison = Combinaison.new :suite, suite
+    possibilites = combinaison.possibilites
+    possibilites.size.must_equal 2
+    possibilites[0].must_equal combinaison.remplacement
+    possibilites[1].carte_id.must_equal 3
+  end
+
+  it "Renvoie 2 cartes si suite style [ 3 4 J 6 ]" do
+    suite = []
+    suite << Carte.new("3C")
+    suite << Carte.new("4C")
+    suite << Carte.new("J*")
+    suite << Carte.new("6C")
+    combinaison = Combinaison.new :suite, suite
+    possibilites = combinaison.possibilites
+    possibilites.size.must_equal 2
+    possibilites[0].must_equal combinaison.remplacement
+    possibilites[1].to_s.must_equal "2C"
+  end
+
+  it "Renvoie 2 cartes si suite style [ 3 J 5 6 ]" do
+    suite = []
+    suite << Carte.new("3C")
+    suite << Carte.new("J*")
+    suite << Carte.new("5C")
+    suite << Carte.new("6C")
+    combinaison = Combinaison.new :suite, suite
+    possibilites = combinaison.possibilites
+    possibilites.size.must_equal 2
+    possibilites[0].must_equal combinaison.remplacement
+    possibilites[1].to_s.must_equal "7C"
+  end
+
+  it "Renvoie 3 cartes si suite style [ 3 4 J 6 7 ]" do
+    suite = []
+    suite << Carte.new("3C")
+    suite << Carte.new("4C")
+    suite << Carte.new("J*")
+    suite << Carte.new("6C")
+    suite << Carte.new("7C")
+    combinaison = Combinaison.new :suite, suite
+    possibilites = combinaison.possibilites
+    possibilites.size.must_equal 3
+    possibilites[0].must_equal combinaison.remplacement
+    possibilites[1].to_s.must_equal "2C"
+    possibilites[2].to_s.must_equal "8C"
+  end
+
+end
+
+
 describe "Combinaison", "Vérification remplacement joker" do
 
   it "Renvoie vide si suite sans joker" do

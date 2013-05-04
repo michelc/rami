@@ -125,6 +125,53 @@ class Combinaison
     end
   end
 
+  # Recherche les cartes qui pourraient rendre le joker facultatif
+  def possibilites
+    if self.joker_facultatif?
+      # Le Joker est facultatif
+      # => On n'a pas besoin d'autres cartes pour que la combinaison soit complète
+      []
+    elsif self.type == :serie
+      # Le Joker est indispensable dans une série (donc Paire + Joker)
+      # => Il faut récupérer une des 2 cartes complémentaires pour espérer
+      #    terminer la combinaison
+      self.complements
+    elsif self.cartes.first.est_as? || self.cartes.last.est_as?
+      # Suite avec un As sur un des bords
+      # => Le Joker est soit à l'autre bord, soit au milieu de la suite
+      # => Il n'y a donc qu'une carte à récupérer pour terminer la combinaison,
+      #    celle que le Joker remplace
+      [ self.remplacement ]
+    elsif self.cartes.first.est_joker?
+      # Suite avec Joker en première carte
+      # => Il y a 2 cartes à récupérer pour terminer la combinaison,
+      #    celle que le joker remplace et celle qui suit la dernière carte
+      [ self.remplacement, self.cartes.last.carte_apres ]
+    elsif self.cartes.last.est_joker?
+      # Suite avec Joker en dernière carte
+      # => Il y a 2 cartes à récupérer pour terminer la combinaison,
+      #    celle que le joker remplace et celle qui précède la première carte
+      [ self.remplacement, self.cartes.first.carte_avant ]
+    else
+      # => Le Joker n'est pas au bord, il n'y a donc qu'une carte à récupérer
+      #    pour terminer la combinaison, celle que le Joker remplace
+      possibilites = [ self.remplacement ]
+      if self.cartes[2].est_joker?
+        # Et aussi celle qui précède la première carte
+        # - [ 3 4 J 6 ] => _2_ 5
+        # - [ 3 4 J 6 7 ] => _2_ 5 8
+        possibilites << self.cartes.first.carte_avant
+      end
+      if self.cartes[self.cartes.size - 3].est_joker?
+        # Et aussi celle qui suit la dernière carte
+        # - [ 3 J 5 6 ] => 4 _7_
+        # - [ 3 4 J 6 7 ] => 2 5 _8_
+        possibilites << self.cartes.last.carte_apres
+      end
+      possibilites
+    end
+  end
+
   private
 
   # Compte le nombre de point que rapporte la combinaison
