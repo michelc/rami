@@ -151,27 +151,28 @@ class Niveau4
         # et que le joueur n'a pas de joker dans sa main
         nb_esperance = 10
         unless combinaison.joker_facultatif?
-######### unless a_un_joker
-            # Cherche les cartes pour finir la combinaison sans avoir besoin du Joker
-            besoins = combinaison.possibilites
-            # Chaque carte est présente 2 fois dans le jeu et il y a 4 Jokers
-            # => on a donc le nombre de chance suivant de tomber sur la carte espérée :
-            nb_esperance = (besoins.size * 2) + 4
-            # Moins le nombre de fois où une des cartes espérées a déjà été jouée
-            besoins.each do |besoin|
-              nb_esperance -= la_defausse.count { |c| c == besoin }
-              les_tas.each do |tas|
-                nb_esperance -= tas.cartes.count { |c| c == besoin }
-              end
+          # Cherche les cartes pour finir la combinaison sans avoir besoin du Joker
+          besoins = combinaison.possibilites
+          # Chaque carte est présente 2 fois dans le jeu et il y a 4 Jokers
+          # => on a donc le nombre de chance suivant de tomber sur la carte espérée :
+          nb_esperance = (besoins.size * 2) + 4
+          # Moins le nombre de fois où une des cartes espérées a déjà été jouée
+          besoins.each do |besoin|
+            nb_esperance -= la_defausse.count { |c| c == besoin }
+            les_tas.each do |tas|
+              nb_esperance -= tas.cartes.count { |c| c == besoin }
             end
-            # Moins le nombre de Jokers déjà joués
+          end
+          # Moins le nombre de Jokers déjà joués
+          # (sauf si on en a déjà un)
+          unless a_un_joker
             nb_esperance -= la_defausse.count { |c| c.est_joker? } # au cas où
             les_tas.each do |tas|
               nb_esperance -= tas.cartes.count { |c| c.est_joker? }
             end
-            # Rien à faire s'il ne reste pas de carte pour compléter la combinaison
-            next if nb_esperance == 0
-######### end
+          end
+          # Rien à faire s'il ne reste pas de carte pour compléter la combinaison
+          next if nb_esperance == 0
         end
 
         score.nb_utilisation += 1
