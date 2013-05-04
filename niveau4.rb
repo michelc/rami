@@ -152,38 +152,8 @@ class Niveau4
         nb_esperance = 10
         unless combinaison.joker_facultatif?
 ######### unless a_un_joker
-            # On établit la liste des cartes à espérer pour que la combinaison soit complète
-            besoins = []
-            if combinaison.type == :serie
-              # Paire + Joker
-              # => Il faut récupérer une des 2 cartes complémentaires pour espérer
-              #    terminer la combinaison
-              besoins = combinaison.complements
-            elsif combinaison.cartes.first.est_as? || combinaison.cartes.last.est_as?
-              # Suite avec un As sur un des bords
-              # => Le Joker est soit à l'autre bord, soit au milieur de la suite
-              # => Il n'y a donc qu'une carte à récupérer pour terminer la combinaison,
-              #    celle que le Joker remplace
-              besoins = [ combinaison.remplacement ]
-            elsif combinaison.cartes.first.est_joker?
-              # Suite avec Joker en première carte
-              # => Il y a 2 cartes à récupérer pour terminer la combinaison
-              # - Celle que le joker remplace
-              besoins = [ combinaison.remplacement ]
-              # - Celle qui suit la dernière carte
-              besoins << combinaison.cartes.last.carte_apres
-            elsif combinaison.cartes.last.est_joker?
-              # Suite avec Joker en dernière carte
-              # => Il y a 2 cartes à récupérer pour terminer la combinaison
-              # - Celle que le joker remplace
-              besoins = [ combinaison.remplacement ]
-              # - Celle qui précède la première carte
-              besoins << combinaison.cartes.first.carte_avant
-            else
-              # => Le Joker n'est pas au bord, il n'y a donc qu'une carte à récupérer
-              #    pour terminer la combinaison, celle que le Joker remplace
-              besoins = [ combinaison.remplacement ]
-            end
+            # Cherche les cartes pour finir la combinaison sans avoir besoin du Joker
+            besoins = combinaison.possibilites
             # Chaque carte est présente 2 fois dans le jeu et il y a 4 Jokers
             # => on a donc le nombre de chance suivant de tomber sur la carte espérée :
             nb_esperance = (besoins.size * 2) + 4
