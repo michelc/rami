@@ -157,13 +157,13 @@ class Joueur
       # Joueur a déjà posé ses cartes
       # => cherche à finir la partie (tout poser ou diminuer nb points en main)
       :finir_partie
-    elsif self.tierce_franche?
-      # Joueur a sa tierce franche (mais pas encore 51 points)
-      # => cherche à avoir plus de points pour pouvoir poser
+    elsif self.a_pose_tierce?
+      # Joueur a posé sa tierce franche (mais pas encore 51 points)
+      # => doit poser d'autres combinaisons pour faire 51 points
       :faire_points
     else
       # Joueur n'a pas encore de tierce franche
-      # => cherche à faire une tierce franche pour espérer démarrer la partie
+      # => doit faire une tierce franche pour démarrer la partie
       :faire_tierce
     end
   end
