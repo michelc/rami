@@ -48,54 +48,122 @@ class Niveau4
   end
 
   # Détermine s'il vaut mieux prendre la défausse que piocher
-  # - si cela augmente le nombre de combinaisons
-  # - sinon, si cela augmente le nombre de combinaisons sans joker (ie diminue le nb avec joker)
-# TODO : sinon, si cela permet de poser dans les tas déjà posés
   def mieux_vaut_prendre? carte, les_tas, la_defausse
+
     # Non si le joueur n'a pas le droit de prendre la carte à la défausse
-    self.trace = "interdit"
     return false if self.joueur.peut_prendre? == false
 
-    # Calcule le score de chaque carte dans la main du joueur
-    scores = score_cartes(carte, les_tas, la_defausse)
-    # Si le score de la carte tirée est inférieur à 40
-    # => La carte n'est pas directement posable
-    score = scores.find { |s| s.carte_id = carte.carte_id }
-    score = scores.last
-    self.trace = ""
-    return true if score.nb_tas_joker > 0
-    return true if score.nb_tas_pose > 0
-    return true if score.nb_tierce_franche > 0
-    self.trace = "score"
-    return false if score.valorisation < 40
+    # Si c'est le 1° tour
+    if self.joueur.compte_tour == 0
 
-    # Si la carte est posable
-    # Et que le joueur a déjà posé des 51 points
-    # => Autant prendre la carte
-    self.trace = "" if self.joueur.a_pose_51?
-    return true if self.joueur.a_pose_51?
+      # Oui si c'est un Joker
+      return true if carte.est_joker?
 
-    # Sinon, il peut prendre à condition d'améliorer sa main
-    # (ou pour l'instant son nombre de combinaisons)
-    nb_possibilites = self.joueur.combinaisons.size
-    nb_avec_joker = (self.joueur.combinaisons.map { |c| c.avec_joker? }).size
+      # Oui si cela permet d'avoir un meilleur enchainement de combinaisons
+      main = self.joueur.cartes.clone
+      optimisation = Optimisation.new
+      chemins = optimisation.loop main, 0
+      nb_points_sans = 0 || chemins.max_by { |c| c.nb_points }.nb_points
+      main << carte
+      chemins = optimisation.loop main, 0
+      nb_points_avec = 0 || chemins.max_by { |c| c.nb_points }.nb_points
+      if nb_points_avec > nb_points_sans
+        return true
+      end
+
+      # Non si le joueur a déjà cette carte dans sa main
+      if self.joueur.cartes.any? { |c| c == carte }
+        # ESSAYER D'ETRE PLUS SUBTIL
+        return false
+      end
+
+      # Oui si le joueur n'a pas encore de tierce franche
+      # et que la carte augmente le nombre de suites possibles
+      if self.joueur.combinaisons.any? { |c| c.tierce_franche? }
+        nb_suites_sans = self.joueur.combinaisons.count { |c| c.type == :suite }
+        main = self.joueur.cartes.clone
+        main << carte
+        analyse = Analyse.new main.clone
+        combinaisons = analyse.combinaisons
+        nb_suites_avec = combinaisons.count { |c| c.type == :suite }
+        if nb_suites_avec > nb_suites_sans
+          return true
+        else
+          return false
+        end
+      end
+
+      # Oui si le joueur a déjà sa tierce franche
+      # et que la carte augmente le nombre de combinaisons possibles
+      nb_combinaisons_sans = self.joueur.combinaisons.size
+      main = self.joueur.cartes.clone
+      main << carte
+      analyse = Analyse.new main.clone
+      combinaisons = analyse.combinaisons
+      nb_combinaisons_avec = combinaisons.size
+      if nb_combinaisons_avec > nb_combinaisons_sans
+        return true
+      else
+        return false
+      end
+
+      # Non dans les autres cas (pour le 1° tour)
+      return false
+
+    end
+
+    # Si le joueur a déjà posé ses 51 points
+    if self.joueur.a_pose_51?
+
+      # Oui si c'est un Joker
+      return true if carte.est_joker?
+
+      # Non si le joueur a déjà cette carte dans sa main
+      if self.joueur.cartes.any? { |c| c == carte }
+        # ESSAYER D'ETRE PLUS SUBTIL
+        return false
+      end
+
+      # Oui si la carte permet de faire une combinaison
+      nb_combinaisons_sans = self.joueur.combinaisons.size # 0 normalement ?
+      main = self.joueur.cartes.clone
+      main << carte
+      if main.size > 3
+        analyse = Analyse.new main.clone
+        combinaisons = analyse.combinaisons
+        nb_combinaisons_avec = combinaisons.size
+        return true if nb_combinaisons_avec > nb_combinaisons_sans
+      end
+
+      # Oui si la carte est posable sur un tas
+      les_tas.each do |tas|
+        if tas.remplace_le_joker? carte
+          return true
+        elsif tas.complete_le_tas? carte
+          return true
+        end
+      end
+# ESSAYER DE GERER SI CARTE PEUT ETRE POSABLE SUR UN TAS APRES QUE
+#  DES CARTES DELA MAIN AURONT ETE POSEES SUR DES TAS
+
+      # Non dans les autres cas (après 51 points)
+      return false
+
+    end
+
+    # Le joueur n'a pas encore 51 points, mais possède déjà une tierce franche
+    # (sans quoi il ne pourrait pas prendre la défausse)
+    # On regarde donc si la prise de la carte permet d'atteindre les 51 points
     main = self.joueur.cartes.clone
     main << carte
-    analyse = Analyse.new main.clone
-    nb_possibilites < analyse.combinaisons.size
-    if analyse.combinaisons.size > nb_possibilites
-      self.trace = ""
-      true
+    optimisation = Optimisation.new
+    chemin = optimisation.pose_tierce main
+    if chemin.type == :tas
+      return false
     else
-      nb_avec_joker_apres = (analyse.combinaisons.map { |c| c.avec_joker? }).size
-      if nb_avec_joker_apres < nb_avec_joker
-        self.trace = ""
-        true
-      else
-        self.trace = "pareil"
-        false
-      end
+      return true
     end
+
   end
 
   # Analyse la main du joueur
