@@ -2,6 +2,7 @@
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "joueur"
+require "optimisation"
 
 class Niveau4
 
@@ -26,35 +27,24 @@ class Niveau4
   end
 
   # Détermine quelle est la meilleure combinaison à poser
-  # - celle qui contient le plus de cartes
-  # - avec si possible pas de joker
+  # en fonction de la phase de jeu
   def meilleure_combinaison
-    nb_cartes = 0
-    avec_joker = nil
-    meilleure = nil
-
-    #
-    if joueur.tierce_franche?
-      tierces = self.joueur.combinaisons.select { |c| c.tierce_franche? }
-      sans_joker = tierces.reject { |c| c.avec_joker? }
-      return sans_joker.sample if sans_joker.size > 0
-      return tierces.sample
+    # Calcule tous les enchainements de combinaisons et sélectionne :
+    optimisation = Optimisation.new
+    case self.joueur.phase_du_jeu
+    when :faire_tierce
+      # - celui qui commence par une tierce franche
+      # - qui permet d'atteindre 51 points
+      # - et qui utilise un maximum de cartes
+      optimisation.pose_tierce joueur.cartes
+    when :faire_points
+      # - celui qui permet de finir la pose des 51 points
+      # - et qui utilise un maximum de cartes
+      optimisation.pose_points joueur.cartes, joueur.a_pose_combien
+    else
+      # - celui qui utilise un maximum de cartes
+      optimisation.pose_restes joueur.cartes
     end
-
-    self.joueur.combinaisons.each do |combinaison|
-      if nb_cartes < combinaison.cartes.size
-        nb_cartes = combinaison.cartes.size
-        meilleure = combinaison
-        avec_joker = meilleure.avec_joker?
-      elsif nb_cartes == combinaison.cartes.size
-        if avec_joker
-          nb_cartes = combinaison.cartes.size
-          meilleure = combinaison
-          avec_joker = meilleure.avec_joker?
-        end
-      end
-    end
-    meilleure
   end
 
   # Détermine s'il vaut mieux prendre la défausse que piocher
@@ -91,7 +81,7 @@ class Niveau4
     nb_avec_joker = (self.joueur.combinaisons.map { |c| c.avec_joker? }).size
     main = self.joueur.cartes.clone
     main << carte
-    analyse = Analyse.new main
+    analyse = Analyse.new main.clone
     nb_possibilites < analyse.combinaisons.size
     if analyse.combinaisons.size > nb_possibilites
       self.trace = ""

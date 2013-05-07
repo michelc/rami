@@ -193,7 +193,7 @@ end
 # Nouvelle partie
 get "/demarrer" do
   @partie = Partie.new "Moi", "Ruby"
-  @partie.joueurs[RUBY].niveau = Niveau3.new @partie.joueurs[RUBY]
+  @partie.joueurs[RUBY].niveau = Niveau4.new @partie.joueurs[RUBY]
   @partie.joueurs[MOI].niveau = Niveau4.new @partie.joueurs[MOI]
 
   @partie.distribuer_les_cartes
