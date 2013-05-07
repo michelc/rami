@@ -14,9 +14,65 @@ class Niveau4
   end
 
   # Détermine quelle est la meilleure carte à défausser
-  # - une carte qui ne fait pas baisser le nombre de combinaisons possibles
   def meilleure_defausse les_tas, la_defausse
+    # La main du joueur
+    main = self.joueur.cartes.clone
+
+    # Une carte en double dans la main du joueur
+    doublons = main
+              .each_with_object(Hash.new(0)) { |o, h| h[o] += 1 }
+              .map { |k, v| k if v >= 2}
+              .compact
+    if doublons.size > 0
+      nb_points = if self.joueur.phase_du_jeu == :finir_partie
+                  doublons.max_by { |c| c.points }.points
+                else
+                  doublons.min_by { |c| c.points }.points
+                end
+      doublons.keep_if { |c| c.points == nb_points }
+      return doublons.sample
+    end
+
+    # Une carte inutilisée dans les combinaisons possibles
+    combinaisons = []
+    if main.size > 3
+      a_un_joker = main.any? { |c| c.est_joker? }
+      main << Carte.new(52) unless a_un_joker
+      optimisation = Optimisation.new
+      combinaisons = optimisation.combinaisons main
+      inutiles = main.clone
+      combinaisons.each do |combinaison|
+        inutiles = optimisation.enlever_cartes_utilisees inutiles.clone, combinaison
+      end
+      if inutiles.size > 0
+        nb_points = if self.joueur.phase_du_jeu == :finir_partie
+                    inutiles.max_by { |c| c.points }.points
+                  else
+                    inutiles.min_by { |c| c.points }.points
+                  end
+        inutiles.keep_if { |c| c.points == nb_points }
+        return inutiles.sample
+      end
+    end
+
+    # Une carte pas indispensable dans les combinaisons possibles
+    combinaisons.shuffle.each do |combinaison|
+      next if combinaison.type != :suite
+      next if combinaison.cartes.size != 4
+      if combinaison.cartes[1].est_joker?
+        # Suite 6 J 8 9 => le 6 n'apporte pas grand chose
+        return combinaison.cartes[0]
+      elsif combinaison.cartes[2].est_joker?
+        # Suite 6 7 J 9 => le 9 n'apporte pas grand chose
+        return combinaison.cartes[3]
+      end
+    end
+
+    # Une carte d'une série avec Joker tant que pas de tierce franche
+    # OK, MAIS COMMENT FAIRE CA ???
+
     # Calcule le score de chaque carte dans la main du joueur
+    # A REVOIR...
     scores = score_cartes(nil, les_tas, la_defausse)
     # Détermine le score le plus bas
     minimum = scores.min_by { |s| s.valorisation }.valorisation
@@ -24,6 +80,7 @@ class Niveau4
     defaussables = scores.select { |s| s.valorisation == minimum }
     # Repose une des cartes faiblichonnes
     self.joueur.cartes[defaussables.sample.index]
+
   end
 
   # Détermine quelle est la meilleure combinaison à poser
