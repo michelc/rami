@@ -90,7 +90,17 @@ def get_conseil
   # Est-ce qu'il existe un tas en cours de remplissage ?
   tas_en_cours = @partie.ta12s.any? { |t| [1,2].include? t.cartes.size }
 
-  if @partie.piocher
+  if @partie.joueurs[1].cartes.size == 0
+
+    # L'adversaire n'a plus de carte => il a gagné !
+    conseil = "Dommage ! Vous avez perdu la partie :("
+
+  elsif joueur.cartes.size == 0
+
+    # Le joueur n'a plus de carte => il a gagné !
+    conseil = "Félicitation ! Vous avez gagné la partie :)"
+
+  elsif @partie.piocher
 
     # Le joueur doit piocher une carte
 
@@ -103,8 +113,8 @@ def get_conseil
       # Le joueur ne peut pas prendre de carte dans la défausse
       if @partie.compte_tour < 4
         # On est au début du jeu => on l'aide au maximum
-        conseil = "Vous devez tirer une carte dans la pioche car vous n'avez pas
-                   de tierce franche dans votre main"
+        conseil = "Vous devez tirer une carte dans la pioche (car vous n'avez pas
+                   de tierce franche dans votre main)"
       else
         # Ca fait un moment qu'on joue => on le laisse tranquille
         conseil = "Tirez une carte dans la pioche"
@@ -137,41 +147,65 @@ def get_conseil
 
     # Le joueur doit jouer une carte
 
-    if @partie.joueurs[1].cartes.size == 0
-      # L'adversaire n'a plus de carte => il a gagné !
-      conseil = "Dommage ! Vous avez perdu la partie :("
-    elsif joueur.cartes.size == 0
-      # Le joueur n'a plus de carte => il a gagné !
-      conseil = "Félicitation ! Vous avez gagné la partie :)"
-    elsif joueur.cartes.size == 1
+    # Cas où le joueur a pris la carte de la défausse
+    defausse_a_poser = false
+    if @partie.carte_prise_nb == 1
+      # Il faut qu'il la pose si ce n'est pas encore fait
+      nb = joueur.cartes.count { |c| c == @partie.carte_prise }
+      if nb == @partie.carte_prise_nb
+        defausse_a_poser = true
+      end
+    end
+
+    if joueur.cartes.size == 1
       # Le joueur n'a plus qu'une carte => il va gagner !
       conseil = "Ecartez votre dernière carte à la défausse !"
     elsif @partie.compte_tour == 1
       # Le joueur ne peut que défausser lors du 1° tour
       conseil = "Posez une de vos cartes dans la défausse"
-    elsif @partie.compte_tour > 10
-      # Ca fait un moment qu'on joue => on laisse le joueur tranquille
-      conseil = "Posez une carte sur la table ou dans la défausse"
     elsif joueur.tierce_franche?
       # Il dispose d'une tierce franche et ne l'a pas encore posée
-      conseil = "Posez votre tierce franche à condition d'atteindre 51 points
-                 avec d'autres combinaisons ou écartez une carte à la défausse"
+      if defausse_a_poser
+        conseil = "Posez votre tierce franche à condition d'atteindre 51 points
+                   avec d'autres combinaisons"
+      else
+        conseil = "Posez votre tierce franche à condition d'atteindre 51 points
+                   avec d'autres combinaisons ou écartez une carte à la défausse"
+      end
+    elsif @partie.compte_tour > 10
+      # Ca fait un moment qu'on joue => on laisse le joueur assez tranquille
+      if defausse_a_poser
+        conseil = "Posez une combinaison sur la table"
+      else
+        conseil = "Posez une combinaison sur la table ou écartez une carte à la
+                   défausse"
+      end
     elsif joueur.a_pose_51?
       # Le joueur a posé 51 points
       # => Il peut jouer assez librement
-      if joueur.cartes.size > 3
+      if joueurs.cartes.size <= 3
+        if defausse_a_poser
+          conseil = "Complétez une des combinaisons déjà posées"
+        else
+          conseil = "Complétez une des combinaisons déjà posées ou écartez une
+                     carte à la défausse"
+        end
+      elsif defausse_a_poser
+        conseil = "Posez une nouvelle combinaison ou complétez une des combinaisons
+                   déjà posées"
+      else
         conseil = "Posez une nouvelle combinaison, complétez une des combinaisons
                    déjà posées ou écartez une carte à la défausse"
-      else
-        conseil = "Complétez une des combinaisons déjà posées ou écartez une
-                   carte à la défausse"
       end
     elsif joueur.a_pose_tierce?
       # Il a déjà posé sa tierce franche mais n'a pas encore ses 51 points
       conseil = "Posez d'autres combinaisons pour atteindre 51 points"
     elsif @partie.compte_tour < 10
-      conseil = "Vous ne pouvez pas encore poser de tierce franche. Vous devez
-                 donc écarter une de vos cartes dans la défausse"
+      conseil = "Vous devez poser une carte dans la défausse (car vous n'avez pas
+                 de tierce franche dans votre main)"
+    elsif defausse_a_poser
+      # Le joueur a pris la carte à la défausse et ne l'a pas encore posée
+      conseil = "Posez une combinaison sur la table"
     else
       conseil = "Ecartez une carte à la défausse"
     end
