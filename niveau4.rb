@@ -23,6 +23,7 @@ class Niveau4
               .each_with_object(Hash.new(0)) { |o, h| h[o] += 1 }
               .map { |k, v| k if v >= 2}
               .compact
+    doublons.delete_if { |c| c.est_joker? }
     if doublons.size > 0
       nb_points = if self.joueur.phase_du_jeu == :finir_partie
                   doublons.max_by { |c| c.points }.points
@@ -44,6 +45,7 @@ class Niveau4
       combinaisons.each do |combinaison|
         inutiles = optimisation.enlever_cartes_utilisees inutiles.clone, combinaison
       end
+      inutiles.delete_if { |c| c.est_joker? }
       if inutiles.size > 0
         nb_points = if self.joueur.phase_du_jeu == :finir_partie
                     inutiles.max_by { |c| c.points }.points
