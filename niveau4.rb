@@ -120,10 +120,10 @@ class Niveau4
       main = self.joueur.cartes.clone
       optimisation = Optimisation.new
       chemins = optimisation.loop main, 0
-      nb_points_sans = 0 || chemins.max_by { |c| c.nb_points }.nb_points
+      nb_points_sans = chemins.size == 0 ? 0 : chemins.max_by { |c| c.nb_points }.nb_points
       main << carte
       chemins = optimisation.loop main, 0
-      nb_points_avec = 0 || chemins.max_by { |c| c.nb_points }.nb_points
+      nb_points_avec = chemins.size == 0 ? 0 : chemins.max_by { |c| c.nb_points }.nb_points
       if nb_points_avec > nb_points_sans
         return true
       end
