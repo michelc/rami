@@ -46,9 +46,12 @@ class Optimisation
     chemins.keep_if { |c| c.franche }
     # Et qui apportent un total de 51 points
     chemins.keep_if { |c| c.nb_points >= 51 }
-    # En privilégiant ceux qui utilisent un maximum de carte
-    chemins.sort_by! { |c| c.nb_cartes }
+    # En qui utilisent un maximum de carte
     if chemins.size > 0
+      nb_cartes = chemins.max_by { |c| c.nb_cartes }.nb_cartes
+      chemins.keep_if { |c| c.nb_cartes >= nb_cartes }
+      # En privilégiant ceux qui font un maximum de points
+      chemins.sort_by! { |c| c.nb_points }
       # Et le gagnant est ...
       combinaisons = combinaisons(une_main)
       combinaisons[chemins.last.index]
@@ -63,44 +66,27 @@ class Optimisation
     chemins = loop une_main, 0
     # On ne prend que les enchainements qui permettent de finir les 51 points
     chemins.keep_if { |c| c.nb_points >= 51 - deja_fait}
-    # En privilégiant ceux qui utilisent un maximum de carte
-    chemins.sort_by! { |c| c.nb_cartes }
-# Et le gagnant est ...
-combinaisons = combinaisons(une_main)
-combinaisons[chemins.last.index]
-=begin
-    if chemins.size > 0
-      # Et le gagnant est ...
-      combinaisons = combinaisons(une_main)
-      combinaisons[chemins.last.index]
-    else
-      # Ca sera pour la prochaine fois ...
-      puts "CA NE DEVRAIT JAMAIS SE PRODUIRE (pose_points) !?!?!?!?!?!?"
-      Combinaison.new :tas, []
-    end
-=end
+    # En qui utilisent un maximum de carte
+    nb_cartes = chemins.max_by { |c| c.nb_cartes }.nb_cartes
+    chemins.keep_if { |c| c.nb_cartes >= nb_cartes }
+    # En privilégiant ceux qui font un maximum de points
+    chemins.sort_by! { |c| c.nb_points }
+    # Et le gagnant est ...
+    combinaisons = combinaisons(une_main)
+    combinaisons[chemins.last.index]
   end
 
   def pose_restes une_main
     # Evalue tous les enchainements possibles pour poser les combinaisons
     chemins = loop une_main, 0
-    # On privilégie les enchainements qui utilisent un maximum de carte
-    # EST-CE QUE UN MAXMUM DE POINTS NE SERAIT PAS MIEUX ???
-    chemins.sort_by! { |c| c.nb_cartes }
-# Et le gagnant est ...
-combinaisons = combinaisons(une_main)
-combinaisons[chemins.last.index]
-=begin
-    if chemins.size > 0
-      # Et le gagnant est ...
-      combinaisons = combinaisons(une_main)
-      combinaisons[chemins.last.index]
-    else
-      # Ca sera pour la prochaine fois ...
-      puts "CA NE DEVRAIT JAMAIS SE PRODUIRE (pose_restes) !?!?!?!?!?!?"
-      Combinaison.new :tas, []
-    end
-=end
+    # On prend ceux qui utilisent un maximum de carte
+    nb_cartes = chemins.max_by { |c| c.nb_cartes }.nb_cartes
+    chemins.keep_if { |c| c.nb_cartes >= nb_cartes }
+    # En privilégiant ceux qui font un maximum de points
+    chemins.sort_by! { |c| c.nb_points }
+    # Et le gagnant est ...
+    combinaisons = combinaisons(une_main)
+    combinaisons[chemins.last.index]
   end
 
   # Evalue tous les enchainements possibles pour poser les combinaisons d'une main
