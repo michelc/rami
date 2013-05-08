@@ -123,12 +123,12 @@ def get_conseil
       # Le joueur a déjà posé ses 51 points
       # => il peut prendre la défausse à condition de la jouer
       conseil = "Tirez une carte dans la pioche ou prenez la carte de la défausse
-                 à condition de la poser dans le tour"
+                 (à condition de la poser dans le tour)"
     else
       # Le joueur a déjà une tierce franche en main
       # => il peut prendre la défausse à condition de poser 51 points
       conseil = "Tirez une carte dans la pioche ou prenez la carte de la défausse
-                 à condition de poser 51 points dans le tour"
+                 (à condition de poser 51 points dans le tour)"
     end
 
   elsif tas_en_cours
