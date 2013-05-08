@@ -183,7 +183,7 @@ def get_conseil
     elsif joueur.a_pose_51?
       # Le joueur a posé 51 points
       # => Il peut jouer assez librement
-      if joueurs.cartes.size <= 3
+      if joueur.cartes.size <= 3
         if defausse_a_poser
           conseil = "Complétez une des combinaisons déjà posées"
         else
