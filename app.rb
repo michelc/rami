@@ -22,10 +22,10 @@ helpers do
   def img_carte carte, derniere
     id = carte.carte_id.to_s
     id = "0" + id if id.size < 2
-    css = "card"
+    css = "card " + carte.to_css
     css << " derniere" if carte == derniere
     tooltip = @debug ? " title='#{carte.tooltip}'" : ""
-    "<img id='carte#{id}' class='#{css}' src='/#{@cards_theme}/carte-#{id}.png'#{tooltip} />"
+    "<div id='carte#{id}' class='#{css}'#{tooltip}></div>"
   end
 
   # Code HTML pour afficher le dos d'une carte
@@ -38,7 +38,7 @@ helpers do
               nil
             end
     if carte.nil?
-      "<img class='card' src='/#{@cards_theme}/carte-dos.png' />"
+      "<div class='card X BK'></div>"
     else
       img_carte carte, nil
     end

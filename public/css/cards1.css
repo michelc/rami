@@ -9,30 +9,60 @@
 }
 .une_main li             { margin-left: -64px; }
 .une_main li:first-child { margin-left: 0; }
-.un_tas li               { margin-left: -44px; }
+.un_tas li               { margin-left: -40px; }
 .un_tas li:first-child   { margin-left: 0; }
 
 .card
 {
-  background-color: #fff;
-  border: 1px solid #666;
-  margin: 3px;
-  padding: 0 2px;
-  padding: 0;
+  background-color: transparent;
+  background-image: url(../cards1/cards1_88_122.png);
+  background-repeat: no-repeat;
   border-radius: 5px;
+  height: 122px;
+  margin: 0;
+  padding: 0;
+  width: 88px;
 }
 
 .card.ui-draggable-dragging
 {
-  border: 1px solid #00a;
   box-shadow: #08f 0 0 15px;
 }
 
-.ma_main .derniere { margin-top: -20px; }
+.ma_main .card { margin-top: 20px; }
+.ma_main .derniere { top: -20px; }
 
 .un_tas .card
 {
-  border-radius: 3px;
-  width: 50px;
-  height: 70px;
+  width: 55px;
+  height: 76px;
+  border-right: 1px solid #777;
+  border-bottom: 1px solid #777;
 }
+
+/* Couleurs */
+.C { background-position-y:   -0px; }
+.P { background-position-y: -122px; }
+.K { background-position-y: -244px; }
+.T { background-position-y: -366px; }
+.X { background-position-y: -488px; }
+
+/* Valeurs */
+.V1 { background-position-x:    -0px; }
+.V2 { background-position-x:   -88px; }
+.V3 { background-position-x:  -176px; }
+.V4 { background-position-x:  -264px; }
+.V5 { background-position-x:  -352px; }
+.V6 { background-position-x:  -440px; }
+.V7 { background-position-x:  -528px; }
+.V8 { background-position-x:  -616px; }
+.V9 { background-position-x:  -704px; }
+.VX { background-position-x:  -792px; }
+.VV { background-position-x:  -880px; }
+.VD { background-position-x:  -968px; }
+.VR { background-position-x: -1056px; }
+
+/* Spéciales */
+.J1 { background-position-x:    -0px; }
+.J2 { background-position-x:   -88px; }
+.BK { background-position-x:  -176px; }
