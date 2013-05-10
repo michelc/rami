@@ -138,7 +138,7 @@ class Niveau4
 
       # Oui si le joueur n'a pas encore de tierce franche
       # et que la carte augmente le nombre de suites possibles
-      if self.joueur.combinaisons.any? { |c| c.tierce_franche? }
+      if self.joueur.combinaisons.none? { |c| c.tierce_franche? }
         nb_suites_sans = self.joueur.combinaisons.count { |c| c.type == :suite }
         main = self.joueur.cartes.clone
         main << carte
