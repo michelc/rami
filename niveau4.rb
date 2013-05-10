@@ -216,11 +216,11 @@ class Niveau4
     main = self.joueur.cartes.clone
     main << carte
     optimisation = Optimisation.new
-    chemin = optimisation.pose_tierce main
-    if chemin.type == :tas
-      return false
-    else
+    combinaison = optimisation.pose_tierce main
+    if combinaison
       return true
+    else
+      return false
     end
 
   end
