@@ -231,7 +231,7 @@ describe "Optimisation", "Vérification loop avec 2 combinaisons" do
     chemins[1].nb_cartes.must_equal 3
   end
 
-  it "Compte est bon si 2 suites imbriquées - cas 1" do
+  it "Compte est bon si 4 suites imbriquées - cas 1" do
     main = []
     main << Carte.new("AC")
     main << Carte.new("J*")
@@ -241,17 +241,27 @@ describe "Optimisation", "Vérification loop avec 2 combinaisons" do
     main << Carte.new("VT")
     optimisation = Optimisation.new
     chemins = optimisation.loop main
-    chemins.size.must_equal 2
+    chemins.size.must_equal 4
     # La 1° suite
     chemins[0].visuel.must_equal "[ AC J* 3C 4C 5C ]"
     chemins[0].franche.must_equal false
     chemins[0].nb_points.must_equal 15
     chemins[0].nb_cartes.must_equal 5
     # La 2° suite
-    chemins[1].visuel.must_equal "[ 3C 4C 5C ]"
-    chemins[1].franche.must_equal true
-    chemins[1].nb_points.must_equal 12
-    chemins[1].nb_cartes.must_equal 3
+    chemins[1].visuel.must_equal "[ AC J* 3C 4C ]"
+    chemins[1].franche.must_equal false
+    chemins[1].nb_points.must_equal 10
+    chemins[1].nb_cartes.must_equal 4
+    # La 3° suite
+    chemins[2].visuel.must_equal "[ AC J* 3C ]"
+    chemins[2].franche.must_equal false
+    chemins[2].nb_points.must_equal 6
+    chemins[2].nb_cartes.must_equal 3
+    # La 4° suite
+    chemins[3].visuel.must_equal "[ 3C 4C 5C ]"
+    chemins[3].franche.must_equal true
+    chemins[3].nb_points.must_equal 12
+    chemins[3].nb_cartes.must_equal 3
   end
 
   it "Compte est bon si 2 suites imbriquées - cas 2" do

@@ -178,33 +178,24 @@ class Analyse
 
         # S'il y a assez de cartes pour faire une suite
         while en_cours.size >= 3
+          # Supprime le Joker de fin s'il n'est pas indispensable
           if en_cours.size > 3
             if en_cours.last.est_joker?
               en_cours.pop
               deja_un_joker = false
             end
           end
+          # Vérifie si les cartes constituent une suite
           if est_une_suite? en_cours
-            # Ajoute la suite au tableau des séries possibles
+            # Ajoute la suite au tableau des suites possibles
             suites << Combinaison.new(:suite, en_cours)
             k = i + en_cours.size if k == -1
-            # Cas où suite A 2 3 J 5 contient aussi la suite A 2 3
-            if deja_un_joker
-              until en_cours.last.est_joker?
-                en_cours.pop
-              end
-              en_cours.pop
-              if en_cours.size >= 3
-                if est_une_suite? en_cours
-                  suites << Combinaison.new(:suite, en_cours)
-                end
-              end
-            end
-            # Sort de la boucle
-            en_cours = []
-          else
-            en_cours.pop
           end
+          # Enlève la dernière carte car une suite peut en cacher une autre
+          # - A 2 3 4 5 => A 2 3 4 et A 2 3 sont aussi des suites
+          # - A 2 3 J 5 => A 2 3 est aussi une suite
+          # Mais il manque encore A 2 3 4 5 => 2 3 4 5, 2 3 4 et 3 4 5 sont aussi des suites !!!!!
+          en_cours.pop
         end
         i = k == -1 ? i + 1 : k
         if k != -1

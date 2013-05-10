@@ -111,12 +111,10 @@ class Optimisation
                          false
                        elsif combinaison.avec_joker?
                          false
-                       elsif combinaison.cartes.size == 3
-                         true
-                       else
-                         # RATE LES SUITES FRANCHES DE PLUS DE 3 CARTES !!!
-                         # SI 4567 => Tester avec 456 et 567 !!!
+                       elsif combinaison.cartes.size != 3
                          false
+                       else
+                         true # suite sans joker de 3 cartes
                        end
       chemin.nb_points = combinaison.points
       chemin.nb_cartes = combinaison.cartes.size

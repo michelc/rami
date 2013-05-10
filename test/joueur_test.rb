@@ -87,7 +87,7 @@ describe "Joueur", "Vérification ramassage" do
 
   it "Alimente la liste des combinaisons" do
     joueur = Joueur.new("Toto")
-    distribution = (0..3).map { |i| Carte.new i }
+    distribution = (0..2).map { |i| Carte.new i }
     distribution << Carte.new(13)
     joueur.ramasser_cartes distribution
     joueur.combinaisons.size.must_equal 1
@@ -170,7 +170,7 @@ describe "Joueur", "Vérification retrait carte" do
 
   it "Actualise la liste des combinaisons tant que au moins 3 cartes" do
     joueur = Joueur.new("Toto")
-    distribution = (0..3).map { |i| Carte.new i }
+    distribution = (0..2).map { |i| Carte.new i }
     joueur.ramasser_cartes distribution
     joueur.combinaisons.size.must_equal 1
     joueur.enlever_une_carte distribution.last
