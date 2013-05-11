@@ -19,7 +19,7 @@ require "./niveau4"
 helpers do
 
   # Code HTML pour afficher une carte
-  def img_carte carte, derniere
+  def img_carte carte
     id = carte.carte_id.to_s
     id = "0" + id if id.size < 2
     css = "card " + carte.to_css
@@ -40,14 +40,14 @@ helpers do
     if carte.nil?
       "<div class='card X BK'></div>"
     else
-      img_carte carte, nil
+      img_carte carte
     end
   end
 
   # Code HTML pour afficher la pile des cartes rejetées
   def img_rebut carte
     if carte
-      img_carte carte, nil
+      img_carte carte
     else
       " " #<img src='/#{@cards_theme}/pile-vide.png' />"
     end
