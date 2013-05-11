@@ -83,6 +83,7 @@ class Partie
     self.carte_prise = nil
     self.carte_prise_nb = 0
     # Pour l'ajouter à la main du joueur
+    self.carte_tiree.repere = true
     self.joueurs[joueur_id].ajouter_une_carte self.carte_tiree
     # Mémorise le coup joué
     self.coups.piocher joueur_id, self.carte_tiree.carte_id
@@ -93,6 +94,7 @@ class Partie
     self.carte_tiree = self.paquet.prendre_la_defausse
     self.carte_prise = self.carte_tiree
     # Pour l'ajouter à la main du joueur
+    self.carte_tiree.repere = true
     self.joueurs[joueur_id].ajouter_une_carte self.carte_tiree
     # Puis compte combien de fois cette carte prise est dans la main du joueur
     self.carte_prise_nb = self.joueurs[joueur_id].cartes.count { |c| c == self.carte_prise }
@@ -198,6 +200,9 @@ class Partie
       return
     end
 
+    # On repère la carte posée
+    carte.repere = true
+
     # Cas où le joueur n'a pas encore posé sa tierce franche
     unless joueur.a_pose_tierce?
       # => il est en train de constituer sa tierce franche
@@ -214,6 +219,22 @@ class Partie
 
     poser_autre_carte joueur, tas, carte
 
+  end
+
+  # Supprime les repères sur les cartes
+  def enlever_les_reperes
+    # Pour les cartes posées sur la table
+    self.ta12s.each do |tas|
+      tas.cartes.each do |carte|
+        carte.repere = false
+      end
+    end
+    # Pour les cartes dans la main des joueurs
+    self.joueurs.each do |joueur|
+      joueur.cartes.each do |carte|
+        carte.repere = false
+      end
+    end
   end
 
   def faire_jouer joueur_id

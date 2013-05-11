@@ -23,7 +23,7 @@ helpers do
     id = carte.carte_id.to_s
     id = "0" + id if id.size < 2
     css = "card " + carte.to_css
-    css << " derniere" if carte == derniere
+    css << " repere" if carte.repere
     tooltip = @debug ? " title='#{carte.tooltip}'" : ""
     "<div id='carte#{id}' class='#{css}'#{tooltip}></div>"
   end
@@ -264,6 +264,9 @@ get "/piocher" do
   # On ne peut piocher que si c'est le moment de piocher
   redirect to('/') unless @partie.piocher
 
+  # On supprime le repérage des cartes
+  @partie.enlever_les_reperes
+
   # MOI tire une carte dans la pioche
   @partie.prendre_dans_pioche MOI
 
@@ -281,6 +284,9 @@ get "/prendre" do
 
   # On ne peut prendre dans la défausse que si c'est le moment de piocher
   redirect to('/') unless @partie.piocher
+
+  # On supprime le repérage des cartes
+  @partie.enlever_les_reperes
 
   # MOI prend la carte de la défausse
   @partie.prendre_dans_defausse MOI
@@ -305,6 +311,9 @@ get "/ecarter/:carte_id" do
     session[:partie] = @partie
     redirect to("/")
   end
+
+  # On supprime le repérage des cartes
+  @partie.enlever_les_reperes
 
   # MOI écarte une carte dans la défausse
   carte = Carte.new params[:carte_id].to_i

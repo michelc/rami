@@ -18,6 +18,7 @@ class Carte
   attr_accessor :couleur    # Couleur de la carte (:coeur, :pique, :carreau, :trefle)
   attr_accessor :valeur     # Valeur de la carte (As, 2, 3, ..., 10, Valet, Dame, Roi, Joker)
   attr_accessor :tooltip    # Information de débugage pour afficher le score de la carte
+  attr_accessor :repere     # Sert à repérer les cartes qui viennent d'être posées
 
   def initialize(carte_id)
 
@@ -41,6 +42,7 @@ class Carte
       self.couleur = nil
     end
     self.tooltip = ""
+    self.repere = false
   end
 
   # Opérateur <=> pour trier les cartes à l'affichage
