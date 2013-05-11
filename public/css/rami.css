@@ -76,12 +76,15 @@ h1, h2, h3, h4, h5, h6
   padding: 5px;
 }
 
-#tas .un_tas {
+#tas .un_tas
+{
+  border: 1px dotted #1abc9c;
   height: 80px;
   margin-bottom: 5px;
 }
 
 #tas10,
-#tas11 {
+#tas11
+{
   margin-bottom: 0 !important;
 }
