@@ -45,6 +45,8 @@ class Optimisation
     chemins.keep_if { |c| c.franche }
     # Et qui apportent un total de 51 points
     chemins.keep_if { |c| c.nb_points >= 51 }
+    # Et qui laissent une carte pour la défausse
+    chemins.keep_if { |c| c.nb_cartes < une_main.size }
     # Et qui utilisent un maximum de cartes
     if chemins.size > 0
       nb_cartes = chemins.max_by { |c| c.nb_cartes }.nb_cartes
@@ -64,11 +66,8 @@ class Optimisation
     chemins = loop une_main, 0
     # On ne prend que les enchainements qui permettent de finir les 51 points
     chemins.keep_if { |c| c.nb_points >= 51 - deja_fait }
-    # Cas où il n'y a plus de combinaison possible
-    # (MAIS NE DEVRAIT PAS ARRIVER SI ON A SUIVI LE BON CHEMIN ???)
-    if chemins.size == 0
-      return nil
-    end
+    # Et qui laissent une carte pour la défausse
+    chemins.keep_if { |c| c.nb_cartes < une_main.size }
     # Et qui utilisent un maximum de cartes
     nb_cartes = chemins.max_by { |c| c.nb_cartes }.nb_cartes
     chemins.keep_if { |c| c.nb_cartes >= nb_cartes }
