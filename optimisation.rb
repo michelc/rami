@@ -6,19 +6,6 @@ require "analyse"
 
 class Optimisation
 
-  def garder_cartes_necessaires main
-    # Retrouve toutes les combinaisons possibles avec la main
-    combinaisons = combinaisons(main)
-    # Boucle sur chaque carte de la main pour ne conserver
-    # que celles utilisées dans une combinaison
-    nouvelle_main = main.clone
-    combinaisons.each do |combinaison|
-      nouvelle_main = enlever_cartes_utilisees nouvelle_main, combinaison
-    end
-    # Renvoie la main avec uniquement les cartes nécessaires aux combinaisons
-    main.clone - nouvelle_main
-  end
-
   def enlever_cartes_utilisees main, combinaison
     # Enlève de la main les cartes qui sont nécessaires à la combinaison
     nouvelle_main = main.clone
@@ -95,7 +82,7 @@ class Optimisation
 
   # Evalue tous les enchainements possibles pour poser les combinaisons d'une main
   def loop une_main, level = 0
-    main = garder_cartes_necessaires(une_main.clone)
+    main = une_main.clone
     # Pour totaliser l'apport de chaque combinaison
     chemins = []
     # Retrouve toutes les combinaisons possibles avec la main

@@ -4,47 +4,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "minitest/autorun"
 require "../optimisation"
 
-describe "Optimisation", "Vérification garder_cartes_necessaires" do
-
-  it "Conserve le bon nombre de cartes" do
-    main = []
-    main << Carte.new(0)
-    main << Carte.new(1)
-    main << Carte.new(2)
-    main << Carte.new(33)
-    optimisation = Optimisation.new
-    nouvelle = optimisation.garder_cartes_necessaires(main)
-    nouvelle.size.must_equal 3
-  end
-
-  it "Conserve uniquement les cartes nécessaires" do
-    main = []
-    main << Carte.new(0)
-    main << Carte.new(1)
-    main << Carte.new(2)
-    main << Carte.new(33)
-    optimisation = Optimisation.new
-    nouvelle = optimisation.garder_cartes_necessaires(main)
-    analyse = Analyse.new nouvelle
-    analyse.to_s.must_equal "[ AC 2C 3C ]"
-  end
-
-  it "Conserve toutes les cartes nécessaires" do
-    main = []
-    main << Carte.new(0)
-    main << Carte.new(1)
-    main << Carte.new(3)
-    main << Carte.new(4)
-    main << Carte.new(52)
-    optimisation = Optimisation.new
-    nouvelle = optimisation.garder_cartes_necessaires(main)
-    analyse = Analyse.new nouvelle
-    analyse.to_s.must_equal "[ AC 2C 4C 5C J* ]"
-  end
-
-end
-
-
 describe "Optimisation", "Vérification enlever_cartes_utilisees" do
 
   it "Enlève le bon nombre de cartes" do
@@ -399,7 +358,7 @@ describe "Optimisation", "Vérification loop avec 3 combinaisons" do
     chemins[5].nb_cartes.must_equal 9
   end
 
-  it "Compte est bon si 4 combinaison indépendantes avec 1 Joker dans la suite" do
+  it "Compte est bon si 4 combinaisons indépendantes avec 1 Joker dans la suite" do
     main = []
     main << Carte.new("5K")
     main << Carte.new("J*")
@@ -445,15 +404,15 @@ describe "Optimisation", "Vérification loop avec 3 combinaisons" do
     chemins[5].nb_points.must_equal 57
     chemins[5].nb_cartes.must_equal 9
 
-    chemins[6].visuel.must_equal "[ 7P 7K 7T ] [ 5K 6K 7K ]"
+    chemins[6].visuel.must_equal "[ 7P 7K 7T ] [ 5K 6K 7K ] [ 6C 6P J* ]"
     chemins[6].franche.must_equal false
-    chemins[6].nb_points.must_equal 39
-    chemins[6].nb_cartes.must_equal 6
+    chemins[6].nb_points.must_equal 57
+    chemins[6].nb_cartes.must_equal 9
 
-    chemins[7].visuel.must_equal "[ 7P 7K 7T ] [ 6C 6P 6K ]"
+    chemins[7].visuel.must_equal "[ 7P 7K 7T ] [ 6C 6P 6K ] [ 5K J* 7K ]"
     chemins[7].franche.must_equal false
-    chemins[7].nb_points.must_equal 39
-    chemins[7].nb_cartes.must_equal 6
+    chemins[7].nb_points.must_equal 57
+    chemins[7].nb_cartes.must_equal 9
 
   end
 
