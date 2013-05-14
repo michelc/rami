@@ -19,7 +19,7 @@ class Niveau1
   # Détermine quelle est la meilleure combinaison à poser
   # - une tierce franche au hasard
   # - sinon une combinaison au hasard
-  def meilleure_combinaison
+  def meilleure_combinaison carte_defausse = nil
     if joueur.tierce_franche?
       tierces = self.joueur.combinaisons.select { |c| c.tierce_franche? }
       sans_joker = tierces.reject { |c| c.avec_joker? }

@@ -254,7 +254,7 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
 
     # Joue ses cartes (s'il est en mesure de poser)
     if joueur.peut_poser?
-      combinaison = joueur.meilleure_combinaison
+      combinaison = joueur.meilleure_combinaison self.carte_prise
       while combinaison
         tas_libre = self.ta12s.find { |t| t.cartes.empty? == true }
         combinaison.cartes.each do |carte|

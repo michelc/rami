@@ -28,7 +28,7 @@ class Niveau3
   # Détermine quelle est la meilleure combinaison à poser
   # - celle qui contient le plus de cartes
   # - avec si possible pas de joker
-  def meilleure_combinaison
+  def meilleure_combinaison carte_defausse = nil
     nb_cartes = 0
     avec_joker = nil
     meilleure = nil

@@ -174,8 +174,8 @@ class Joueur
   end
 
   # Détermine quelle est la meilleure combinaison à poser
-  def meilleure_combinaison
-    self.niveau.meilleure_combinaison
+  def meilleure_combinaison carte_defausse = nil
+    self.niveau.meilleure_combinaison carte_defausse
   end
 
   # Détermine s'il vaut mieux prendre la défausse que piocher

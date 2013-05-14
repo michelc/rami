@@ -87,7 +87,7 @@ class Niveau4
 
   # Détermine quelle est la meilleure combinaison à poser
   # en fonction de la phase de jeu
-  def meilleure_combinaison
+  def meilleure_combinaison carte_defausse = nil
     # Calcule tous les enchainements de combinaisons et sélectionne :
     optimisation = Optimisation.new
     case self.joueur.phase_du_jeu
@@ -95,7 +95,7 @@ class Niveau4
       # - celui qui commence par une tierce franche
       # - qui permet d'atteindre 51 points
       # - et qui utilise un maximum de cartes
-      optimisation.pose_tierce joueur.cartes
+      optimisation.pose_tierce joueur.cartes, carte_defausse
     when :faire_points
       # - celui qui permet de finir la pose des 51 points
       # - et qui utilise un maximum de cartes
