@@ -293,7 +293,6 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
           poser_sur_tas joueur, tas_libre, carte
         end
         self.traces << " plateau <= #{combinaison.to_s} (#{combinaison.to_text} / #{joueur.a_pose_combien})"
-        combinaison = joueur.meilleure_combinaison
       end
 
       # Complète les combinaisons existantes (s'il a le droit de le faire)
