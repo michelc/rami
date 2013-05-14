@@ -219,7 +219,7 @@ class Niveau4
     main = self.joueur.cartes.clone
     main << carte
     optimisation = Optimisation.new
-    combinaison = optimisation.pose_tierce main
+    combinaison = optimisation.pose_tierce main, carte
     if combinaison
       return true
     else

@@ -25,11 +25,18 @@ class Optimisation
     combinaisons
   end
 
-  def pose_tierce une_main
+  def pose_tierce une_main, carte_defausse = nil
     # Evalue tous les enchainements possibles pour poser les combinaisons
     chemins = loop une_main, 0
     # On ne prend que les enchainements qui commencent par une tierce franche
     chemins.keep_if { |c| c.franche }
+    # Et qui n'utilisent pas la carte prise à la défausse dans la tierce franche
+    if carte_defausse
+      nb_exemplaires = une_main.count { |carte| carte == carte_defausse }
+      if nb_exemplaires == 1
+        chemins.keep_if { |c| c.combinaison.cartes.none? { |carte| carte == carte_defausse } }
+      end
+    end
     # Et qui apportent un total de 51 points
     chemins.keep_if { |c| c.nb_points >= 51 }
     # Et qui laissent une carte pour la défausse
