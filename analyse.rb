@@ -138,73 +138,29 @@ class Analyse
       end
       # Re-vérifie qu'il y a un minimum de cartes pour espérer une suite
       next if suite.size < 3
-
-      # A, 2, J, 7, 8, 9, J, A
-      # - A, 2, J, 7, 8, 9 => A, 2, J => OK
-      # - 7, 8, 9 => OK
-
-      # A, 2, J, 5, J, 8, 9, J, A
-      # - A, 2, J, 5 => A, 2, J => OK
-      # - 5, J, 8, 9 => KO
-      # - 8, 9, J, AC => 8, 9, J => OK
-
-      # A, J, 5, 6, 7, J, 9, J, V, J, A
-      # - A, J, 5, 6, 7 => KO
-      # - 5, 6, 7 => OK
-      # - J, 9 => KO
-      # - 9, J, V => OK
-      # - V, J, A => KO
-
-      # A, J, R, A
-      # - A, J, R, A => A, J, R => KO
-      # - J, R, A => OK
-
-      i = 0
-      while i < suite.size - 3 + 1
-
-        en_cours = [ suite[i] ]
-        j = i + 1
-        k = -1
-        deja_un_joker = suite[i].est_joker?
-        while j < suite.size
-          if suite[j].est_joker?
-            break if deja_un_joker
-            k = j + 1
-            deja_un_joker = true
+      # Groupe les cartes par combinaisons consécutives de 3 cartes minimum.
+      # Puis teste chaque combinaison pour savoir s'il s'agit d'une suite.
+      # - 1° passage en évitant les suites qui commencent par un Joker
+      #   (car rapporte moins de points qu'avec le Joker placé à la fin)
+      nb_avant = suites.size
+      suite.size.downto(3) do |nombre|
+        suite.each_cons(nombre) do |groupe|
+          if est_une_suite? groupe
+            suites << Combinaison.new(:suite, groupe) unless groupe.first.est_joker?
           end
-          en_cours << suite[j]
-          j += 1
-        end
-
-        # S'il y a assez de cartes pour faire une suite
-        while en_cours.size >= 3
-          # Supprime le Joker de fin s'il n'est pas indispensable
-          if en_cours.size > 3
-            if en_cours.last.est_joker?
-              en_cours.pop
-              deja_un_joker = false
-            end
-          end
-          # Vérifie si les cartes constituent une suite
-          if est_une_suite? en_cours
-            # Ajoute la suite au tableau des suites possibles
-            suites << Combinaison.new(:suite, en_cours)
-            k = i + en_cours.size if k == -1
-          end
-          # Enlève la dernière carte car une suite peut en cacher une autre
-          # - A 2 3 4 5 => A 2 3 4 et A 2 3 sont aussi des suites
-          # - A 2 3 J 5 => A 2 3 est aussi une suite
-          # Mais il manque encore A 2 3 4 5 => 2 3 4 5, 2 3 4 et 3 4 5 sont aussi des suites !!!!!
-          en_cours.pop
-        end
-        i = k == -1 ? i + 1 : k
-        if k != -1
-          i -= 1 if i == suite.size - 3 + 1
         end
       end
-
+      # - 2° passage en acceptant le Joker devant (si pas d'autres solution)
+      if nb_avant == suites.size
+        suite.size.downto(3) do |nombre|
+          suite.each_cons(nombre) do |groupe|
+            if est_une_suite? groupe
+              suites << Combinaison.new(:suite, groupe)
+            end
+          end
+        end
+      end
     end
-
     # Renvoie toutes les suites possibles
     suites
   end

@@ -141,17 +141,23 @@ describe "Analyse", "Vérification suites" do
     analyse.combinaisons[0].to_text.must_equal "Tierce"
   end
 
-  it "Reconnait AC DC RC VC comme cinquante" do
+  it "Reconnait AC DC RC VC comme 1 cinquante et 2 tierces" do
     une_main = []
     une_main << Carte.new(0)
     une_main << Carte.new(11)
     une_main << Carte.new(12)
     une_main << Carte.new(10)
     analyse = Analyse.new une_main
+    analyse.combinaisons.size.must_equal 3
     analyse.combinaisons[0].to_text.must_equal "Cinquante"
+    analyse.combinaisons[0].to_s.must_equal "[ VC DC RC AC ]"
+    analyse.combinaisons[1].to_text.must_equal "Tierce"
+    analyse.combinaisons[1].to_s.must_equal "[ VC DC RC ]"
+    analyse.combinaisons[2].to_text.must_equal "Tierce"
+    analyse.combinaisons[2].to_s.must_equal "[ DC RC AC ]"
   end
 
-  it "Reconnait XC AC DC RC VC comme cent" do
+  it "Reconnait XC AC DC RC VC comme 1 cent, 2 cinquantes et 3 tierces" do
     une_main = []
     une_main << Carte.new(9)
     une_main << Carte.new(0)
@@ -159,7 +165,19 @@ describe "Analyse", "Vérification suites" do
     une_main << Carte.new(12)
     une_main << Carte.new(10)
     analyse = Analyse.new une_main
+    analyse.combinaisons.size.must_equal 6
     analyse.combinaisons[0].to_text.must_equal "Cent"
+    analyse.combinaisons[0].to_s.must_equal "[ XC VC DC RC AC ]"
+    analyse.combinaisons[1].to_text.must_equal "Cinquante"
+    analyse.combinaisons[1].to_s.must_equal "[ XC VC DC RC ]"
+    analyse.combinaisons[2].to_text.must_equal "Cinquante"
+    analyse.combinaisons[2].to_s.must_equal "[ VC DC RC AC ]"
+    analyse.combinaisons[3].to_text.must_equal "Tierce"
+    analyse.combinaisons[3].to_s.must_equal "[ XC VC DC ]"
+    analyse.combinaisons[4].to_text.must_equal "Tierce"
+    analyse.combinaisons[4].to_s.must_equal "[ VC DC RC ]"
+    analyse.combinaisons[5].to_text.must_equal "Tierce"
+    analyse.combinaisons[5].to_s.must_equal "[ DC RC AC ]"
   end
 
 end
@@ -237,7 +255,7 @@ end
 
 describe "Analyse", "Multiples combinaisons" do
 
-  it "Reconnait 2C 3C 4C 2P Joker comme 2 combinaisons" do
+  it "Reconnait 2C 3C 4C 2P Joker comme 4 combinaisons" do
     une_main = []
     une_main << Carte.new(1)    # 2C
     une_main << Carte.new(2)    # 3C
@@ -245,22 +263,14 @@ describe "Analyse", "Multiples combinaisons" do
     une_main << Carte.new(14)   # 2P
     une_main << Carte.new(52)   # Joker
     analyse = Analyse.new une_main
-    analyse.combinaisons.size.must_equal 2
+    analyse.combinaisons.size.must_equal 4
+    analyse.combinaisons[0].to_s.must_equal "[ 2C 3C 4C J* ]"
+    analyse.combinaisons[1].to_s.must_equal "[ 2C 3C 4C ]"
+    analyse.combinaisons[2].to_s.must_equal "[ 3C 4C J* ]"
+    analyse.combinaisons[3].to_s.must_equal "[ 2C 2P J* ]"
   end
 
-  it "Reconnait 2C 3C 4C 2P Joker comme 1 tierce et 1 brelan" do
-    une_main = []
-    une_main << Carte.new(1)    # 2C
-    une_main << Carte.new(2)    # 3C
-    une_main << Carte.new(3)    # 4C
-    une_main << Carte.new(14)   # 2P
-    une_main << Carte.new(52)   # Joker
-    analyse = Analyse.new une_main
-    analyse.combinaisons[0].to_text.must_equal "Tierce"
-    analyse.combinaisons[1].to_text.must_equal "Brelan"
-  end
-
-  it "Reconnait AC 3C 4C 6C 9C Joker comme 2 cinquantes et 2 tierces" do
+  it "Reconnait AC 3C 4C 6C 9C Joker comme 2 cinquantes et 3 tierces" do
     une_main = []
     une_main << Carte.new(0)    # AC
     une_main << Carte.new(2)    # 3C
@@ -269,15 +279,12 @@ describe "Analyse", "Multiples combinaisons" do
     une_main << Carte.new(8)    # 9C
     une_main << Carte.new(53)   # Joker
     analyse = Analyse.new une_main
-    analyse.combinaisons.size.must_equal 4
-    analyse.combinaisons[0].to_text.must_equal "Cinquante"
+    analyse.combinaisons.size.must_equal 5
     analyse.combinaisons[0].to_s.must_equal "[ AC J* 3C 4C ]"
-    analyse.combinaisons[1].to_text.must_equal "Tierce"
-    analyse.combinaisons[1].to_s.must_equal "[ AC J* 3C ]"
-    analyse.combinaisons[2].to_text.must_equal "Cinquante"
-    analyse.combinaisons[2].to_s.must_equal "[ 3C 4C J* 6C ]"
-    analyse.combinaisons[3].to_text.must_equal "Tierce"
+    analyse.combinaisons[1].to_s.must_equal "[ 3C 4C J* 6C ]"
+    analyse.combinaisons[2].to_s.must_equal "[ AC J* 3C ]"
     analyse.combinaisons[3].to_s.must_equal "[ 3C 4C J* ]"
+    analyse.combinaisons[4].to_s.must_equal "[ 4C J* 6C ]"
   end
 
   it "Reconnait 5P 8P XP DP Joker comme 2 tierces" do
@@ -289,13 +296,11 @@ describe "Analyse", "Multiples combinaisons" do
     une_main << Carte.new(53)   # Joker
     analyse = Analyse.new une_main
     analyse.combinaisons.size.must_equal 2
-    analyse.combinaisons[0].to_text.must_equal "Tierce"
-    analyse.combinaisons[1].to_text.must_equal "Tierce"
     analyse.combinaisons[0].to_s.must_equal "[ 8P J* XP ]"
     analyse.combinaisons[1].to_s.must_equal "[ XP J* DP ]"
   end
 
-  it "Reconnait AC Joker 3C 4C 5C comme 4 suites" do
+  it "Reconnait AC Joker 3C 4C 5C comme 1 cent, 2 cinquante et 3 tierces" do
     une_main = []
     une_main << Carte.new("AC")
     une_main << Carte.new("J*")
@@ -303,18 +308,16 @@ describe "Analyse", "Multiples combinaisons" do
     une_main << Carte.new("4C")
     une_main << Carte.new("5C")
     analyse = Analyse.new une_main
-    analyse.combinaisons.size.must_equal 4
-    analyse.combinaisons[0].to_text.must_equal "Cent"
-    analyse.combinaisons[1].to_text.must_equal "Cinquante"
-    analyse.combinaisons[2].to_text.must_equal "Tierce"
-    analyse.combinaisons[3].to_text.must_equal "Tierce"
+    analyse.combinaisons.size.must_equal 6
     analyse.combinaisons[0].to_s.must_equal "[ AC J* 3C 4C 5C ]"
     analyse.combinaisons[1].to_s.must_equal "[ AC J* 3C 4C ]"
-    analyse.combinaisons[2].to_s.must_equal "[ AC J* 3C ]"
-    analyse.combinaisons[3].to_s.must_equal "[ 3C 4C 5C ]"
+    analyse.combinaisons[2].to_s.must_equal "[ 3C 4C 5C J* ]"
+    analyse.combinaisons[3].to_s.must_equal "[ AC J* 3C ]"
+    analyse.combinaisons[4].to_s.must_equal "[ 3C 4C 5C ]"
+    analyse.combinaisons[5].to_s.must_equal "[ 4C 5C J* ]"
   end
 
-  it "Reconnait AC 2C 3C Joker 5C comme 2 suites" do
+  it "Reconnait AC 2C 3C Joker 5C comme 1 cent, 2 cinquantes et 3 tierces" do
     une_main = []
     une_main << Carte.new("AC")
     une_main << Carte.new("2C")
@@ -322,14 +325,16 @@ describe "Analyse", "Multiples combinaisons" do
     une_main << Carte.new("J*")
     une_main << Carte.new("5C")
     analyse = Analyse.new une_main
-    analyse.combinaisons.size.must_equal 2
-    analyse.combinaisons[0].to_text.must_equal "Cent"
-    analyse.combinaisons[1].to_text.must_equal "Tierce"
+    analyse.combinaisons.size.must_equal 6
     analyse.combinaisons[0].to_s.must_equal "[ AC 2C 3C J* 5C ]"
-    analyse.combinaisons[1].to_s.must_equal "[ AC 2C 3C ]"
+    analyse.combinaisons[1].to_s.must_equal "[ AC 2C 3C J* ]"
+    analyse.combinaisons[2].to_s.must_equal "[ 2C 3C J* 5C ]"
+    analyse.combinaisons[3].to_s.must_equal "[ AC 2C 3C ]"
+    analyse.combinaisons[4].to_s.must_equal "[ 2C 3C J* ]"
+    analyse.combinaisons[5].to_s.must_equal "[ 3C J* 5C ]"
   end
 
-  it "[ RESTE A FAIRE ] Reconnait A 2 3 4 5 comme 6 suites" do
+  it "Reconnait A 2 3 4 5 comme 1 cent, 2 cinquantes et 3 tierces" do
     une_main = []
     une_main << Carte.new(0)
     une_main << Carte.new(1)
@@ -340,8 +345,8 @@ describe "Analyse", "Multiples combinaisons" do
     analyse.combinaisons.size.must_equal 6
     analyse.combinaisons[0].to_s.must_equal "[ AC 2C 3C 4C 5C ]"
     analyse.combinaisons[1].to_s.must_equal "[ AC 2C 3C 4C ]"
-    analyse.combinaisons[2].to_s.must_equal "[ AC 2C 3C ]"
-    analyse.combinaisons[3].to_s.must_equal "[ 2C 3C 4C 5C ]"
+    analyse.combinaisons[2].to_s.must_equal "[ 2C 3C 4C 5C ]"
+    analyse.combinaisons[3].to_s.must_equal "[ AC 2C 3C ]"
     analyse.combinaisons[4].to_s.must_equal "[ 2C 3C 4C ]"
     analyse.combinaisons[5].to_s.must_equal "[ 3C 4C 5C ]"
   end
@@ -363,20 +368,21 @@ describe "Analyse", "Multiples combinaisons" do
     une_main << Carte.new(44)   # 6T
     une_main << Carte.new(53)   # Joker
     analyse = Analyse.new une_main
-    analyse.combinaisons.size.must_equal 11
+    analyse.combinaisons.size.must_equal 12
     # 4 suites
     analyse.combinaisons[0].to_s.must_equal "[ AC J* 3C 4C ]"
-    analyse.combinaisons[1].to_s.must_equal "[ AC J* 3C ]"
-    analyse.combinaisons[2].to_s.must_equal "[ 3C 4C J* 6C ]"
+    analyse.combinaisons[1].to_s.must_equal "[ 3C 4C J* 6C ]"
+    analyse.combinaisons[2].to_s.must_equal "[ AC J* 3C ]"
     analyse.combinaisons[3].to_s.must_equal "[ 3C 4C J* ]"
-    analyse.combinaisons[4].to_s.must_equal "[ 4K J* 6K ]"
-    analyse.combinaisons[5].to_s.must_equal "[ AT 2T J* ]"
+    analyse.combinaisons[4].to_s.must_equal "[ 4C J* 6C ]"
+    analyse.combinaisons[5].to_s.must_equal "[ 4K J* 6K ]"
+    analyse.combinaisons[6].to_s.must_equal "[ AT 2T J* ]"
     # 5 séries
-    analyse.combinaisons[6].to_s.must_equal "[ AC AT J* ]"
-    analyse.combinaisons[7].to_s.must_equal "[ 2P 2T J* ]"
-    analyse.combinaisons[8].to_s.must_equal "[ 4C 4K J* ]"
-    analyse.combinaisons[9].to_s.must_equal "[ 6C 6K 6T ]"
-    analyse.combinaisons[10].to_s.must_equal "[ 9C 9P J* ]"
+    analyse.combinaisons[7].to_s.must_equal "[ AC AT J* ]"
+    analyse.combinaisons[8].to_s.must_equal "[ 2P 2T J* ]"
+    analyse.combinaisons[9].to_s.must_equal "[ 4C 4K J* ]"
+    analyse.combinaisons[10].to_s.must_equal "[ 6C 6K 6T ]"
+    analyse.combinaisons[11].to_s.must_equal "[ 9C 9P J* ]"
   end
 
   it "Reconnait toutes les suites d'une distribution" do
@@ -389,11 +395,15 @@ describe "Analyse", "Multiples combinaisons" do
     une_main << Carte.new(10)   # VC
     une_main << Carte.new(53)   # Joker
     analyse = Analyse.new une_main
-    analyse.combinaisons.size.must_equal 3
+    analyse.combinaisons.size.must_equal 7
     # 3 suites
     analyse.combinaisons[0].to_s.must_equal "[ 5C 6C 7C J* 9C ]"
-    analyse.combinaisons[1].to_s.must_equal "[ 5C 6C 7C ]"
-    analyse.combinaisons[2].to_s.must_equal "[ 9C J* VC ]"
+    analyse.combinaisons[1].to_s.must_equal "[ 5C 6C 7C J* ]"
+    analyse.combinaisons[2].to_s.must_equal "[ 6C 7C J* 9C ]"
+    analyse.combinaisons[3].to_s.must_equal "[ 5C 6C 7C ]"
+    analyse.combinaisons[4].to_s.must_equal "[ 6C 7C J* ]"
+    analyse.combinaisons[5].to_s.must_equal "[ 7C J* 9C ]"
+    analyse.combinaisons[6].to_s.must_equal "[ 9C J* VC ]"
   end
 
   it "Reconnait toutes les suites d'une distribution - cas 2" do
@@ -405,13 +415,18 @@ describe "Analyse", "Multiples combinaisons" do
     une_main << Carte.new("7P")
     une_main << Carte.new("J*")
     analyse = Analyse.new une_main
-    analyse.combinaisons.size.must_equal 5
+    analyse.combinaisons.size.must_equal 10
     # 2 suites
     analyse.combinaisons[0].to_s.must_equal "[ 2P 3P J* 5P 6P 7P ]"
     analyse.combinaisons[1].to_s.must_equal "[ 2P 3P J* 5P 6P ]"
-    analyse.combinaisons[2].to_s.must_equal "[ 2P 3P J* 5P ]"
-    analyse.combinaisons[3].to_s.must_equal "[ 2P 3P J* ]"
-    analyse.combinaisons[4].to_s.must_equal "[ 5P 6P 7P ]"
+    analyse.combinaisons[2].to_s.must_equal "[ 3P J* 5P 6P 7P ]"
+    analyse.combinaisons[3].to_s.must_equal "[ 2P 3P J* 5P ]"
+    analyse.combinaisons[4].to_s.must_equal "[ 3P J* 5P 6P ]"
+    analyse.combinaisons[5].to_s.must_equal "[ 5P 6P 7P J* ]"
+    analyse.combinaisons[6].to_s.must_equal "[ 2P 3P J* ]"
+    analyse.combinaisons[7].to_s.must_equal "[ 3P J* 5P ]"
+    analyse.combinaisons[8].to_s.must_equal "[ 5P 6P 7P ]"
+    analyse.combinaisons[9].to_s.must_equal "[ 6P 7P J* ]"
   end
 
 end

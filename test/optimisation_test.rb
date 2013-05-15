@@ -200,7 +200,7 @@ describe "Optimisation", "Vérification loop avec 2 combinaisons" do
     main << Carte.new("VT")
     optimisation = Optimisation.new
     chemins = optimisation.loop main
-    chemins.size.must_equal 4
+    chemins.size.must_equal 6
     # La 1° suite
     chemins[0].visuel.must_equal "[ AC J* 3C 4C 5C ]"
     chemins[0].franche.must_equal false
@@ -212,15 +212,25 @@ describe "Optimisation", "Vérification loop avec 2 combinaisons" do
     chemins[1].nb_points.must_equal 10
     chemins[1].nb_cartes.must_equal 4
     # La 3° suite
-    chemins[2].visuel.must_equal "[ AC J* 3C ]"
+    chemins[2].visuel.must_equal "[ 3C 4C 5C J* ]"
     chemins[2].franche.must_equal false
-    chemins[2].nb_points.must_equal 6
-    chemins[2].nb_cartes.must_equal 3
+    chemins[2].nb_points.must_equal 18
+    chemins[2].nb_cartes.must_equal 4
     # La 4° suite
-    chemins[3].visuel.must_equal "[ 3C 4C 5C ]"
-    chemins[3].franche.must_equal true
-    chemins[3].nb_points.must_equal 12
+    chemins[3].visuel.must_equal "[ AC J* 3C ]"
+    chemins[3].franche.must_equal false
+    chemins[3].nb_points.must_equal 6
     chemins[3].nb_cartes.must_equal 3
+    # La 5° suite
+    chemins[4].visuel.must_equal "[ 3C 4C 5C ]"
+    chemins[4].franche.must_equal true
+    chemins[4].nb_points.must_equal 12
+    chemins[4].nb_cartes.must_equal 3
+    # La 6° suite
+    chemins[5].visuel.must_equal "[ 4C 5C J* ]"
+    chemins[5].franche.must_equal false
+    chemins[5].nb_points.must_equal 15
+    chemins[5].nb_cartes.must_equal 3
   end
 
   it "Compte est bon si 2 suites imbriquées - cas 2" do
@@ -233,17 +243,37 @@ describe "Optimisation", "Vérification loop avec 2 combinaisons" do
     main << Carte.new("VT")
     optimisation = Optimisation.new
     chemins = optimisation.loop main
-    chemins.size.must_equal 2
+    chemins.size.must_equal 6
     # La 1° suite
     chemins[0].visuel.must_equal "[ AC 2C 3C J* 5C ]"
     chemins[0].franche.must_equal false
     chemins[0].nb_points.must_equal 15
     chemins[0].nb_cartes.must_equal 5
     # La 2° suite
-    chemins[1].visuel.must_equal "[ AC 2C 3C ]"
-    chemins[1].franche.must_equal true
-    chemins[1].nb_points.must_equal 6
-    chemins[1].nb_cartes.must_equal 3
+    chemins[1].visuel.must_equal "[ AC 2C 3C J* ]"
+    chemins[1].franche.must_equal false
+    chemins[1].nb_points.must_equal 10
+    chemins[1].nb_cartes.must_equal 4
+    # La 3° suite
+    chemins[2].visuel.must_equal "[ 2C 3C J* 5C ]"
+    chemins[2].franche.must_equal false
+    chemins[2].nb_points.must_equal 14
+    chemins[2].nb_cartes.must_equal 4
+    # La 4° suite
+    chemins[3].visuel.must_equal "[ AC 2C 3C ]"
+    chemins[3].franche.must_equal true
+    chemins[3].nb_points.must_equal 6
+    chemins[3].nb_cartes.must_equal 3
+    # La 5° suite
+    chemins[4].visuel.must_equal "[ 2C 3C J* ]"
+    chemins[4].franche.must_equal false
+    chemins[4].nb_points.must_equal 9
+    chemins[4].nb_cartes.must_equal 3
+    # La 6° suite
+    chemins[5].visuel.must_equal "[ 3C J* 5C ]"
+    chemins[5].franche.must_equal false
+    chemins[5].nb_points.must_equal 12
+    chemins[5].nb_cartes.must_equal 3
   end
 
 end
@@ -372,47 +402,67 @@ describe "Optimisation", "Vérification loop avec 3 combinaisons" do
     main << Carte.new("VT")
     optimisation = Optimisation.new
     chemins = optimisation.loop main
-    chemins.size.must_equal 8
+    chemins.size.must_equal 12
     # La 1° série puis la 2°
     chemins[0].visuel.must_equal "[ 6P 7P J* ] [ 5K 6K 7K ]"
     chemins[0].franche.must_equal false
     chemins[0].nb_points.must_equal 39
     chemins[0].nb_cartes.must_equal 6
 
-    chemins[1].visuel.must_equal "[ 5K 6K 7K ] [ 6P 7P J* ]"
-    chemins[1].franche.must_equal true
-    chemins[1].nb_points.must_equal 39
-    chemins[1].nb_cartes.must_equal 6
+    chemins[1].visuel.must_equal "[ 5K 6K 7K J* ] [ 7P 7K 7T ]"
+    chemins[1].franche.must_equal false
+    chemins[1].nb_points.must_equal 47
+    chemins[1].nb_cartes.must_equal 7
 
-    chemins[2].visuel.must_equal "[ 5K 6K 7K ] [ 6C 6P J* ] [ 7P 7K 7T ]"
+    chemins[2].visuel.must_equal "[ 5K 6K 7K ] [ 6P 7P J* ]"
     chemins[2].franche.must_equal true
-    chemins[2].nb_points.must_equal 57
-    chemins[2].nb_cartes.must_equal 9
+    chemins[2].nb_points.must_equal 39
+    chemins[2].nb_cartes.must_equal 6
 
-    chemins[3].visuel.must_equal "[ 5K 6K 7K ] [ 7P 7K 7T ] [ 6C 6P J* ]"
+    chemins[3].visuel.must_equal "[ 5K 6K 7K ] [ 6C 6P J* ] [ 7P 7K 7T ]"
     chemins[3].franche.must_equal true
     chemins[3].nb_points.must_equal 57
     chemins[3].nb_cartes.must_equal 9
 
-    chemins[4].visuel.must_equal "[ 6C 6P 6K ] [ 5K J* 7K ] [ 7P 7K 7T ]"
-    chemins[4].franche.must_equal false
+    chemins[4].visuel.must_equal "[ 5K 6K 7K ] [ 7P 7K 7T ] [ 6C 6P J* ]"
+    chemins[4].franche.must_equal true
     chemins[4].nb_points.must_equal 57
     chemins[4].nb_cartes.must_equal 9
 
-    chemins[5].visuel.must_equal "[ 6C 6P 6K ] [ 7P 7K 7T ] [ 5K J* 7K ]"
+    chemins[5].visuel.must_equal "[ 6K 7K J* ] [ 7P 7K 7T ]"
     chemins[5].franche.must_equal false
-    chemins[5].nb_points.must_equal 57
-    chemins[5].nb_cartes.must_equal 9
+    chemins[5].nb_points.must_equal 42
+    chemins[5].nb_cartes.must_equal 6
 
-    chemins[6].visuel.must_equal "[ 7P 7K 7T ] [ 5K 6K 7K ] [ 6C 6P J* ]"
+    chemins[6].visuel.must_equal "[ 6C 6P 6K ] [ 5K J* 7K ] [ 7P 7K 7T ]"
     chemins[6].franche.must_equal false
     chemins[6].nb_points.must_equal 57
     chemins[6].nb_cartes.must_equal 9
 
-    chemins[7].visuel.must_equal "[ 7P 7K 7T ] [ 6C 6P 6K ] [ 5K J* 7K ]"
+    chemins[7].visuel.must_equal "[ 6C 6P 6K ] [ 7P 7K 7T ] [ 5K J* 7K ]"
     chemins[7].franche.must_equal false
     chemins[7].nb_points.must_equal 57
     chemins[7].nb_cartes.must_equal 9
+
+    chemins[8].visuel.must_equal "[ 7P 7K 7T ] [ 5K 6K 7K J* ]"
+    chemins[8].franche.must_equal false
+    chemins[8].nb_points.must_equal 47
+    chemins[8].nb_cartes.must_equal 7
+
+    chemins[9].visuel.must_equal "[ 7P 7K 7T ] [ 5K 6K 7K ] [ 6C 6P J* ]"
+    chemins[9].franche.must_equal false
+    chemins[9].nb_points.must_equal 57
+    chemins[9].nb_cartes.must_equal 9
+
+    chemins[10].visuel.must_equal "[ 7P 7K 7T ] [ 6K 7K J* ]"
+    chemins[10].franche.must_equal false
+    chemins[10].nb_points.must_equal 42
+    chemins[10].nb_cartes.must_equal 6
+
+    chemins[11].visuel.must_equal "[ 7P 7K 7T ] [ 6C 6P 6K ] [ 5K J* 7K ]"
+    chemins[11].franche.must_equal false
+    chemins[11].nb_points.must_equal 57
+    chemins[11].nb_cartes.must_equal 9
 
   end
 
