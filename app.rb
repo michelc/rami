@@ -23,9 +23,12 @@ helpers do
     id = carte.carte_id.to_s
     id = "0" + id if id.size < 2
     css = "card " + carte.to_css
-    css << " repere" if carte.repere
     tooltip = @debug ? " title='#{carte.tooltip}'" : ""
-    "<div id='carte#{id}' class='#{css}'#{tooltip}></div>"
+    if carte.repere
+      "<div class='repere'><div id='carte#{id}' class='#{css}'#{tooltip}></div></div>"
+    else
+      "<div id='carte#{id}' class='#{css}'#{tooltip}></div>"
+    end
   end
 
   # Code HTML pour afficher le dos d'une carte

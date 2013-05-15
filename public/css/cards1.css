@@ -30,7 +30,7 @@
 }
 
 .ma_main .card { margin-top: 20px; }
-.ma_main .repere { top: -20px; }
+.ma_main .repere .card { top: -20px; }
 
 .un_tas .card
 {
@@ -42,7 +42,12 @@
 }
 .un_tas .repere
 {
-  -webkit-transform: translate(0, -2px) rotate(-2deg);
+  background-color: #F1C40F;
+  border-radius: 4px;
+}
+.un_tas .repere .card
+{
+  opacity: 0.5;
 }
 
 /* Couleurs */
