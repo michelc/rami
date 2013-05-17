@@ -23,20 +23,15 @@ class Partie
 
   attr_accessor :carte_defausse   # Carte disponible dans le tas de défausse
 
-  attr_accessor :piocher          # Indique si MOI doit piocher (quick & dirty)
+  attr_accessor :piocher          # Indique si MOI doit piocher (TODO: quick & dirty)
 
   attr_accessor :compte_tour      # Numéro du tour en cours
 
   attr_accessor :ta12s            # Tableau des tas de cartes posés
-                                  # C'EST UN NOM POURRI
+                                  # TODO: C'EST UN NOM POURRI
 
   attr_accessor :traces           # Tableau des messages de trace
   attr_accessor :coups            # Tableau des coups joués
-
-  # OU BIEN, GERER PIOCHE ET DEFAUSSE AU NIVEAU DE LA PARTIE
-  # attr_accessor :pioche
-  # attr_accessor :defausse
-  # attr_accessor :joueurs
 
   def initialize *les_joueurs
     # Partie se joue avec 2 jeux de cartes

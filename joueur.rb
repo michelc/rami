@@ -151,8 +151,7 @@ class Joueur
     else
       # Le joueur n'a pas encore posé sa tierce franche
       # Et il a une tierce franche
-      # Il faudrait s'assurer qu'il a bien 51 points à poser
-      # MAIS EN ATTENDANT, IL PEUT POSER
+      # => Il peut poser (après s'être assuré qu'il a 51 points à poser)
       true
     end
   end

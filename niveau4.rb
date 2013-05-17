@@ -73,10 +73,10 @@ class Niveau4
     end
 
     # Une carte d'une série avec Joker tant que pas de tierce franche
-    # OK, MAIS COMMENT FAIRE CA ???
+    # TODO: OK, MAIS COMMENT FAIRE CA ???
 
     # Calcule le score de chaque carte dans la main du joueur
-    # A REVOIR...
+    # TODO: A REVOIR...
     scores = score_cartes(nil, les_tas, la_defausse)
     # Détermine le score le plus bas
     minimum = scores.min_by { |s| s.valorisation }.valorisation
@@ -134,7 +134,7 @@ class Niveau4
 
       # Non si le joueur a déjà cette carte dans sa main
       if self.joueur.cartes.any? { |c| c == carte }
-        # ESSAYER D'ETRE PLUS SUBTIL
+        # TODO: ESSAYER D'ETRE PLUS SUBTIL
         return false
       end
 
@@ -184,7 +184,7 @@ class Niveau4
 
       # Non si le joueur a déjà cette carte dans sa main
       if self.joueur.cartes.any? { |c| c == carte }
-        # ESSAYER D'ETRE PLUS SUBTIL
+        # TODO: ESSAYER D'ETRE PLUS SUBTIL
         return false
       end
 
@@ -207,8 +207,8 @@ class Niveau4
           return true
         end
       end
-# ESSAYER DE GERER SI CARTE PEUT ETRE POSABLE SUR UN TAS APRES QUE
-#  DES CARTES DELA MAIN AURONT ETE POSEES SUR DES TAS
+# TODO: ESSAYER DE GERER SI CARTE PEUT ETRE POSABLE SUR UN TAS APRES QUE
+#       DES CARTES DE LA MAIN AURONT ETE POSEES SUR DES TAS
 
       # Non dans les autres cas (après 51 points)
       return false
