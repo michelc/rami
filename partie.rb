@@ -302,6 +302,10 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
         while ok
           ok = false
           self.ta12s.each do |tas|
+            # évite de compléter la tierce franche lors de la 1° pose
+            unless joueur.a_atteint_51?
+              break if tas.nom_joueur == joueur.nom + "_tf"
+            end
             # regarde si on peut ajouter une carte au tas
             joueur.cartes.each do |carte|
               if tas.complete_le_tas? carte
@@ -350,7 +354,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # - Le joueur ne peut pas encore compléter sa tierce franche
       if tas.nom_joueur == joueur.nom + "_tf"
         self.coups.alerter joueur.joueur_id, "attendre 1 tour pour compléter la tierce franche"
-        return if joueur.est_humain? # TODO: Pas encore géré pour le joueur Ruby
+        return if joueur.est_humain? # TODO: Pas géré pour Niveau < 4
       end
     end
 
