@@ -43,22 +43,6 @@ describe "Joueur", "Vérification initialisation" do
 end
 
 
-describe "Joueur", "Vérification est-humain?" do
-
-  it "Est un joueur humain par défaut" do
-    joueur = Joueur.new("Toto")
-    joueur.est_humain?.must_equal true
-  end
-
-  it "N'est pas un joueur humain si niveau est défini" do
-    joueur = Joueur.new("Toto")
-    joueur.niveau = ""
-    joueur.est_humain?.must_equal false
-  end
-
-end
-
-
 describe "Joueur", "Vérification ramassage" do
 
   it "Remplit la main du joueur" do

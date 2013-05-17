@@ -7,9 +7,11 @@ class Niveau3
 
   attr_accessor :joueur       # Le joueur
   attr_accessor :trace
+  attr_accessor :version
 
   def initialize joueur
     self.joueur = joueur
+    self.version = 3
   end
 
   # Détermine quelle est la meilleure carte à défausser

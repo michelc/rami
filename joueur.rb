@@ -32,8 +32,14 @@ class Joueur
     self.a_atteint_51 = false
   end
 
-  def est_humain?
-    self.niveau == nil
+  def connait_les_regles?
+    if self.niveau == nil
+      true
+    elsif self.niveau.version > 3
+      true
+    else
+      false
+    end
   end
 
   def ramasser_cartes cartes

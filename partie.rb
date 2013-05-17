@@ -354,7 +354,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # - Le joueur ne peut pas encore compléter sa tierce franche
       if tas.nom_joueur == joueur.nom + "_tf"
         self.coups.alerter joueur.joueur_id, "attendre 1 tour pour compléter la tierce franche"
-        return if joueur.est_humain? # TODO: Pas géré pour Niveau < 4
+        return if joueur.connait_les_regles? # Pas géré si joueur niveau 1 ou 3
       end
     end
 
@@ -455,7 +455,7 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
       # Mais ce n'est un problème que s'il n'a pas cette carte en double
       if self.carte_prise_nb == 1
         self.coups.alerter joueur.joueur_id, "carte prise à la défausse interdite dans tierce franche"
-        return if joueur.est_humain? # TODO: Pas encore géré pour le joueur Ruby
+        return if joueur.connait_les_regles? # Pas géré si joueur niveau 1 ou 3
       end
     end
 
