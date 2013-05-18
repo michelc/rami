@@ -283,14 +283,16 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
       end
 
       # Si on a récupéré un Joker, cela permet peut-être de faire une combinaison
-      combinaison = joueur.meilleure_combinaison
-      if combinaison
-        tas_libre = self.ta12s.find { |t| t.cartes.empty? == true }
-        combinaison.cartes.each do |carte|
-          poser_sur_tas joueur, tas_libre, carte
+      if joueur.cartes.size > 3
+        combinaison = joueur.meilleure_combinaison
+        if combinaison
+          tas_libre = self.ta12s.find { |t| t.cartes.empty? == true }
+          combinaison.cartes.each do |carte|
+            poser_sur_tas joueur, tas_libre, carte
+          end
+          self.traces << " plateau <= #{combinaison.to_s} (#{combinaison.to_text} / #{joueur.a_pose_combien})"
         end
-        self.traces << " plateau <= #{combinaison.to_s} (#{combinaison.to_text} / #{joueur.a_pose_combien})"
-      end
+     end
 
       # Complète les combinaisons existantes (s'il a le droit de le faire)
       if (joueur.a_pose_51? == true)
