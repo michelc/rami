@@ -121,7 +121,7 @@ class Partie
     end
     # Si le joueur a pris la carte à la défausse,
     # => il faut qu'il ait posé cette carte
-    if self.carte_prise_nb == 1
+    if self.carte_prise_nb > 0
       # Donc qu'il en ait moins que ce qu'il en avait après l'avoir prise
       nb = self.joueurs[joueur_id].cartes.count { |c| c == self.carte_prise }
       if nb == self.carte_prise_nb

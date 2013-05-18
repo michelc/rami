@@ -309,7 +309,7 @@ get "/ecarter/:carte_id" do
   # On ne peut pas jeter si c'est le moment de piocher
   redirect to('/') if @partie.piocher
 
-  # On ne peut pas défausser s'il existe un temps entamé
+  # On ne peut pas défausser s'il existe un tas entamé
   unless @partie.accepter_defausse MOI
     session[:partie] = @partie
     redirect to("/")
