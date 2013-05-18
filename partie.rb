@@ -249,14 +249,16 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
 
     # Joue ses cartes (s'il est en mesure de poser)
     if joueur.peut_poser?
-      combinaison = joueur.meilleure_combinaison self.carte_prise
+      controle_defausse = self.carte_prise ? self.carte_prise.clone : nil
+      combinaison = joueur.meilleure_combinaison controle_defausse
       while combinaison
         tas_libre = self.ta12s.find { |t| t.cartes.empty? == true }
         combinaison.cartes.each do |carte|
           poser_sur_tas joueur, tas_libre, carte
+          controle_defausse = nil if controle_defausse == carte
         end
         self.traces << " plateau <= #{combinaison.to_s} (#{combinaison.to_text} / #{joueur.a_pose_combien})"
-        combinaison = joueur.meilleure_combinaison
+        combinaison = joueur.meilleure_combinaison controle_defausse
       end
 
       # Récupère éventuellement un joker

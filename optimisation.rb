@@ -37,6 +37,10 @@ class Optimisation
         chemins.keep_if { |c| c.combinaison.cartes.none? { |carte| carte == carte_defausse } }
       end
     end
+    # Mais qui utilisent la carte prise à la défausse dans les combinaisons suivantes
+    if carte_defausse
+      chemins.keep_if { |c| c.visuel.include? " #{carte_defausse.to_s} " }
+    end
     # Et qui apportent un total de 51 points
     chemins.keep_if { |c| c.nb_points >= 51 }
     # Et qui laissent une carte pour la défausse
@@ -55,10 +59,14 @@ class Optimisation
     end
   end
 
-  def pose_points une_main, deja_fait
+  def pose_points une_main, carte_defausse, deja_fait
     # Evalue tous les enchainements possibles pour poser les combinaisons
     chemins = loop une_main, 0
-    # On ne prend que les enchainements qui permettent de finir les 51 points
+    # On ne prend que les enchainements qui utilisent la carte prise à la défausse
+    if carte_defausse
+      chemins.keep_if { |c| c.visuel.include? " #{carte_defausse.to_s} " }
+    end
+    # Et qui permettent de finir les 51 points
     chemins.keep_if { |c| c.nb_points >= 51 - deja_fait }
     # Et qui laissent une carte pour la défausse
     chemins.keep_if { |c| c.nb_cartes < une_main.size }
@@ -71,9 +79,13 @@ class Optimisation
     chemins.last.combinaison
   end
 
-  def pose_restes une_main
+  def pose_restes une_main, carte_defausse
     # Evalue tous les enchainements possibles pour poser les combinaisons
     chemins = loop une_main, 0
+    # On ne prend que les enchainements qui utilisent la carte prise à la défausse
+    if carte_defausse
+      chemins.keep_if { |c| c.visuel.include? " #{carte_defausse.to_s} " }
+    end
     # Cas où il n'y a plus de combinaison possible
     if chemins.size == 0
       return nil

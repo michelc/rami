@@ -101,10 +101,10 @@ class Niveau4
     when :faire_points
       # - celui qui permet de finir la pose des 51 points
       # - et qui utilise un maximum de cartes
-      optimisation.pose_points joueur.cartes, joueur.a_pose_combien
+      optimisation.pose_points joueur.cartes, carte_defausse, joueur.a_pose_combien
     else
       # - celui qui utilise un maximum de cartes
-      optimisation.pose_restes joueur.cartes
+      optimisation.pose_restes joueur.cartes, carte_defausse
     end
   end
 
