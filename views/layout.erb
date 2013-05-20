@@ -119,7 +119,7 @@
 
   // Joueur peut double-cliquer une de ses cartes pour l'écarter
   $(".ma_main .card").on("dblclick", function () {
-    url = "/ecarter/" + this.id.replace("carte", "");
+    url = "/ecarter/" + this.id.replace("c", "");
     window.location.href = url;
   });
   $(".ma_main .card").css("cursor", "pointer");
@@ -146,7 +146,7 @@
     , hoverClass: "hovered"
     , drop: function(e, ui) {
         ui.draggable.draggable("option", "revert", false);
-        url = "/ecarter/" + ui.draggable[0].id.replace("carte", "");
+        url = "/ecarter/" + ui.draggable[0].id.replace("c", "");
         window.location.href = url;
       }
   };
@@ -159,7 +159,7 @@
     , hoverClass: "hovered"
     , drop: function(e, ui) {
         ui.draggable.draggable("option", "revert", false);
-        url = "/poser/" + ui.draggable[0].id.replace("carte", "");
+        url = "/poser/" + ui.draggable[0].id.replace("c", "");
         url += this.id.replace("tas", "/sur/");
         window.location.href = url;
       }
