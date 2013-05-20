@@ -121,17 +121,6 @@ class Carte
                        end
   end
 
-  # Classe CSS pour les sprites
-  def to_css
-    if self.carte_id == 52
-      "X J1"
-    elsif self.carte_id == 53
-      "X J2"
-    else
-      "CPKT".slice(self.carte_id / 13) + " V" + self.valeur.to_s
-    end
-  end
-
   # Renvoie la carte précédante dans la couleur
   def carte_avant
     id_avant = self.carte_id - 1

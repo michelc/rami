@@ -50,29 +50,67 @@
   opacity: 0.5;
 }
 
-/* Couleurs */
-.C { background-position-y:   -0px; }
-.P { background-position-y: -122px; }
-.K { background-position-y: -244px; }
-.T { background-position-y: -366px; }
-.X { background-position-y: -488px; }
+/* Coeurs */
+#c00 { background-position:    -0px 0; }
+#c01 { background-position:   -88px 0; }
+#c02 { background-position:  -176px 0; }
+#c03 { background-position:  -264px 0; }
+#c04 { background-position:  -352px 0; }
+#c05 { background-position:  -440px 0; }
+#c06 { background-position:  -528px 0; }
+#c07 { background-position:  -616px 0; }
+#c08 { background-position:  -704px 0; }
+#c09 { background-position:  -792px 0; }
+#c10 { background-position:  -880px 0; }
+#c11 { background-position:  -968px 0; }
+#c12 { background-position: -1056px 0; }
 
-/* Valeurs */
-.V1 { background-position-x:    -0px; }
-.V2 { background-position-x:   -88px; }
-.V3 { background-position-x:  -176px; }
-.V4 { background-position-x:  -264px; }
-.V5 { background-position-x:  -352px; }
-.V6 { background-position-x:  -440px; }
-.V7 { background-position-x:  -528px; }
-.V8 { background-position-x:  -616px; }
-.V9 { background-position-x:  -704px; }
-.VX { background-position-x:  -792px; }
-.VV { background-position-x:  -880px; }
-.VD { background-position-x:  -968px; }
-.VR { background-position-x: -1056px; }
+/* Pique */
+#c13 { background-position:    -0px -122px; }
+#c14 { background-position:   -88px -122px; }
+#c15 { background-position:  -176px -122px; }
+#c16 { background-position:  -264px -122px; }
+#c17 { background-position:  -352px -122px; }
+#c18 { background-position:  -440px -122px; }
+#c19 { background-position:  -528px -122px; }
+#c20 { background-position:  -616px -122px; }
+#c21 { background-position:  -704px -122px; }
+#c22 { background-position:  -792px -122px; }
+#c23 { background-position:  -880px -122px; }
+#c24 { background-position:  -968px -122px; }
+#c25 { background-position: -1056px -122px; }
+
+/* Carreau */
+#c26 { background-position:    -0px -244px; }
+#c27 { background-position:   -88px -244px; }
+#c28 { background-position:  -176px -244px; }
+#c29 { background-position:  -264px -244px; }
+#c30 { background-position:  -352px -244px; }
+#c31 { background-position:  -440px -244px; }
+#c32 { background-position:  -528px -244px; }
+#c33 { background-position:  -616px -244px; }
+#c34 { background-position:  -704px -244px; }
+#c35 { background-position:  -792px -244px; }
+#c36 { background-position:  -880px -244px; }
+#c37 { background-position:  -968px -244px; }
+#c38 { background-position: -1056px -244px; }
+
+/* Trèfle */
+#c39 { background-position:    -0px -366px; }
+#c40 { background-position:   -88px -366px; }
+#c41 { background-position:  -176px -366px; }
+#c42 { background-position:  -264px -366px; }
+#c43 { background-position:  -352px -366px; }
+#c44 { background-position:  -440px -366px; }
+#c45 { background-position:  -528px -366px; }
+#c46 { background-position:  -616px -366px; }
+#c47 { background-position:  -704px -366px; }
+#c48 { background-position:  -792px -366px; }
+#c49 { background-position:  -880px -366px; }
+#c50 { background-position:  -968px -366px; }
+#c51 { background-position: -1056px -366px; }
 
 /* Spéciales */
-.J1 { background-position-x:    -0px; }
-.J2 { background-position-x:   -88px; }
-.BK { background-position-x:  -176px; }
+#c52 { background-position:    -0px -488px; }
+#c53 { background-position:   -88px -488px; }
+.dos { background-position:  -176px -488px; }

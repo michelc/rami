@@ -22,12 +22,11 @@ helpers do
   def img_carte carte
     id = carte.carte_id.to_s
     id = "0" + id if id.size < 2
-    css = "card " + carte.to_css
     tooltip = @debug ? " title='#{carte.tooltip}'" : ""
     if carte.repere
-      "<div class='repere'><div id='carte#{id}' class='#{css}'#{tooltip}></div></div>"
+      "<div class='repere'><div id='c#{id}' class='card'#{tooltip}></div></div>"
     else
-      "<div id='carte#{id}' class='#{css}'#{tooltip}></div>"
+      "<div id='c#{id}' class='card'#{tooltip}></div>"
     end
   end
 
@@ -41,7 +40,7 @@ helpers do
               nil
             end
     if carte.nil?
-      "<div class='card X BK'></div>"
+      "<div class='card dos'></div>"
     else
       img_carte carte
     end
@@ -52,7 +51,7 @@ helpers do
     if carte
       img_carte carte
     else
-      " " #<img src='/#{@cards_theme}/pile-vide.png' />"
+      " "
     end
   end
 
