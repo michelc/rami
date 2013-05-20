@@ -71,7 +71,7 @@ class Carte
 
   # Nombre de points de la carte (pour score en fin de partie)
   def points
-    case valeur
+    case self.valeur
     when :X, :V, :D, :R, :A
       # Le 10, les têtes et l'AS valent 10 points
       10
@@ -106,13 +106,19 @@ class Carte
   end
 
   # Représentation figurative de la carte
-  # (pose problème incompatibilité encodage quand erreur avec Sinatra)
-  def to_s2
-    if est_joker?
-      "J*"
-    else
-      self.valeur.to_s + "♥♠♦♣".slice(self.carte_id / 13)
-    end
+  def to_html
+    self.valeur.to_s + case self.couleur
+                       when :coeur
+                         "&hearts;"
+                       when :pique
+                         "&spades;"
+                       when :carreau
+                         "&diams;"
+                       when :trefle
+                         "&clubs;"
+                       else
+                         "*"
+                       end
   end
 
   # Classe CSS pour les sprites

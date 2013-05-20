@@ -81,7 +81,7 @@ class Coups < Array
             end
           end
           # Message uniquement quand pose de la dernière carte de l'ensemble
-          carte = Carte.new(coup.carte_id).to_s
+          carte = Carte.new(coup.carte_id).to_html
           tas_id = (coup.type_id.sub "sur tas ", "").to_i
           tas[tas_id] << " #{carte}"
           if derniere
@@ -123,7 +123,7 @@ class Coup
     text = "MRD"[self.joueur_id]
     text << ": "
     if self.message == ""
-      carte = Carte.new(self.carte_id).to_s
+      carte = Carte.new(self.carte_id).to_html
       if self.type_id.include? "sur "
         text << "pose #{carte} #{self.type_id}"
       else

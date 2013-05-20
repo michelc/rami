@@ -216,7 +216,7 @@ describe "Carte", "Vérification du to_text" do
 end
 
 
-describe "Carte", "Vérification du to_s2" do
+describe "Carte", "Vérification du to_html" do
 
   it "Renvoie 'J*' pour le 1° joker" do
     Carte.new(52).to_s.must_equal "J*"
@@ -261,46 +261,46 @@ describe "Carte", "Vérification du to_s2" do
 end
 
 
-describe "Carte", "Vérification du to_s2" do
+describe "Carte", "Vérification du to_html" do
 
   it "Renvoie 'J*' pour le 1° joker" do
-    Carte.new(52).to_s2.must_equal "J*"
+    Carte.new(52).to_html.must_equal "J*"
   end
 
   it "Renvoie 'J*' pour le 2° joker" do
-    Carte.new(53).to_s2.must_equal "J*"
+    Carte.new(53).to_html.must_equal "J*"
   end
 
   it "Renvoie 'A♥' pour l'as de coeur'" do
-    Carte.new(0).to_s2.must_equal "A♥"
+    Carte.new(0).to_html.must_equal "A&hearts;"
   end
 
   it "Renvoie '2♥' pour le 2 de coeur'" do
-    Carte.new(1).to_s2.must_equal "2♥"
+    Carte.new(1).to_html.must_equal "2&hearts;"
   end
 
   it "Renvoie '2♠' pour le 2 de pique'" do
-    Carte.new(14).to_s2.must_equal "2♠"
+    Carte.new(14).to_html.must_equal "2&spades;"
   end
 
   it "Renvoie '3♠' pour le 3 de pique'" do
-    Carte.new(15).to_s2.must_equal "3♠"
+    Carte.new(15).to_html.must_equal "3&spades;"
   end
 
   it "Renvoie 'X♦' pour le 10 de carreau'" do
-    Carte.new(35).to_s2.must_equal "X♦"
+    Carte.new(35).to_html.must_equal "X&diams;"
   end
 
   it "Renvoie 'V♦' pour le valet de carreau'" do
-    Carte.new(36).to_s2.must_equal "V♦"
+    Carte.new(36).to_html.must_equal "V&diams;"
   end
 
   it "Renvoie 'D♣' pour la dame de trèfle'" do
-    Carte.new(50).to_s2.must_equal "D♣"
+    Carte.new(50).to_html.must_equal "D&clubs;"
   end
 
   it "Renvoie 'R♣' pour le roi de trèfle'" do
-    Carte.new(51).to_s2.must_equal "R♣"
+    Carte.new(51).to_html.must_equal "R&clubs;"
   end
 
 end
