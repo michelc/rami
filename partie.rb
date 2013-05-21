@@ -314,6 +314,8 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
                 ok = true # On re-teste tout chaque fois qu'on a posé une carte
               end
             end
+            # Abandonne l'examen des différents tas quand plus qu'une carte
+            break if joueur.cartes.size == 1s
           end
         end
       end
