@@ -303,7 +303,7 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
           self.ta12s.each do |tas|
             # évite de compléter la tierce franche lors de la 1° pose
             unless joueur.a_atteint_51?
-              break if tas.nom_joueur == joueur.nom + "_tf"
+              next if tas.nom_joueur == joueur.nom + "_tf"
             end
             # regarde si on peut ajouter une carte au tas
             joueur.cartes.each do |carte|
