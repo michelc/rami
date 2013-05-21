@@ -315,7 +315,7 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
               end
             end
             # Abandonne l'examen des différents tas quand plus qu'une carte
-            break if joueur.cartes.size == 1s
+            break if joueur.cartes.size == 1
           end
         end
       end
