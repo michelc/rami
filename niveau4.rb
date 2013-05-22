@@ -46,10 +46,7 @@ class Niveau4
     main = self.joueur.cartes.clone
 
     # Une carte en double dans la main du joueur
-    doublons = main
-              .each_with_object(Hash.new(0)) { |o, h| h[o] += 1 }
-              .map { |k, v| k if v >= 2}
-              .compact
+    doublons = main - main.uniq { |c| c.carte_id }
     doublons.delete_if { |c| c.est_joker? }
     doublons = gare_aux_tas doublons, les_tas
     if doublons.size > 0
