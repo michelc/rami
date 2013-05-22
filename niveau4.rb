@@ -15,8 +15,33 @@ class Niveau4
     self.version = 4
   end
 
+  def gare_aux_tas des_cartes, les_tas
+    return des_cartes if les_tas.size == 0
+    cartes_sures = []
+    des_cartes.each do |carte|
+      if les_tas.any? { |tas| tas.remplace_le_joker? carte }
+        #
+      elsif les_tas.any? { |tas| tas.complete_le_tas? carte }
+        #
+      else
+        cartes_sures << carte
+      end
+    end
+    cartes_sures
+  end
+
   # Détermine quelle est la meilleure carte à défausser
   def meilleure_defausse les_tas, la_defausse
+    # meilleure défausse en tenant compte des tas
+    carte = tester_defausse les_tas, la_defausse
+    # meilleure défausse sans tenir compte des tas
+    carte = tester_defausse [], la_defausse unless carte
+    # bye
+    carte
+  end
+
+  # Teste quelle est la meilleure carte à défausser
+  def tester_defausse les_tas, la_defausse
     # La main du joueur
     main = self.joueur.cartes.clone
 
@@ -26,6 +51,7 @@ class Niveau4
               .map { |k, v| k if v >= 2}
               .compact
     doublons.delete_if { |c| c.est_joker? }
+    doublons = gare_aux_tas doublons, les_tas
     if doublons.size > 0
       nb_points = if self.joueur.phase_du_jeu == :finir_partie
                   doublons.max_by { |c| c.points }.points
@@ -48,6 +74,7 @@ class Niveau4
         inutiles = optimisation.enlever_cartes_utilisees inutiles.clone, combinaison
       end
       inutiles.delete_if { |c| c.est_joker? }
+      inutiles = gare_aux_tas inutiles, les_tas
       if inutiles.size > 0
         nb_points = if self.joueur.phase_du_jeu == :finir_partie
                     inutiles.max_by { |c| c.points }.points
@@ -60,16 +87,21 @@ class Niveau4
     end
 
     # Une carte pas indispensable dans les combinaisons possibles
+    surplus = []
     combinaisons.shuffle.each do |combinaison|
       next if combinaison.type != :suite
       next if combinaison.cartes.size != 4
       if combinaison.cartes[1].est_joker?
         # Suite 6 J 8 9 => le 6 n'apporte pas grand chose
-        return combinaison.cartes[0]
+        surplus << combinaison.cartes[0]
       elsif combinaison.cartes[2].est_joker?
         # Suite 6 7 J 9 => le 9 n'apporte pas grand chose
-        return combinaison.cartes[3]
+        surplus << combinaison.cartes[3]
       end
+    end
+    surplus = gare_aux_tas surplus, les_tas
+    if surplus.size > 0
+      return surplus.sample
     end
 
     # Une carte d'une série avec Joker tant que pas de tierce franche
@@ -82,6 +114,7 @@ class Niveau4
     minimum = scores.min_by { |s| s.valorisation }.valorisation
     # Retrouve toutes les cartes concernées par le score le plus bas
     defaussables = scores.select { |s| s.valorisation == minimum }
+    # TODO: gare_aux_tas (mais defaussables n'est pas un Array de Carte)
     # Repose une des cartes faiblichonnes
     self.joueur.cartes[defaussables.sample.index]
 
