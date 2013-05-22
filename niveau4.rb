@@ -30,6 +30,16 @@ class Niveau4
     cartes_sures
   end
 
+  def meilleurs_points des_cartes
+    nb_points = if self.joueur.phase_du_jeu == :finir_partie
+                des_cartes.max_by { |c| c.points }.points
+              else
+                des_cartes.min_by { |c| c.points }.points
+              end
+    des_cartes.keep_if { |c| c.points == nb_points }
+    return des_cartes.sample
+  end
+
   # Détermine quelle est la meilleure carte à défausser
   def meilleure_defausse les_tas, la_defausse
     # meilleure défausse en tenant compte des tas
@@ -50,13 +60,7 @@ class Niveau4
     doublons.delete_if { |c| c.est_joker? }
     doublons = gare_aux_tas doublons, les_tas
     if doublons.size > 0
-      nb_points = if self.joueur.phase_du_jeu == :finir_partie
-                  doublons.max_by { |c| c.points }.points
-                else
-                  doublons.min_by { |c| c.points }.points
-                end
-      doublons.keep_if { |c| c.points == nb_points }
-      return doublons.sample
+      return meilleurs_points doublons
     end
 
     # Une carte inutilisée dans les combinaisons possibles
@@ -73,13 +77,7 @@ class Niveau4
       inutiles.delete_if { |c| c.est_joker? }
       inutiles = gare_aux_tas inutiles, les_tas
       if inutiles.size > 0
-        nb_points = if self.joueur.phase_du_jeu == :finir_partie
-                    inutiles.max_by { |c| c.points }.points
-                  else
-                    inutiles.min_by { |c| c.points }.points
-                  end
-        inutiles.keep_if { |c| c.points == nb_points }
-        return inutiles.sample
+        return meilleurs_points inutiles
       end
     end
 
@@ -98,7 +96,7 @@ class Niveau4
     end
     surplus = gare_aux_tas surplus, les_tas
     if surplus.size > 0
-      return surplus.sample
+      return meilleurs_points surplus
     end
 
     # Une carte d'une série avec Joker tant que pas de tierce franche
