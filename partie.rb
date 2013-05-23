@@ -274,8 +274,6 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
               if tas.remplace_le_joker? carte
                 self.traces << "     tas <= #{tas.to_s} <--> [ #{carte.to_s} ]"
                 poser_sur_tas joueur, tas, carte
-                break if joueur.cartes.size == 1
-                ok = true # On re-teste tout chaque fois qu'on a posé une carte
               end
             end
           end
