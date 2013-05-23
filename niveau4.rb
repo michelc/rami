@@ -15,8 +15,16 @@ class Niveau4
     self.version = 4
   end
 
+  # Renvoie les cartes qu'il est possible de mettre à la défausse sans craindre
+  # que son adversaire les récupère pour poser sur les tas
   def gare_aux_tas des_cartes, les_tas
+    # Toutes les cartes sont sûres tant qu'il n'y a pas de tas sur la table
     return des_cartes if les_tas.size == 0
+    # Le joueur a déjà posé toutes les cartes possibles s'il a 51 points
+    return des_cartes if self.joueur.a_atteint_51?
+    # TODO: l'adversaire ne peut pas récupérer de carte s'il n'a pas encore posé
+    # TODO: l'adversaire ne peut pas récupérer de carte s'il n'a plus qu'une carte
+    # Recherche quelles cartes sont sûres parmi celles envisagées pour la défausse
     cartes_sures = []
     des_cartes.each do |carte|
       if les_tas.any? { |tas| tas.remplace_le_joker? carte }
