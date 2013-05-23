@@ -310,8 +310,8 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
               if tas.complete_le_tas? carte
                 self.traces << "     tas <= #{tas.to_s} + [ #{carte.to_s} ]"
                 poser_sur_tas joueur, tas, carte
+                ok = joueur.cartes.size > 1 # => re-teste tout après pose d'une carte
                 break if joueur.cartes.size == 1
-                ok = true # On re-teste tout chaque fois qu'on a posé une carte
               end
             end
             # Abandonne l'examen des différents tas quand plus qu'une carte

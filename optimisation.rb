@@ -86,10 +86,10 @@ class Optimisation
     if carte_defausse
       chemins.keep_if { |c| c.visuel.include? " #{carte_defausse.to_s} " }
     end
+    # Et qui laissent une carte pour la défausse
+    chemins.keep_if { |c| c.nb_cartes < une_main.size }
     # Cas où il n'y a plus de combinaison possible
-    if chemins.size == 0
-      return nil
-    end
+    return nil if chemins.size == 0
     # On prend ceux qui utilisent un maximum de cartes
     nb_cartes = chemins.max_by { |c| c.nb_cartes }.nb_cartes
     chemins.keep_if { |c| c.nb_cartes >= nb_cartes }
