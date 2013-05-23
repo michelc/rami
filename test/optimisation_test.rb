@@ -48,6 +48,44 @@ describe "Optimisation", "Vérification enlever_cartes_utilisees" do
 end
 
 
+describe "Optimisation", "Vérification loop 1 tierce franche" do
+
+  it "Ignore les séries" do
+    main = []
+    main << Carte.new("AC")
+    main << Carte.new("AP")
+    main << Carte.new("AK")
+    main << Carte.new("VT")
+    optimisation = Optimisation.new
+    chemins = optimisation.loop main, true
+    chemins.size.must_equal 0
+  end
+
+  it "Ignore les tierces avec Joker" do
+    main = []
+    main << Carte.new("AC")
+    main << Carte.new("2C")
+    main << Carte.new("J*")
+    main << Carte.new("VT")
+    optimisation = Optimisation.new
+    chemins = optimisation.loop main, true
+    chemins.size.must_equal 0
+  end
+
+  it "Accepte les tierces franches" do
+    main = []
+    main << Carte.new("AC")
+    main << Carte.new("2C")
+    main << Carte.new("3C")
+    main << Carte.new("VT")
+    optimisation = Optimisation.new
+    chemins = optimisation.loop main, true
+    chemins.size.must_equal 1
+  end
+
+end
+
+
 describe "Optimisation", "Vérification loop 1 combinaison" do
 
   it "Compte est bon si 1 seule suite" do

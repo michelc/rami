@@ -27,10 +27,8 @@ class Optimisation
 
   def pose_tierce une_main, carte_defausse = nil
     # Evalue tous les enchainements possibles pour poser les combinaisons
-    chemins = loop une_main, 0
-    # On ne prend que les enchainements qui commencent par une tierce franche
-    chemins.keep_if { |c| c.franche }
-    # Et qui n'utilisent pas la carte prise à la défausse dans la tierce franche
+    chemins = loop une_main, true
+    # On ne prend que les enchainements sans la carte de la défausse dans la tierce franche
     if carte_defausse
       nb_exemplaires = une_main.count { |carte| carte == carte_defausse }
       if nb_exemplaires == 1
@@ -61,7 +59,7 @@ class Optimisation
 
   def pose_points une_main, carte_defausse, deja_fait
     # Evalue tous les enchainements possibles pour poser les combinaisons
-    chemins = loop une_main, 0
+    chemins = loop une_main
     # On ne prend que les enchainements qui utilisent la carte prise à la défausse
     if carte_defausse
       chemins.keep_if { |c| c.visuel.include? " #{carte_defausse.to_s} " }
@@ -81,7 +79,7 @@ class Optimisation
 
   def pose_restes une_main, carte_defausse
     # Evalue tous les enchainements possibles pour poser les combinaisons
-    chemins = loop une_main, 0
+    chemins = loop une_main
     # On ne prend que les enchainements qui utilisent la carte prise à la défausse
     if carte_defausse
       chemins.keep_if { |c| c.visuel.include? " #{carte_defausse.to_s} " }
@@ -100,7 +98,7 @@ class Optimisation
   end
 
   # Evalue tous les enchainements possibles pour poser les combinaisons d'une main
-  def loop une_main, level = 0
+  def loop une_main, tierce_franche = false, level = 0
     main = une_main.clone
     # Pour totaliser l'apport de chaque combinaison
     chemins = []
@@ -123,13 +121,17 @@ class Optimisation
                        end
       chemin.nb_points = combinaison.points
       chemin.nb_cartes = combinaison.cartes.size
+      # Passe à la suite si besoin d'une tierce franche et que ce n'en est pas une
+      if tierce_franche
+        next unless chemin.franche
+      end
       # Enlève les cartes utilisées par la combinaison de la main
       nouvelle_main = enlever_cartes_utilisees main, combinaison
       #
       nouvelles_combinaisons = combinaisons(nouvelle_main)
       #
       if nouvelles_combinaisons.size > 0
-        sous_chemins = loop(nouvelle_main, level + 1)
+        sous_chemins = loop(nouvelle_main, false, level + 1)
         sous_chemins.each do |nb|
           c = chemin.clone
           c.visuel += " " + nb.visuel
