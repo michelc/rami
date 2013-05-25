@@ -249,6 +249,8 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
 
     # Joue ses cartes (s'il est en mesure de poser)
     if joueur.peut_poser?
+
+      # Pose de nouvelles combinaisons sur la table
       controle_defausse = self.carte_prise ? self.carte_prise.clone : nil
       combinaison = joueur.meilleure_combinaison controle_defausse
       while combinaison
@@ -261,61 +263,30 @@ self.traces << "  pioche => [ #{self.carte_tiree.to_s} ] (#{joueur.niveau.trace}
         combinaison = joueur.meilleure_combinaison controle_defausse
       end
 
-      # Récupère éventuellement un joker
-      # (s'il a le droit de compléter les autres tas)
-      if (joueur.a_pose_51? == true)
-        # Examine tous les tas déjà posés un par un
-        ok = joueur.cartes.size > 1
-        while ok
-          ok = false
-          self.ta12s.each do |tas|
-            # regarde si on peut remplacer le joker du tas
-            joueur.cartes.each do |carte|
-              if tas.remplace_le_joker? carte
-                self.traces << "     tas <= #{tas.to_s} <--> [ #{carte.to_s} ]"
-                poser_sur_tas joueur, tas, carte
-              end
-            end
-          end
-        end
-      end
-
-      # Si on a récupéré un Joker, cela permet peut-être de faire une combinaison
-      if joueur.cartes.size > 3
-        combinaison = joueur.meilleure_combinaison
-        if combinaison
-          tas_libre = self.ta12s.find { |t| t.cartes.empty? == true }
-          combinaison.cartes.each do |carte|
-            poser_sur_tas joueur, tas_libre, carte
-          end
-          self.traces << " plateau <= #{combinaison.to_s} (#{combinaison.to_text} / #{joueur.a_pose_combien})"
-        end
-     end
-
-      # Complète les combinaisons existantes (s'il a le droit de le faire)
-      if (joueur.a_pose_51? == true)
-        # Examine tous les tas déjà posés un par un
-        ok = joueur.cartes.size > 1
-        while ok
-          ok = false
-          self.ta12s.each do |tas|
-            # évite de compléter la tierce franche lors de la 1° pose
-            unless joueur.a_atteint_51?
-              next if tas.nom_joueur == joueur.nom + "_tf"
-            end
-            # regarde si on peut ajouter une carte au tas
-            joueur.cartes.each do |carte|
-              if tas.complete_le_tas? carte
-                self.traces << "     tas <= #{tas.to_s} + [ #{carte.to_s} ]"
-                poser_sur_tas joueur, tas, carte
-                ok = joueur.cartes.size > 1 # => re-teste tout après pose d'une carte
+      # Complète les tas existants (s'il en a le droit)
+      if joueur.a_pose_51?
+        # Essaie de récupérer un joker
+        a_pris = tas_prendre_joker joueur
+        # Ce qui lui permet peut-être de faire une combinaison
+        if a_pris
+          if joueur.cartes.size > 3
+            combinaison = joueur.meilleure_combinaison
+            if combinaison
+              tas_libre = self.ta12s.find { |t| t.cartes.empty? == true }
+              combinaison.cartes.each do |carte|
+                poser_sur_tas joueur, tas_libre, carte
                 break if joueur.cartes.size == 1
               end
+              self.traces << " plateau <= #{combinaison.to_s} (#{combinaison.to_text} / #{joueur.a_pose_combien})"
             end
-            # Abandonne l'examen des différents tas quand plus qu'une carte
-            break if joueur.cartes.size == 1
           end
         end
+        # Essaie de compléter les suites avec 2 cartes sans utiliser de joker
+        tas_poser_2_cartes joueur, true
+        # Essaie de compléter les suites avec 1 Joker et une autre carte
+        tas_poser_2_cartes joueur, false
+        # Essaie de compléter les tas avec une carte
+        tas_poser_1_carte joueur
       end
 
     end
@@ -327,6 +298,117 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
   end
 
   private
+
+  # Essaie récupérer le joker sur les tas existants
+  # TODO: NE GERE PAS QUAND ON A LES 2 CARTES QUI VONT BIEN SUR UNE SERIE AVEC JOKER
+  def tas_prendre_joker joueur
+    a_pris = false
+    # Examine tous les tas déjà posés un par un
+    self.ta12s.each do |tas|
+      # Abandonne l'examen des différents tas quand plus qu'une carte
+      break if joueur.cartes.size == 1
+      # Regarde si on peut remplacer le joker du tas
+      joueur.cartes.each do |carte|
+        # Regarde si la carte remplace le Joker du tas
+        if tas.remplace_le_joker? carte
+          a_pris = true
+          # Pose la carte et récupère le Joker
+          self.traces << "     tas <= #{tas.to_s} <--> [ #{carte.to_s} ]"
+          poser_sur_tas joueur, tas, carte
+          # Plus de Joker à récupérer sur ce tas => passe au tas suivant
+          break
+        end
+      end
+    end
+    a_pris
+  end
+
+  # Essaie de poser 2 cartes consécutives sur les suites existantes
+  def tas_poser_2_cartes joueur, sans_joker
+    # Examine tous les tas déjà posés un par un
+    self.ta12s.each do |tas|
+      # Inutile de s'embêter si le tas est vide
+      next if tas.cartes.size == 0
+      # Inutile de s'embêter si le joueur n'a plus que 2 cartes
+      break if joueur.cartes.size <= 2
+      # La pose de 2 cartes successives ne concerne que les suites
+      next unless tas.combinaison.type == :suite
+      # Evite de compléter la tierce franche lors de la 1° pose
+      unless joueur.a_atteint_51?
+        next if tas.nom_joueur == joueur.nom + "_tf"
+      end
+      # Regarde si on peut ajouter une carte à la suite
+      joueur.cartes.each do |carte1|
+        # Est-ce qu'on doit se débrouiller sans utiliser de Joker
+        if sans_joker
+          # La 1° fois, on chercher à poser 2 cartes sans utiliser de Joker
+          # => On passe à la carte suivante si celle-ci est un Joker
+          next if carte1.est_joker?
+        else
+          # La 2° fois, on cherche à poser 1 Joker + 1 autre carte
+          # => On passe à la carte suivante si celle-ci n'est pas un Joker
+          next unless carte1.est_joker?
+        end
+        # Regarde si la carte peut aller sur la suite
+        a_pose = false
+        if tas.complete_le_tas? carte1
+          suite = tas.cartes.clone + [ carte1 ]
+          carte2 = nil
+          analyse = Analyse.new []
+          if analyse.est_une_suite? suite
+            # La "carte1" est ajoutée à la fin de la série : 4 5 6 + 7
+            # => est-ce que le joueur possède la carte suivante (un 8 dans l'exemple)
+            carte2 = carte1.carte_apres unless carte1.est_as?
+          else
+            # La "carte1" est ajoutée au début de la série : 3 + 4 5 6
+            # => est-ce que le joueur possède la carte précédante (un 2 dans l'exemple)
+            carte2 = carte1.carte_avant
+          end
+          a_pose = joueur.cartes.any? { |c| c == carte2 }
+          if a_pose
+              # Pose la 1° carte
+              self.traces << "     tas <= #{tas.to_s} + [ #{carte1.to_s} ]"
+              poser_sur_tas joueur, tas, carte1
+              combi = tas.combinaison
+              # Pose la 2° carte
+              self.traces << "     tas <= #{tas.to_s} + [ #{carte2.to_s} ]"
+              poser_sur_tas joueur, tas, carte2
+              # Impossible d'ajouter une 3° carte (sinon on aurait eu une combinaison)
+              break
+          end
+        end
+        # Abandonne l'examen des différentes cartes si on vient de compléter le tas
+        break if a_pose
+      end
+    end
+  end
+
+  # Essaie de poser 1 carte sur les tas existants
+  def tas_poser_1_carte joueur
+    # Examine tous les tas déjà posés un par un
+    self.ta12s.each do |tas|
+      # Abandonne l'examen des différents tas quand plus qu'une carte
+      break if joueur.cartes.size == 1
+      # Evite de compléter la tierce franche lors de la 1° pose
+      unless joueur.a_atteint_51?
+        next if tas.nom_joueur == joueur.nom + "_tf"
+      end
+      # Regarde si on peut ajouter une carte au tas
+      joueur.cartes.each do |carte|
+        # Regarde si la carte peut aller sur le tas
+        if tas.complete_le_tas? carte
+          type = tas.combinaison.type
+          # Pose la carte
+          self.traces << "     tas <= #{tas.to_s} + [ #{carte.to_s} ]"
+          poser_sur_tas joueur, tas, carte
+          # On ne peut plus compléter le tas si c'est une série de plus de 3 cartes
+          break if tas.cartes.size > 3
+          # on ne peut plus compléter le tas si ce n'est pas une série
+          break if type != :serie
+        end
+      end
+    end
+  end
 
   # Gère la pose d'une carte sur un tas
   # en fonction des différents cas qui peuvent se présenter
