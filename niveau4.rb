@@ -22,8 +22,15 @@ class Niveau4
     return des_cartes if les_tas.size == 0
     # Le joueur a déjà posé toutes les cartes possibles s'il a 51 points
     return des_cartes if self.joueur.a_atteint_51?
-    # TODO: l'adversaire ne peut pas récupérer de carte s'il n'a pas encore posé
-    # TODO: l'adversaire ne peut pas récupérer de carte s'il n'a plus qu'une carte
+    # Compte les cartes posées sur les tas
+    nb_cartes_posees = 0
+    les_tas.each { |tas| nb_cartes_posees += tas.cartes.size }
+    # Calcule le nombre de cartes de l'adversaire
+    nb_cartes_adversaire = (Joueur::TAILLE_MAIN * 2) + 1 - nb_cartes_posees - self.joueur.cartes.size
+    # L'adversaire ne peut pas récupérer de carte s'il n'a pas encore posé
+    return des_cartes if nb_cartes_adversaire == Joueur::TAILLE_MAIN
+    # L'adversaire ne peut pas récupérer de carte s'il n'a plus qu'une carte
+    return des_cartes if nb_cartes_adversaire == 1
     # Recherche quelles cartes sont sûres parmi celles envisagées pour la défausse
     cartes_sures = []
     des_cartes.each do |carte|
