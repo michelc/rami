@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6
 /* Mise en évidence des piles pioche et défausse
    --------------------------------------------- */
 
-.sabots {
+.sabot {
   margin: 10px 0;
 }
 
@@ -46,15 +46,15 @@ h1, h2, h3, h4, h5, h6
   border: 5px solid #1abc9c; /* turquoise */
   border-radius: 5px;
   height: 122px;
-  margin: 0 10px;
+  margin: 0 0 0 7px;
   padding: 5px;
   width: 88px;
 }
 
-#la_pioche .card,
-#la_defausse .card
+#la_defausse
 {
-  margin: 0;
+  margin: 0 7px 0 0;
+  width: 114px;
 }
 
 

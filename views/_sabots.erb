@@ -1,13 +1,21 @@
-<div class="row-fluid sabots">
+<div class="row-fluid sabot">
   <ul class="span6 alert alert-info" style="font-size: smaller">
   <% @partie.coups.to_messages.reverse.take(12).each do |message| %>
     <li><%= message %></li>
   <% end %>
   </ul>
   <div class="span3">
-    <div id="la_pioche"><%= img_dos(nil) %></div>
+    <div id="la_pioche">
+      <ul class="liste"><% @partie.paquet.pioche.last(2).each do |carte| %>
+        <li><%= img_dos(nil) %></li><% end %>
+      </ul>
+    </div>
   </div>
   <div class="span3">
-    <div id="la_defausse"><%= img_rebut @partie.carte_defausse %></div>
+    <div id="la_defausse">
+      <ul class="liste"><% @partie.paquet.defausse.last(3).each do |carte| %>
+        <li><%= img_carte(carte) %></li><% end %>
+      </ul>
+    </div>
   </div>
 </div>
