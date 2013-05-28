@@ -1,16 +1,15 @@
-.une_main ul, .une_main li,
-.un_tas, .un_tas li
+.liste, .liste li
 {
   display: inline-block;
+  list-style: none;
   margin: 0;
   padding: 0;
-  list-style: none;
   position: relative;
 }
-.une_main li             { margin-left: -64px; }
-.une_main li:first-child { margin-left: 0; }
-.un_tas li               { margin-left: -42px; }
-.un_tas li:first-child   { margin-left: 0; }
+.liste li             { margin-left: -64px; }
+.liste li:first-child { margin-left: 0; }
+#tas li               { margin-left: -42px; }
+#tas li:first-child   { margin-left: 0; }
 
 .card
 {
@@ -32,7 +31,7 @@
 .ma_main .card { margin-top: 20px; }
 .ma_main .repere .card { top: -20px; }
 
-.un_tas .card
+#tas .card
 {
   border-radius: 4px;
   border-bottom: 1px solid #555;
@@ -40,12 +39,12 @@
   height: 76px;
   width: 55px;
 }
-.un_tas .repere
+#tas .repere
 {
   background-color: #F1C40F;
   border-radius: 4px;
 }
-.un_tas .repere .card
+#tas .repere .card
 {
   opacity: 0.5;
 }

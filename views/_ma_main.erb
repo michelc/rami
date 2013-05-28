@@ -1,6 +1,6 @@
 <div class="row-fluid">
-  <div class="span12 une_main"<%= tooltip("points = #{@partie.joueurs[0].a_pose_combien}") %>>
-    <ul class="ma_main"><% @partie.joueurs[0].cartes.each do |carte| %>
+  <div class="span12"<%= tooltip("points = #{@partie.joueurs[0].a_pose_combien}") %>>
+    <ul class="liste ma_main"><% @partie.joueurs[0].cartes.each do |carte| %>
       <li><%= img_carte(carte) %></li><% end %>
     </ul>
   </div>
