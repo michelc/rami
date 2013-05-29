@@ -23,8 +23,7 @@ class Niveau4
     # Le joueur a déjà posé toutes les cartes possibles s'il a 51 points
     return des_cartes if self.joueur.a_atteint_51?
     # Compte les cartes posées sur les tas
-    nb_cartes_posees = 0
-    les_tas.each { |tas| nb_cartes_posees += tas.cartes.size }
+    nb_cartes_posees = les_tas.inject { |sum, tas| sum + tas.cartes.size }
     # Calcule le nombre de cartes de l'adversaire
     nb_cartes_adversaire = (Joueur::TAILLE_MAIN * 2) + 1 - nb_cartes_posees - self.joueur.cartes.size
     # L'adversaire ne peut pas récupérer de carte s'il n'a pas encore posé
