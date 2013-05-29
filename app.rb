@@ -22,11 +22,10 @@ helpers do
   def img_carte carte
     id = carte.carte_id.to_s
     id = "0" + id if id.size < 2
-    tooltip = @debug ? " title='#{carte.tooltip}'" : ""
     if carte.repere
-      "<div class='repere'><div id='c#{id}' class='card'#{tooltip}></div></div>"
+      "<div class='repere'><div id='c#{id}' class='card'></div></div>"
     else
-      "<div id='c#{id}' class='card'#{tooltip}></div>"
+      "<div id='c#{id}' class='card'></div>"
     end
   end
 
@@ -44,19 +43,6 @@ helpers do
     else
       img_carte carte
     end
-  end
-
-  # Code HTML pour afficher la pile des cartes rejetées
-  def img_rebut carte
-    if carte
-      img_carte carte
-    else
-      " "
-    end
-  end
-
-  def tooltip text
-    @debug ? " title='#{text}'" : ""
   end
 
 end

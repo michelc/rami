@@ -235,10 +235,6 @@ class Niveau3
       # On mémorise le score de la carte
       scores[carte] = score
 
-      if i < self.joueur.cartes.size
-        self.joueur.cartes[i].tooltip = score
-      end
-
     end
 
     if autre_carte

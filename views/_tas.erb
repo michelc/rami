@@ -2,7 +2,7 @@
   <div class="span12" id="tas"><% 6.times do |r| %>
     <div class="row-fluid"><% 2.times do |c| %>
       <% t = (r * 2) + c %>
-      <ul id="tas<%= t %>" class="span6 liste mini"<%= tooltip("#{@partie.ta12s[t].combinaison.tooltip}") %>>
+      <ul id="tas<%= t %>" class="span6 liste mini">
         <% @partie.ta12s[t].cartes.each do |carte| %><li><%= img_carte(carte) %></li><% end %>
       </ul><% end %>
     </div><% end %>

@@ -15,8 +15,6 @@ class Combinaison
   attr_accessor :remplacement   # Carte qui peut remplacer le joker
   attr_accessor :complements    # Cartes qui peuvent être ajoutées à la combinaison
 
-  attr_accessor :tooltip        # Information de débugage pour afficher ce qui peut compléter le tas
-
   def initialize type, cartes
     self.type = type
     self.cartes = cartes.clone
@@ -24,10 +22,6 @@ class Combinaison
     self.remplacement = chercher_remplacement
     self.complements = chercher_complements
     self.points = compter_les_points
-    self.tooltip = self.remplacement ? "Joker = #{self.remplacement.to_s} // " : ""
-    self.tooltip += "[ "
-    self.complements.each { |c| self.tooltip += c.to_s + " " }
-    self.tooltip += "]"
   end
 
   # Affiche le nom de la combinaison
