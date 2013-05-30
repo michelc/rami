@@ -18,12 +18,12 @@ class Niveau4
   # Renvoie les cartes qu'il est possible de mettre à la défausse sans craindre
   # que son adversaire les récupère pour poser sur les tas
   def gare_aux_tas des_cartes, les_tas
-    # Toutes les cartes sont sûres tant qu'il n'y a pas de tas sur la table
-    return des_cartes if les_tas.size == 0
-    # Le joueur a déjà posé toutes les cartes possibles s'il a 51 points
-    return des_cartes if self.joueur.a_atteint_51?
     # Compte les cartes posées sur les tas
     nb_cartes_posees = les_tas.inject(0) { |sum, tas| sum + tas.cartes.size }
+    # Toutes les cartes sont sûres tant qu'il n'y a pas de tas sur la table
+    return des_cartes if nb_cartes_posees == 0
+    # Le joueur a déjà posé toutes les cartes possibles s'il a 51 points
+    return des_cartes if self.joueur.a_atteint_51?
     # Calcule le nombre de cartes de l'adversaire
     nb_cartes_adversaire = (Joueur::TAILLE_MAIN * 2) + 1 - nb_cartes_posees - self.joueur.cartes.size
     # L'adversaire ne peut pas récupérer de carte s'il n'a pas encore posé
