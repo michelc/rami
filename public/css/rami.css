@@ -66,6 +66,17 @@ h1, h2, h3, h4, h5, h6
   background-color: #1abc9c; /* turquoise */
 }
 
+
+/* Présentation de la surface pour la main du joueur
+   ------------------------------------------------- */
+
+.ma_main
+{
+  width: 100%;
+  background-color: #16a085; /* green sea */
+}
+
+
 /* Présentation des 12 tas de combinaisons
    --------------------------------------- */
 
