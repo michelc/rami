@@ -14,6 +14,7 @@ class Combinaison
   attr_accessor :points         # Nombre de points apportés par la combinaison
   attr_accessor :remplacement   # Carte qui peut remplacer le joker
   attr_accessor :complements    # Cartes qui peuvent être ajoutées à la combinaison
+  attr_accessor :declinaison    # True si la combinaison est un sous-ensemble d'une autre combinaison
 
   def initialize type, cartes
     self.type = type
@@ -22,6 +23,7 @@ class Combinaison
     self.remplacement = chercher_remplacement
     self.complements = chercher_complements
     self.points = compter_les_points
+    self.declinaison = true
   end
 
   # Affiche le nom de la combinaison

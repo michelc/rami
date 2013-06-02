@@ -142,10 +142,15 @@ class Analyse
       # - 1° passage en évitant les suites qui commencent par un Joker
       #   (car rapporte moins de points qu'avec le Joker placé à la fin)
       nb_avant = suites.size
+      declinaison = false
       suite.size.downto(3) do |nombre|
         suite.each_cons(nombre) do |groupe|
           if est_une_suite? groupe
-            suites << Combinaison.new(:suite, groupe) unless groupe.first.est_joker?
+            unless groupe.first.est_joker?
+              suites << Combinaison.new(:suite, groupe)
+              suites.last.declinaison = declinaison
+              declinaison = true
+            end
           end
         end
       end
@@ -155,6 +160,7 @@ class Analyse
           suite.each_cons(nombre) do |groupe|
             if est_une_suite? groupe
               suites << Combinaison.new(:suite, groupe)
+              suites.last.declinaison = false
             end
           end
         end
@@ -182,6 +188,7 @@ class Analyse
       if est_une_serie? serie
         # Ajoute la série au tableau des séries possibles
         series << Combinaison.new(:serie, serie)
+        series.last.declinaison = false
       end
     end
 
