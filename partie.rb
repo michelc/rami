@@ -15,7 +15,7 @@ class Partie
   NB_JEUX = 2
 
   attr_accessor :paquet           # Paquet de cartes utilisées pour la partie
-  attr_accessor :joueurs          # Tableau des joueurs participamnst à la partie
+  attr_accessor :joueurs          # Tableau des joueurs participants à la partie
 
   attr_accessor :carte_tiree      # Dernière carte tirée par le joueur en cours
   attr_accessor :carte_prise      # Carte prise à la défausse le cas échéant
@@ -572,6 +572,33 @@ self.traces << "defausse <= [ #{self.carte_defausse.to_s} ]"
     tas.clear
     # - Informe le joueur qu'il y a un problème
     self.coups.alerter joueur.joueur_id, "#{combinaison.to_s} pas une tierce franche"
+  end
+
+  # Calcule le nombre d'exemplaires d'une carte qui sont encore présents dans la
+  # pioche (ou dans la main de l'adversaire) pour un joueur donné.
+  #
+  # Par définition, on a :
+  # - toutes_les_cartes = la_pioche + la_defausse + les_tas + ma_main + sa_main
+  # Ce qui équivaut à :
+  # - la_pioche + sa_main = toutes_les_cartes - la_defausse - les_tas - ma_main
+  # Ce qui tombe bien, puisqu'on connait :
+  # - toutes_les_cartes
+  # - la_defausse
+  # - les_tas
+  # - ma_main
+  #
+  # L'algorithme peut donc chercher directement dans la_pioche + sa_main sans
+  # que cela soit de la triche !
+  #
+  def exemplaires carte, joueur_id
+    # Nombre d'exemplaires de la carte dans la pioche
+    nb_pioche = self.paquet.pioche.count { |c| c == carte }
+    # Identifiant de l'adversaire
+    adversaire_id = joueur_id ^ 1
+    # Nombre d'exemplaires de la carte dans la main de l'adversaire
+    nb_adversaire = self.joueurs[adversaire_id].cartes.count { |c| c == carte }
+    # Renvoie le total
+    nb_pioche + nb_adversaire
   end
 
 end
