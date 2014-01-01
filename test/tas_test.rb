@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+require "minitest/spec"
 require "minitest/autorun"
 require "../tas"
 
