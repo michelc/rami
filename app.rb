@@ -11,7 +11,6 @@ require "./combinaison"
 require "./joueur"
 require "./paquet"
 require "./partie"
-require "./niveau3"
 require "./niveau4"
 
 # ---------- Helpers ----------
@@ -233,7 +232,6 @@ if 1 == 2
     @partie.joueurs[RUBY].enlever_une_carte carte
     @partie.paquet.pioche.unshift carte
   end
-
 end
 
   # Une fois sur 2, faire jouer RUBY en premier
